@@ -1,0 +1,38 @@
+@media(min-width: 750px){
+	.banner{
+		margin-top:15px;	
+	}
+}
+
+.small-banner{
+	background: #FFF;
+}
+
+.small-banner-top{
+	height: 150px;
+}
+
+.small-banner-bottom{
+	height: 150px;
+}
+
+@media(min-width: 750px){
+
+	.small-banner-top{
+		height: 222.242px;
+		margin-left: 5px;
+		margin-bottom: 2px;
+	}
+
+	.small-banner-bottom{
+		height: 142.242px;
+		margin-left: 5px;
+		margin-bottom: 2px;
+	}
+
+}
+
+
+
+
+

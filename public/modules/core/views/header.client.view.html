@@ -1,4 +1,5 @@
 <div class="container" data-ng-controller="HeaderController">
+
 	<div class="navbar-header">
 		<button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
 			<span class="sr-only">Toggle navigation</span>
@@ -8,8 +9,10 @@
 		</button>
 		<a href="/#!/" class="navbar-brand">GADGET BOY</a>
 	</div>
+	
+
 	<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">		
-		<ul class="nav navbar-nav navbar-left" data-ng-if="menu.shouldRender(authentication.user);">
+		<!--<ul class="nav navbar-nav navbar-left" data-ng-if="menu.shouldRender(authentication.user);">
 			<li data-ng-repeat="item in menu.items | orderBy: 'position'" data-ng-if="item.shouldRender(authentication.user);" ng-switch="item.menuItemType" ui-route="{{item.uiRoute}}" class="{{item.menuItemClass}}" ng-class="{active: ($uiRoute)}" dropdown="item.menuItemType === 'dropdown'" dropdown >
 				<a ng-switch-when="dropdown" class="dropdown-toggle" dropdown-toggle>
 					<span data-ng-bind="item.title"></span>
@@ -21,6 +24,21 @@
 					</li>
 				</ul>
 				<a ng-switch-default href="/#!/{{item.link}}" data-ng-bind="item.title"></a>
+			</li>
+		</ul>-->
+
+		<!-- Product Categories Dropdown Menu -->
+		<ul class="nav navbar-nav navbar-left" style="margin-right:50px;" >
+			<li class="dropdown" dropdown >
+				<a href="#" class="dropdown-toggle" dropdown-toggle >
+					<span class="glyphicon glyphicon-th" ></span>
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+				</ul>
 			</li>
 		</ul>
 

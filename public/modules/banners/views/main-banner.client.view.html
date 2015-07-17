@@ -1,13 +1,25 @@
-<section style="margin-top:30px;"  data-ng-controller="BannersController">
-  <div style="height: 250px">
-    <carousel interval="myInterval">
-      <slide ng-repeat="slide in slides" active="slide.active">
-        <img ng-src="{{slide.image}}" style="margin:auto;">
-        <div class="carousel-caption">
+<section class="banner row" data-ng-controller="BannersController">
+  <section class="col-lg-9 mobile-nopadding " >
+   <carousel interval="myInterval" class="item-box">
+    <slide ng-repeat="slide in slides" active="slide.active">
+      <img ng-src="{{slide.image}}">
+        <!--<div class="carousel-caption">
           <h4>Slide {{$index}}</h4>
           <p>{{slide.text}}</p>
-        </div>
+        </div>-->
       </slide>
     </carousel>
-  </div>
+  </section>
+  <section class="col-lg-3 col-md-12 col-sm-12 mobile-nopadding" >
+    <section class="row small-banner small-banner-top item-box" >
+      <section class="col-lg-12  ">
+       small banner
+      </section>
+    </section>
+    <section class="row small-banner small-banner-bottom item-box" >
+       <section class="col-lg-12">
+       small banner
+      </section>
+    </section>
+  </section>
 </section>

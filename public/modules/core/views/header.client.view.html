@@ -24,27 +24,46 @@
 								<span class="glyphicon glyphicon-tags" ></span> 
 								อุปกรณ์อำนวยความสะดวก
 							</a>
-						</span> 
-					</li>
-				</ul>
-			</li>
-		</ul>
 
-		<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav navbar-nav navbar-left" data-ng-show="authentication.user">
+				<li dropdown on-toggle="toggled(open)">
+					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>
+						<span class="hidden-sm" >หมวดหมู่สินค้า</span><b class="caret" ></b></a>
+					<ul class="dropdown-menu" >
+						<li><a href="#" ><span class="glyphicon glyphicon-tags" ></span> ลำโพง</a></li>
+						<li><a href="#" ><span class="glyphicon glyphicon-tags" ></span> ของเล่น</a></li>
+						<li>
+							<a href="#" >
+								<span class="glyphicon glyphicon-tags" ></span> 
+								อุปกรณ์อำนวยความสะดวก
+							</a>
+							
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
 
 
-		<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
 
-			<li ui-route="/signin" ng-class="{active: $uiRoute}" title="เข้าสู่ระบบ" >
-				<a href="/#!/signin">
-					<span class="glyphicon glyphicon-lock" ></span>
-					<span class="hidden-sm" >เข้าสู่ระบบ</span>
-				</a>
-			</li>
-			<li ui-route="/signup" ng-class="{active: $uiRoute}" title="สมัครสมาชิก">
-				<a href="/#!/signup">
-					<span class="glyphicon glyphicon-user" ></span> 
-					<span class="hidden-sm" >สมัครสมาชิก</span></a>
+			<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
+
+				<li ui-route="/signin" ng-class="{active: $uiRoute}" title="เข้าสู่ระบบ" >
+					<a href="/#!/signin">
+						<span class="glyphicon glyphicon-lock" ></span>
+						<span class="hidden-sm" >เข้าสู่ระบบ</span>
+					</a>
+				</li>
+				<li ui-route="/signup" ng-class="{active: $uiRoute}" title="สมัครสมาชิก">
+					<a href="/#!/signup">
+						<span class="glyphicon glyphicon-user" ></span> 
+						<span class="hidden-sm" >สมัครสมาชิก</span>
+					</a>
 				</li>
 				<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
 					<a href="#">
@@ -54,7 +73,11 @@
 					</a>
 				</li>
 
+
 			</ul>
+
+
+
 
 
 
@@ -78,9 +101,20 @@
 						<li >
 							<a href="#" ng-click="signout()">Signout</a>
 						</li>
+
 					</ul>
 				</li>
+				<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
+					<a href="#">
+						<span class="glyphicon glyphicon-shopping-cart" ></span>
+						<span class="hidden-sm" >ตระกร้า</span> 
+						<span class="badge">5</span>
+					</a>
+				</li>
 			</ul>
+
+
+
 		</nav>
 	</section>
 </nav>

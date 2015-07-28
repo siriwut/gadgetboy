@@ -54,6 +54,30 @@
 
 }
 
+.app-search-button:visited{
+	background: #3c3c3c;
+	border-top: #22DDFF solid 1px ;
+	border-bottom: #22DDFF solid 1px ;
+	border-right: #22DDFF solid 1px ;
+	border-left:none;
+	color: #22DDFF;
+
+}
+
+.app-search-button:hover{
+	background: #3c3c3c;
+	border-top: #22DDFF solid 1px ;
+	border-bottom: #22DDFF solid 1px ;
+	border-right: #22DDFF solid 1px ;
+	border-left:none;
+	color: #22DDFF;
+
+}
+
+
+
+
+
 
 
 

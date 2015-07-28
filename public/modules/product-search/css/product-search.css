@@ -1,4 +1,62 @@
-.search-bar{
-	margin-top:10px;
-	padding: 5px;
+.app-search-text{
+	background: #3c3c3c;
+	border-top: #22DDFF solid 1px ;
+	border-bottom: #22DDFF solid 1px ;
+	border-left: #22DDFF solid 1px ;
+	border-right:none;
 }
+
+@media (min-width: 768px) {
+	.app-search-text{
+		width: 200px !important;
+		background: #3c3c3c;
+		border-top: #22DDFF solid 1px ;
+		border-bottom: #22DDFF solid 1px ;
+		border-left: #22DDFF solid 1px ;
+		border-right:none;
+	}
+}
+
+@media (min-width: 992px) {
+	.app-search-text{
+		width: 200px !important;
+		background: #3c3c3c;
+		border-top: #22DDFF solid 1px ;
+		border-bottom: #22DDFF solid 1px ;
+		border-left: #22DDFF solid 1px ;
+		border-right:none;
+	}	
+
+}
+
+
+@media (min-width: 1200px) {
+	.app-search-text{
+		width: 400px !important;
+		border-top: #22DDFF solid 1px ;
+		border-bottom: #22DDFF solid 1px ;
+		border-left: #22DDFF solid 1px ;
+		border-right:none;
+		background: #3c3c3c;
+
+	}
+
+}
+
+
+.app-search-button{
+	background: #3c3c3c;
+	border-top: #22DDFF solid 1px ;
+	border-bottom: #22DDFF solid 1px ;
+	border-right: #22DDFF solid 1px ;
+	border-left:none;
+	color: #22DDFF;
+
+}
+
+
+
+
+
+
+

@@ -1,21 +1,12 @@
-<section data-ng-controller="ProductSearchController">
-	<form>
+<section data-ng-controller="ProductSearchController"  >	
+	<form class="navbar-form navbar-left" role="search" >
 		<section class="input-group" >
-			<input type="text" class="form-control col-lg-12" placeholder="Search"  >		
-			<section class="input-group-btn"  >
-				<select class="form-control" style="margin-left:2px;">
-					<option>ทุกหมวดหมู่สินค้า</option>
-					<option>เครื่องเสียง</option>
-				<select>
-				<ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Another action</a></li>
-					<li><a href="#">Something else here</a></li>
-					<li role="separator" class="divider"></li>
-					<li><a href="#">Separated link</a></li>
-				</ul>
-				<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon glyphicon-search" ></span></button>
-			</section>
+			<input type="text" class="form-control app-search-text" placeholder="ค้นหาสินค้า">
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default app-search-button" ><span class="glyphicon glyphicon-search" ></span>
+				</button>
+			</span>
 		</section>
 	</form>
 </section>
+

@@ -7,7 +7,7 @@ angular.module('banners').controller('BannersController', ['$scope',
 		$scope.addSlide = function() {
 			var newWidth = 1200 + slides.length + 1;
 			slides.push({
-				image: 'http://placekitten.com/' + newWidth + '/500',
+				image: 'http://placekitten.com/' + newWidth + '/400',
 				text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
 				['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
 			});

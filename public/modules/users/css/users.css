@@ -12,3 +12,77 @@
 	right: 10px;
 	position: absolute;
 }
+
+.header-text{
+	margin-top:40px;
+	padding-bottom:20px;
+	border-bottom: 1px solid #D8D8D8;
+	text-align: left;
+}
+
+.login-facebook-box{
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.login-box{
+	margin-top: 50px;
+}
+
+.login-box-header{
+	text-align: center;
+}
+
+
+
+@media(min-width: 768px){
+	.login-box{
+		margin-top: 50px;
+	}
+
+	.login-box-header{
+		text-align: center;
+	}
+
+
+
+}
+
+@media(min-width: 1200px){
+	.login-box-header{
+		text-align: left;
+		margin-left: 100px;
+	}
+	.login-box{
+		margin-left: 80px;
+		margin-top: 0;
+	}
+
+	.login-box-form{
+		margin-left: 65px;
+	}
+
+	.login-facebook-box{
+		text-align: center;
+		border-right:1px solid #D8D8D8;
+		padding-bottom: 130px;
+	}
+
+}
+
+.login-header-or,.signup-header-or{
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+@media(min-width: 1200px){
+	.signup-facebook-box{
+		padding-bottom: 350px;
+		border-right: 1px solid #D8D8D8;
+
+	}
+}
+
+
+
+

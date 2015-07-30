@@ -1,41 +1,43 @@
-<section class="container" data-ng-controller="AuthenticationController" style="margin-top:60px;" >
+<section class="container" data-ng-controller="AuthenticationController"  >
+	<h3 class="header-text" ><span class="glyphicon glyphicon-lock"></span>ลงชื่อเข้าใช้</h3>
 	<section class="row" >
-		<section class="col-lg-7">
-			<h3>เข้าสู่ระบบด้วยบัญชี Facebook ของคุณ</h3>
-			<div class="row" >
-				<div class="col-lg-offset-3 col-lg-3">
+		<section class="col-md-12 col-lg-6">
+			<div class="login-facebook-box">
+				<h3>ด้วยบัญชี Facebook ของคุณ</h3>
+				<a href="/auth/facebook" class="undecorated-link">
+					<img src="/modules/users/img/buttons/facebook.png">
+				</a>
 
-					<a href="/auth/facebook" class="undecorated-link">
-						<img src="/modules/users/img/buttons/facebook.png">
-					</a>
-				</div>
 			</div>
-		</section>
 
-		<section class="col-lg-5">
-			<h3>เข้าสู่ระบบด้วยบัญชี Gadget Boy ของคุณ</h3>
-			<form data-ng-submit="signin()" class="signin form-horizontal" autocomplete="off">
-				<fieldset>
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Username">
-					</div>
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
-					</div>
-					<div class="text-center form-group">
-						<button type="submit" class="btn btn-primary">Sign in</button>&nbsp; or&nbsp;
-						<a href="/#!/signup">Sign up</a>
-					</div>
-					<div class="forgot-password">
-						<a href="/#!/password/forgot">Forgot your password?</a>
-					</div>
-					<div data-ng-show="error" class="text-center text-danger">
-						<strong data-ng-bind="error"></strong>
-					</div>
-				</fieldset>
-			</form>
+		</section>
+		<h2 class="login-header-or text-center col-md-12 hidden-lg" >-หรือ-</h2>
+		<section class="col-md-12 col-lg-6">
+			<div class="login-box" >			
+				<h3 class="login-box-header" >ด้วย Email ของคุณ</h3>
+				<form data-ng-submit="signin()" class="signin form-horizontal login-box-form" autocomplete="off">
+					<fieldset class="col-lg-8" >
+						<div class="form-group">
+							<label for="username">อีเมล</label>
+							<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Email">
+						</div>
+						<div class="form-group">
+							<label for="password">รหัสผ่าน</label>
+							<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+						</div>
+						<div class="text-center form-group">
+							<button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>&nbsp; หรือ&nbsp;
+							<a href="/#!/signup">สมัครสมาชิก</a>
+						</div>
+						<div class="forgot-password">
+							<a href="/#!/password/forgot">ลืมรหัสผ่าน?</a>
+						</div>
+						<div data-ng-show="error" class="text-center text-danger">
+							<strong data-ng-bind="error"></strong>
+						</div>
+					</fieldset>
+				</form>
+			</div>
 		</section>
 	</section>
 </section>

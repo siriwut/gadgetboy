@@ -1,11 +1,11 @@
-<section data-ng-controller="CategoriesController">
-	<section class="row" >
-		<section class="col-lg-2" >
-			sss
+<section class="category" data-ng-controller="CategoriesController">
+	<section class="row">
+		<section class="col-lg-12">
+			<ol class="breadcrumb category-breadcrumb item-box">
+				<li><a href="#">หน้าแรก</a></li>
+				<li><a href="#">หมวดหมู่สินค้า</a></li>
+				<li class="active">ลำโพง</li>
+			</ol>
 		</section>
-
-		<section class="col-lg-10" >
-			<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
-		</section>
-
 	</section>
+</section>

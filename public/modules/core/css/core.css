@@ -2,6 +2,31 @@
 	margin-top: 50px;
 }
 
+body{
+	background: #F5F5F5;
+}
+
+@media(max-width: 768px){
+	.mobile-col-nopadding {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.desktop-col-nopadding {
+	padding-left:0; 
+	padding-right:0;
+}
+
+.desktop-row-nomargin {
+	margin-left:0; 
+	margin-right:0;
+}
+
+.item-box {
+	border: 1px solid #D8D8D8;
+}
+
 .app-navbar{
 	background: #000;
 }
@@ -28,6 +53,8 @@
 	padding-bottom:5px;
 	margin-bottom: 0;
 }
+
+
 
 .undecorated-link:hover {
 	text-decoration: none;

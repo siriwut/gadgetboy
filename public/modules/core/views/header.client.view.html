@@ -34,10 +34,10 @@
 					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>
 						<span class="hidden-sm" >หมวดหมู่สินค้า</span><b class="caret" ></b></a>
 					<ul class="dropdown-menu" >
-						<li><a href="#" ><span class="glyphicon glyphicon-tags" ></span> ลำโพง</a></li>
-						<li><a href="#" ><span class="glyphicon glyphicon-tags" ></span> ของเล่น</a></li>
+						<li><a href="/#!/categories" ><span class="glyphicon glyphicon-tags" ></span> ลำโพง</a></li>
+						<li><a href="/#!/categories" ><span class="glyphicon glyphicon-tags" ></span> ของเล่น</a></li>
 						<li>
-							<a href="#" >
+							<a href="/#!/categories" >
 								<span class="glyphicon glyphicon-tags" ></span> 
 								อุปกรณ์อำนวยความสะดวก
 							</a>
@@ -76,18 +76,16 @@
 
 			</ul>
 
-
-
-
-
-
 			<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
 				<li class="dropdown" dropdown >
 					<a href="#" class="dropdown-toggle" dropdown-toggle >
 						<span data-ng-bind="authentication.user.displayName"></span>
-						<b class="caret"></b>
+						 <b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
+						<li>
+							<a href="/#!/admin-panel">Admin Panel</a>
+						</li>
 						<li>
 							<a href="/#!/settings/profile">Edit Profile</a>
 						</li>
@@ -108,7 +106,7 @@
 					<a href="#">
 						<span class="glyphicon glyphicon-shopping-cart" ></span>
 						<span class="hidden-sm" >ตระกร้า</span> 
-						<span class="badge">5</span>
+						<span class="label label-primary">10</span>
 					</a>
 				</li>
 			</ul>

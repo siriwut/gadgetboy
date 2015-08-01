@@ -1,0 +1,13 @@
+.product {
+	margin-top: 10px;
+}
+
+.product-detail-header{
+	border-bottom: 1px solid #D8D8D8;
+	padding-bottom: 5px;
+}
+
+
+.product-detail{
+	background: #FFF;
+}

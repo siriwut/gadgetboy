@@ -1,7 +1,9 @@
 .category{
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .category-breadcrumb{
-	background: #000;	
+	background: #F5F5F5;
+	padding: 15px 10px 15px 20px;
+	border:1px solid #D8D8D8;
 }

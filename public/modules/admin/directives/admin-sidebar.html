@@ -1,0 +1,64 @@
+<nav >
+	<ul class="list-group admin-sidebar" >
+		<li class="admin-sidebar-menu admin-sidebar-header " >Admin Panel</li>
+		<li class="admin-sidebar-menu" >
+			
+			<a ui-sref="admin-panel.store" href="/#!/admin-panel/store" >
+				<span class="glyphicon glyphicon-home" ></span> 
+				หน้าร้าน
+			</a>
+		</li>
+
+		<li class="admin-sidebar-menu" >
+			
+			<a href data-ng-click="check(2)" >
+
+				<span  class="glyphicon glyphicon-list-alt" ></span> คำสั่งซื้อ 
+				<span class="label label-danger">40</span>
+				<span ng-class="{'glyphicon-menu-down':collapseVar==2,'glyphicon-menu-left':collapseVar!=2}" class="glyphicon  pull-right" ></span>
+
+			</a> 
+
+			<ul class="admin-sidebar-list" collapse="collapseVar!=2" >
+				<li  ><a href>ใหม่<span class="badge pull-right">20</span></a></li>
+				<li  ><a href>ยื่นหลักฐานชำระแล้ว<span class="badge bg-orange pull-right">1</span></a></li>
+				<li   ><a href>ชำระแล้ว<span class="badge bg-green pull-right">14</span></a></li>
+				<li  ><a href>จัดส่งแล้ว<span class="badge bg-skyblue pull-right">5</span></a></li>
+				<li  ><a href>เกินกำหนดชำระ<span class="badge bg-red pull-right">0</span></a></li>
+				<li ><a href>ยกเลิกคำสั่งซื้อแล้ว<span class="badge bg-grey pull-right">0</span></a></li>
+
+			</ul>
+
+		</li>
+
+		<li class="admin-sidebar-menu"  >
+			<a href data-ng-click="check(3)" >
+				<span class="glyphicon glyphicon-tag"  ></span> 
+				สินค้า
+				<span class="label label-primary">42</span>
+
+				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
+			</a> 
+			
+			<ul class="admin-sidebar-list" collapse="collapseVar!=3"  >
+				<li><a href>เพิ่มสินค้า</a></li>
+			</ul>
+
+		</li>
+
+		<li class="admin-sidebar-menu" >
+			<a href>
+				<span class="glyphicon glyphicon-user" ></span> 
+				ลูกค้า 
+				<span class="label label-primary">42</span>
+			</a>
+		</li>
+		<li class="admin-sidebar-menu" >
+			<a href>
+				<span class="glyphicon glyphicon-sunglasses" ></span> 
+				Admins 
+				<span class="label label-primary">42</span>
+			</a>
+		</li>
+	</ul>
+</nav>

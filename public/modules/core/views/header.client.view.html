@@ -84,20 +84,23 @@
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="/#!/admin-panel">Admin Panel</a>
+							<a href="/#!/admin-panel"><span class="glyphicon glyphicon-sunglasses" ></span>Admin Panel</a>
 						</li>
+
 						<li>
-							<a href="/#!/settings/profile">Edit Profile</a>
+							<a href="/#!/customer-panel"><span class="glyphicon glyphicon-user" ></span>มุมลูกค้า</a>
 						</li>
+						<li class="divider"></li>
 						<li>
-							<a href="/#!/settings/accounts">Manage Social Accounts</a>
+							<a href="/#!/settings/profile"></span>แก้ไขบัญชีผู้ใช้</a>
 						</li>
+						
 						<li data-ng-show="authentication.user.provider === 'local'">
-							<a href="/#!/settings/password">Change Password</a>
+							<a href="/#!/settings/password">เปลี่ยนรหัสผ่าน</a>
 						</li>
 						<li class="divider"></li>
 						<li >
-							<a href="#" ng-click="signout()">Signout</a>
+							<a href="#" ng-click="signout()">ออกจากระบบ</a>
 						</li>
 
 					</ul>

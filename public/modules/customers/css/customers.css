@@ -1,0 +1,54 @@
+.customer-panel{
+	margin-top:10px;
+}
+
+.customer-sidebar {
+	border:1px solid #DDDDDD;
+}
+
+.customer-sidebar-header{
+	background:#000 !important;
+	font-size: 18px;	
+	color:#F2F2F2;
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+
+}
+
+.customer-sidebar li{
+	list-style: none;
+	border-bottom:1px solid #DDDDDD;
+}
+
+.customer-sidebar li a{
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	background-color: #FFFFFF;
+	
+}
+
+.customer-sidebar-list{
+	padding-left: 0;
+}
+
+.customer-sidebar-list  li{
+	border:none;	
+	list-style: none;
+	color:#2780E3 !important;
+
+}
+
+.customer-sidebar-list li a{
+	padding-left: 37px;
+}
+
+.customer-sidebar-menu > a{
+	color: #000;
+
+}
+
+.customer-sidebar-menu > a:link{
+	text-decoration: none;
+}

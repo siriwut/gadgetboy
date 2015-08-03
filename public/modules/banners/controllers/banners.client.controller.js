@@ -8,11 +8,11 @@ angular.module('banners').controller('BannersController', ['$scope',
 			var newWidth = 1200 + slides.length + 1;
 			slides.push({
 				image: 'http://placekitten.com/' + newWidth + '/400',
-				text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
-				['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
+				text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
+				['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
 			});
 		};
-		for (var i=0; i<2; i++) {
+		for (var i=0; i<4; i++) {
 			$scope.addSlide();
 		}
 	}

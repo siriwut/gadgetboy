@@ -1,0 +1,60 @@
+.admin-panel{
+	margin-top:10px;
+}
+
+.admin-panel-header{
+	border-bottom: 1px solid #D8D8D8;
+}
+
+
+.admin-sidebar {
+	border:1px solid #DDDDDD;
+}
+
+.admin-sidebar-header{
+	background:#000 !important;
+	font-size: 18px;	
+	color:#F2F2F2;
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+
+}
+
+.admin-sidebar li{
+	list-style: none;
+	border-bottom:1px solid #DDDDDD;
+}
+
+.admin-sidebar li a{
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	background-color: #FFFFFF;
+	
+}
+
+.admin-sidebar-list{
+	padding-left: 0;
+}
+
+.admin-sidebar-list  li{
+	border:none;	
+	list-style: none;
+	color:#2780E3 !important;
+
+}
+
+.admin-sidebar-list li a{
+	padding-left: 37px;
+}
+
+.admin-sidebar-menu > a{
+	color: #000;
+
+}
+
+.admin-sidebar-menu > a:link{
+	text-decoration: none;
+}
+

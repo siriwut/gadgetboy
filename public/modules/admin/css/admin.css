@@ -8,7 +8,9 @@
 
 
 .admin-sidebar {
-	border:1px solid #DDDDDD;
+	border-top:1px solid #DDDDDD;
+	border-left:1px solid #DDDDDD;
+	border-right:1px solid #DDDDDD;
 }
 
 .admin-sidebar-header{
@@ -34,6 +36,15 @@
 	
 }
 
+
+.admin-sidebar li a:hover{
+	background-color: #EEE;
+}
+
+
+
+
+
 .admin-sidebar-list{
 	padding-left: 0;
 }
@@ -56,5 +67,9 @@
 
 .admin-sidebar-menu > a:link{
 	text-decoration: none;
+}
+
+.admin-sidebar .active{
+	background-color: #EEE !important;
 }
 

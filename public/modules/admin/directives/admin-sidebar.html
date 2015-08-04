@@ -1,25 +1,22 @@
 <nav >
 	<ul class="list-group admin-sidebar" >
 		<li class="admin-sidebar-menu admin-sidebar-header " >Admin Panel</li>
-		<li class="admin-sidebar-menu" >
-			
-			<a ui-sref="admin-panel.store" href="/#!/admin-panel/store" >
-				<span class="glyphicon glyphicon-home" ></span> 
-				หน้าร้าน
+		<li  class="admin-sidebar-menu" >	
+			<a ui-sref-active="active" ui-sref="admin-panel.store" href >
+				<span class="glyphicon glyphicon-dashboard" ></span> 
+				ภาพรวม
 			</a>
-		</li>
+		</li>	
 
-		<li class="admin-sidebar-menu" >
+		<li  class="admin-sidebar-menu" >
 			
-			<a href data-ng-click="check(2)" >
-
+			<a href ng-class="{active:collapseVar==1}" data-ng-click="check(1)" >
 				<span  class="glyphicon glyphicon-list-alt" ></span> คำสั่งซื้อ 
 				<span class="label label-danger">40</span>
-				<span ng-class="{'glyphicon-menu-down':collapseVar==2,'glyphicon-menu-left':collapseVar!=2}" class="glyphicon  pull-right" ></span>
-
+				<span ng-class="{'glyphicon-menu-down':collapseVar==1,'glyphicon-menu-left':collapseVar!=1}" class="glyphicon  pull-right" ></span>
 			</a> 
 
-			<ul class="admin-sidebar-list" collapse="collapseVar!=2" >
+			<ul class="admin-sidebar-list" collapse="collapseVar!=1" >
 				<li  ><a href>ใหม่<span class="badge pull-right">20</span></a></li>
 				<li  ><a href>ยื่นหลักฐานชำระแล้ว<span class="badge bg-orange pull-right">1</span></a></li>
 				<li   ><a href>ชำระแล้ว<span class="badge bg-green pull-right">14</span></a></li>
@@ -32,32 +29,43 @@
 		</li>
 
 		<li class="admin-sidebar-menu"  >
-			<a href data-ng-click="check(3)" >
+			<a href ng-class="{active:collapseVar==2}" data-ng-click="check(2)" >
 				<span class="glyphicon glyphicon-tag"  ></span> 
 				สินค้า
 				<span class="label label-primary">42</span>
 
-				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
+				<span ng-class="{'glyphicon-menu-down':collapseVar==2,'glyphicon-menu-left':collapseVar!=2}" class="glyphicon  pull-right" ></span>
 			</a> 
 			
-			<ul class="admin-sidebar-list" collapse="collapseVar!=3"  >
+			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
 				<li><a href>เพิ่มสินค้า</a></li>
 			</ul>
 
 		</li>
 
 		<li class="admin-sidebar-menu" >
-			<a href>
+			<a href ng-class="{active:collapseVar==3}" data-ng-click="check(3)" >
 				<span class="glyphicon glyphicon-user" ></span> 
 				ลูกค้า 
 				<span class="label label-primary">42</span>
+
+				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
+			</a>
+		</li>
+		<li class="admin-sidebar-menu" >	
+			<a href ng-class="{active:collapseVar==4}" data-ng-click="check(4)" >
+				<span class="glyphicon glyphicon-home" ></span> 
+				หน้าร้าน
+				<span ng-class="{'glyphicon-menu-down':collapseVar==4,'glyphicon-menu-left':collapseVar!=4}" class="glyphicon  pull-right" ></span>
 			</a>
 		</li>
 		<li class="admin-sidebar-menu" >
-			<a href>
+			<a href ng-class="{active:collapseVar==5}" data-ng-click="check(5)" >
 				<span class="glyphicon glyphicon-sunglasses" ></span> 
 				Admins 
 				<span class="label label-primary">42</span>
+
+				<span ng-class="{'glyphicon-menu-down':collapseVar==5,'glyphicon-menu-left':collapseVar!=5}" class="glyphicon  pull-right" ></span>
 			</a>
 		</li>
 	</ul>

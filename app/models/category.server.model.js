@@ -10,8 +10,14 @@ var mongoose = require('mongoose'),
  * Category Schema
  */
 var CategorySchema = new Schema({
-	// Category model fields   
-	// ...
+	name:{
+		type:String,
+		require:'Name cannot be blank'
+	},
+	description:{
+		type:String,
+		default:''
+	} 	
 });
 
 mongoose.model('Category', CategorySchema);

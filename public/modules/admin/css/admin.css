@@ -6,6 +6,10 @@
 	border-bottom: 1px solid #D8D8D8;
 }
 
+.admin-panel-header .header-font-sm{
+	font-size:16px;
+}
+
 
 .admin-sidebar {
 	border-top:1px solid #DDDDDD;

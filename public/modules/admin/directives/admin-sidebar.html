@@ -32,40 +32,52 @@
 			<a href ng-class="{active:collapseVar==2}" data-ng-click="check(2)" >
 				<span class="glyphicon glyphicon-tag"  ></span> 
 				สินค้า
-				<span class="label label-primary">42</span>
-
 				<span ng-class="{'glyphicon-menu-down':collapseVar==2,'glyphicon-menu-left':collapseVar!=2}" class="glyphicon  pull-right" ></span>
 			</a> 
 			
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a href>เพิ่มสินค้า</a></li>
+				<li><a ui-sref="admin-panel.list-product" ui-sref-active="active" href>ทั้งหมด<span class="badge pull-right">20</span></a></li>
+			</ul>
+			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
+				<li><a href ui-sref-active="active" >ลดราคา<span class="badge bg-red pull-right">20</span></a></li>
+			</ul>
+			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
+				<li><a href ui-sref-active="active" >หมดสต็อก<span class="badge bg-grey pull-right">20</span></a></li>
 			</ul>
 
 		</li>
 
-		<li class="admin-sidebar-menu" >
+		<li class="admin-sidebar-menu"  >
 			<a href ng-class="{active:collapseVar==3}" data-ng-click="check(3)" >
+				<span class="glyphicon glyphicon-th-list"  ></span> 
+				หมวดหมู่สินค้า
+				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
+			</a> 
+			
+			<ul class="admin-sidebar-list" collapse="collapseVar!=3"  >
+				<li><a href>ทั้งหมด<span class="badge pull-right">20</span></a></a></li>
+			</ul>
+		</li>
+
+		<li class="admin-sidebar-menu" >
+			<a href ng-class="{active:collapseVar==4}" data-ng-click="check(4)" >
 				<span class="glyphicon glyphicon-user" ></span> 
 				ลูกค้า 
-				<span class="label label-primary">42</span>
-
-				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
-			</a>
-		</li>
-		<li class="admin-sidebar-menu" >	
-			<a href ng-class="{active:collapseVar==4}" data-ng-click="check(4)" >
-				<span class="glyphicon glyphicon-home" ></span> 
-				หน้าร้าน
 				<span ng-class="{'glyphicon-menu-down':collapseVar==4,'glyphicon-menu-left':collapseVar!=4}" class="glyphicon  pull-right" ></span>
 			</a>
 		</li>
-		<li class="admin-sidebar-menu" >
+		<li class="admin-sidebar-menu" >	
 			<a href ng-class="{active:collapseVar==5}" data-ng-click="check(5)" >
+				<span class="glyphicon glyphicon-home" ></span> 
+				หน้าร้าน
+				<span ng-class="{'glyphicon-menu-down':collapseVar==5,'glyphicon-menu-left':collapseVar!=5}" class="glyphicon  pull-right" ></span>
+			</a>
+		</li>
+		<li class="admin-sidebar-menu" >
+			<a href ng-class="{active:collapseVar==6}" data-ng-click="check(6)" >
 				<span class="glyphicon glyphicon-sunglasses" ></span> 
 				Admins 
-				<span class="label label-primary">42</span>
-
-				<span ng-class="{'glyphicon-menu-down':collapseVar==5,'glyphicon-menu-left':collapseVar!=5}" class="glyphicon  pull-right" ></span>
+				<span ng-class="{'glyphicon-menu-down':collapseVar==6,'glyphicon-menu-left':collapseVar!=6}" class="glyphicon  pull-right" ></span>
 			</a>
 		</li>
 	</ul>

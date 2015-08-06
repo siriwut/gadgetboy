@@ -8,6 +8,6 @@ angular.module('admin').config(['$stateProvider',
 		state('admin-panel', {
 			url: '/admin-panel',
 			templateUrl: 'modules/admin/views/admin-panel.client.view.html'
-		})
+		});
 	}	
 	]);

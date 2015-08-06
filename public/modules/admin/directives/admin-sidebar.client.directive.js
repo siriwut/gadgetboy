@@ -11,7 +11,7 @@ angular.module('admin').directive('adminSidebar', [
 				$scope.collapseVar = 0;
 
 				$scope.check = function(itemNum){
-					$scope.collapseVar = (itemNum!=$scope.collapseVar)? itemNum : 0;
+					$scope.collapseVar = (itemNum!==$scope.collapseVar)? itemNum : 0;
 				};
 			}
 		};

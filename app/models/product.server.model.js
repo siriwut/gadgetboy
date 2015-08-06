@@ -22,20 +22,25 @@
  		type:String,
  		default:''
  	},
- 	colors:[color:{
- 		type:{
+ 	colors:[{
+ 		color:{
  			type:String,
- 			enum['red','blue','green','yellow','orange','purple','brown','grey','white','black']
- 		},
- 		default:''
+ 			enum:['red','green','blue','yellow','purple','brown','grey','black','white']
+ 		}
  	}],
  	price:{
  		type:Number,
  		default:0
  	},
- 	discount:{
- 		type:Number,
- 		default:0
+ 	sale:{
+ 		value:{
+ 			type:Number,
+ 			default:0
+ 		},
+ 		onSale:{
+ 			type:Boolean,
+ 			default:false
+ 		}
  	},
  	quantity:{
  		type:Number,
@@ -49,11 +54,32 @@
  		type:String,
  		default:''
  	},
+ 	photos:[{
+ 		name:String,
+ 		type:String,
+ 		size:Number,
+ 		dimensions:{
+ 			widht:Number,
+ 			height:Number
+ 		},
+ 		url:String,
+ 		created:{
+ 			type:Date,
+ 			default:Date.now
+ 		}
+ 	}],
+ 	tags:[String],
+ 	soleOut:{
+ 		type:Boolean,
+ 		default:false
+ 	},
  	created: {
  		type: Date,
  		default: Date.now
  	},
- 	photos:[photo:{type:String}],
+ 	update:{
+ 		type:Date
+ 	},
  	category:{
  		type:Schema.ObjectId,
  		ref:'Category'
@@ -64,4 +90,4 @@
  	}	
  });
 
- mongoose.model('Product', ProductSchema);
+mongoose.model('Product', ProductSchema);

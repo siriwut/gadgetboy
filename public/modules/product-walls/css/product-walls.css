@@ -1,10 +1,11 @@
 .glyphicon { margin-right:5px; }
 .thumbnail {
     margin-bottom: 20px;
-    padding: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
+     padding: 0;
+    border: 1px solid #D8D8D8;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
 }
 
 .item.list-group-item {
@@ -21,13 +22,13 @@
     margin-right: 10px;
 }
 .item.list-group-item .thumbnail {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .item.list-group-item .caption {
-    padding: 9px 9px 0px 9px;
+    padding: 9px 9px 0 9px;
 }
 .item.list-group-item:nth-of-type(odd) {
-    background: #eeeeee;
+    background: #EEEEEE;
 }
 
 .item.list-group-item:before, .item.list-group-item:after {

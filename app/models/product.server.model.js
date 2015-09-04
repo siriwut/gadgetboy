@@ -22,20 +22,16 @@
  		type:String,
  		default:''
  	},
- 	colors:[{
- 		color:{
- 			type:String,
- 			enum:['red','green','blue','yellow','purple','brown','grey','black','white']
- 		}
- 	}],
+ 	color:{
+ 		type:String,
+ 		enum:['red','green','blue','yellow','purple','brown','grey','black','white']
+ 	},
  	price:{
- 		type:Number,
- 		default:0
+ 		type:Number
  	},
  	sale:{
- 		value:{
- 			type:Number,
- 			default:0
+ 		percen:{
+ 			type:Number
  		},
  		onSale:{
  			type:Boolean,
@@ -43,8 +39,7 @@
  		}
  	},
  	quantity:{
- 		type:Number,
- 		default:0
+ 		type:Number
  	},
  	shortDescription:{
  		type:String,
@@ -54,21 +49,11 @@
  		type:String,
  		default:''
  	},
- 	photos:[{
- 		name:String,
- 		type:String,
- 		size:Number,
- 		dimensions:{
- 			widht:Number,
- 			height:Number
- 		},
- 		url:String,
- 		created:{
- 			type:Date,
- 			default:Date.now
- 		}
- 	}],
- 	tags:[String],
+ 	photos:[{type:Schema.ObjectId,ref:'Photo'}],
+ 	tags:{
+ 		type:[String],
+ 		index:true
+ 	},
  	soleOut:{
  		type:Boolean,
  		default:false

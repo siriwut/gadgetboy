@@ -80,6 +80,12 @@ body{
 		background: #5bc0de;
 	}
 
+
+	.thumbnail-frame {
+		padding: 4px !important;
+	}
+
+
 	.undecorated-link:hover {
 		text-decoration: none;
 	}

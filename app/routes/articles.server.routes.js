@@ -1,8 +1,7 @@
 'use strict';
+var multipart = require('connect-multiparty'),
+multipartMiddleware = multipart({autoFiles:true,uploadDir:'./public/photos_upload/'});
 
-/**
- * Module dependencies.
- */
 var users = require('../../app/controllers/users.server.controller'),
 	articles = require('../../app/controllers/articles.server.controller');
 

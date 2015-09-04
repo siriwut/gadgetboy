@@ -12,6 +12,11 @@
 	background: #FFF;
 }
 
+.btn-add-product{
+	margin-left: 10px;
+	margin-bottom: 5px;
+}
+
 .soleout-group{
 	display: block;
 	padding: 10px 10px 10px 10px;
@@ -24,3 +29,62 @@
 	margin-left:5px;
 	font-size: 18px;
 }
+
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type="file"] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	background: white;
+	cursor: inherit;
+	display: block;
+
+}
+
+.photo-upload-area {
+	border:4px dashed #C3C3C3;
+	padding: 15px 40px 30px 20px;
+	display: block;
+}
+
+.photos-upload-frame {
+	margin-top:10px;
+}
+
+.photo-preview-template{
+	display: inline-block;
+
+}
+
+.btn-remove-photo{
+	position: absolute;
+	top:-10px;
+	right:10px;
+	color:#FF0000;
+}
+
+.btn-remove-photo:link{
+	color:#FF0000;
+	text-decoration: none;
+}
+
+
+.btn-remove-photo:visited{
+	color:#FF0000;
+	text-decoration: none;
+}
+
+.btn-remove-photo:hover{
+	color:#FF0000;
+	text-decoration: none;
+}
+

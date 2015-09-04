@@ -1,72 +1,74 @@
-<section data-ng-controller="CreateProductController">
+<section data-ng-controller="ProductController">
 	<section class="row admin-content item-box" >		
 		<div class="col-lg-12">
-			<h3 class="admin-panel-header" >สินค้า <span class="glyphicon glyphicon-menu-right header-font-sm"></span>{{headerName}}</h3>
+			<h3 class="admin-panel-header" >เพิ่มสินค้า</h3>
 		</div>
 		<div class="col-lg-12">
-			<form>
+			<form data-ng-submit="create()" >
 				<div class="col-lg-8">
 					<div class="form-group">
 						<label>ชื่อสินค้า</label>
-						<input type="text" class="form-control" >
+						<input type="text" class="form-control" data-ng-model="product.name" >
 					</div>
 					<div class="form-group">
 						<label>หมวดหมู่สินค้า</label>
-						<select class="form-control" >
-							<option>กล้อง</option>
+						<select class="form-control" data-ng-model="product.category" >
+							<option value="กล้อง">กล้อง</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label>รุ่น</label>
-						<input type="text" class="form-control" >
+						<input type="text" class="form-control" data-ng-model="product.model" >
 					</div>
 					<div class="form-group">
 						<label>แบรนด์</label>
-						<input type="text" class="form-control" >
+						<input type="text" class="form-control" data-ng-model="product.brand" >
 					</div>
 					<div class="form-group">
-						<div class="photo-upload-area" >
-							<span class="btn btn-primary btn-file" >
-								<span class="glyphicon glyphicon-picture" ></span>เลือกรูปภาพ <input type="file" >
-							</span>
-						</div>
+						<product-photo-upload></product-photo-upload>
 					</div>
 					<div class="form-group">
 						<label>คำอธิบายย่อ</label>
-						<textarea class="form-control" ></textarea>
+						<textarea class="form-control" data-ng-model="product.shortDescription" ></textarea>
 					</div>
 					<div class="form-group">
 						<label>คำอธิบาย</label>
-						<textarea class="form-control" rows="15" ></textarea>
+						<textarea class="form-control" rows="15" data-ng-model="product.description" ></textarea>
 					</div>
 					
 					
 				</div>
 				<div class="col-lg-4">
 					<div class="form-group">
-						<label>ราคา</label>
-						<input type="text" class="form-control" placeholder="0.00 บาท" >
+						<label>ราคา (บาท)</label>
+						<input type="number" class="form-control" placeholder="0.00 บาท" data-ng-model="product.price" >
 					</div>
 					<div class="form-group">
 						<label>จำนวน</label>
-						<input type="number" class="form-control" placeholder="0 ชิ้น" min="0" >
+						<input type="number" class="form-control" placeholder="0 ชิ้น" min="0" data-ng-model="product.quantity" >
 					</div>
 					<div class="form-group">
 						<label>ลดราคา (% เปอร์เซ็น)</label>
 						<div class="input-group">
 							<span class="input-group-addon">
-								<input type="checkbox" aria-label="...">
+								<input type="checkbox" aria-label="..." data-ng-model="product.sale.onSale">
 							</span>
-							<input type="number" class="form-control" placeholder="0 %" min="0" max="100" >
+							<input type="number" class="form-control" placeholder="0 %" min="0" max="100" data-ng-model="product.sale.percen">
 						</div>
 					</div>
 					<div class="form-group">
+						<label>สี</label>
+						<select class="form-control" data-ng-model="product.color" >
+							<option value="red">แดง</option>
+						</select>
+					</div>
+					<div class="form-group">
 						<label>Tags</label>
-						<textarea class="form-control" rows="5" ></textarea>
+						<textarea class="form-control" rows="5" data-ng-model="product.tags" ng-list></textarea>
 					</div>
 					<div class="form-group">
 						<div class="soleout-group text-center" >
-							<input type="checkbox" aria-label="...">					
+							<input type="checkbox" aria-label="..." data-ng-model="product.soleOut" >
 							<span class="soleout-text" >Sole Out</span>
 						</div>	
 					</div>

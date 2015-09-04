@@ -34,9 +34,15 @@
 				สินค้า
 				<span ng-class="{'glyphicon-menu-down':collapseVar==2,'glyphicon-menu-left':collapseVar!=2}" class="glyphicon  pull-right" ></span>
 			</a> 
-			
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a ui-sref="admin-panel.list-product" ui-sref-active="active" href>ทั้งหมด<span class="badge pull-right">20</span></a></li>
+				<li>
+					<a ui-sref="admin-panel.create-product" ui-sref-active="active" href> 
+						<span class="glyphicon glyphicon-plus" ></span>เพิ่มสินค้า
+					</a>
+				</li>
+			</ul>
+			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
+				<li><a ui-sref="admin-panel.list-product"  ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
 				<li><a href ui-sref-active="active" >ลดราคา<span class="badge bg-red pull-right">20</span></a></li>

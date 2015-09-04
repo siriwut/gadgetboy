@@ -4,6 +4,8 @@
 
 .admin-panel-header{
 	border-bottom: 1px solid #D8D8D8;
+	padding-top:10px;
+	padding-bottom:10px;
 }
 
 .admin-panel-header .header-font-sm{
@@ -82,30 +84,5 @@
 	background: #FFFFFF;
 }
 
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
 
-}
-
-.photo-upload-area {
-	border:4px dashed #C3C3C3;
-	padding: 30px 20px 30px 30px;
-	display: block;
-}
 

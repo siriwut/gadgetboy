@@ -1,0 +1,25 @@
+<div data-ng-controller="productPhotoUploadController">
+	<div class="photo-upload-area" >
+		<div class="row">
+			<div  data-ng-repeat="photoPreview in photoPreviewList track by $index" class="col-xs-6 col-md-4">
+				<div  class="photo-preview-template" >
+					<img  src="{{photoPreview.photo.url}}" class="thumbnail thumbnail-frame " width="120" height="120"  >
+					<a href ng-click="remove($index)" class="glyphicon glyphicon-remove-circle btn-remove-photo"></a>
+
+					<div ng-if="photoPreview.progressPercentage" class="progress">
+						<div  class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{photoPreview.progressPercentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{photoPreview.progressPercentage}}%">
+							<span class="sr-only">60% Complete (warning)</span>
+						</div>
+					</div>
+				</div>
+
+				
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div class="btn btn-primary btn-file" ngf-select data-ng-model="files" ngf-multiple="true" accept=".jpg,.png,.gif"  >
+					<span class="glyphicon glyphicon-picture" ></span> เลือกรูปภาพ 
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>

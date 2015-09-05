@@ -1,9 +1,12 @@
 <section data-ng-controller="ProductController">
 	<section class="row admin-content item-box" >		
-		<div class="col-lg-12">
-			<h3 class="admin-panel-header" >เพิ่มสินค้า</h3>
+		<div class="row" >
+			<div class="col-lg-12">
+				<h3 class="admin-panel-header" >เพิ่มสินค้า</h3>
+			</div>
 		</div>
-		<div class="col-lg-12">
+		<div class="row" >
+
 			<form data-ng-submit="create()" >
 				<div class="col-lg-8">
 					<div class="form-group">
@@ -35,8 +38,8 @@
 						<label>คำอธิบาย</label>
 						<textarea class="form-control" rows="15" data-ng-model="product.description" ></textarea>
 					</div>
-					
-					
+
+
 				</div>
 				<div class="col-lg-4">
 					<div class="form-group">
@@ -78,6 +81,7 @@
 					<button type="submit" class="btn btn-primary btn-lg" >เพิ่ม</button>
 				</div>
 			</form>
+			
 		</div>
 	</section>
 </section>

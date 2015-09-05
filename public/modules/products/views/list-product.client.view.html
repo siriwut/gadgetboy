@@ -1,43 +1,133 @@
 <section data-ng-controller="ProductController" data-ng-init="list()">
-	<section class="row admin-content item-box" >		
-		<div class="col-lg-12">
-
-			<h3 class="admin-panel-header" >สินค้าทั้งหมด<a ui-sref="admin-panel.create-product" class="btn btn-primary btn-sm btn-add-product" ><span class="glyphicon glyphicon-plus"></span>เพิ่มสินค้า</a></h3>
+	
+	<section class="row admin-content item-box" >	
+		<div class="row admin-panel-header" >	
+			<div class="col-lg-8">
+				<h3  >สินค้าทั้งหมด<a ui-sref="admin-panel.create-product" class="btn btn-primary btn-sm btn-add-product" ><span class="glyphicon glyphicon-plus"></span>เพิ่มสินค้า</a></h3>
+			</div>
+			<div class="col-lg-4">
+				<h3 class="pull-right">
+					<form class="form-inline" >
+						<div class="form-group " >
+							<input type="text" class="form-control input-sm " placeholder="ค้นหาสินค้า..."  >
+						</div>
+						<button class="btn btn-default btn-sm" >ค้นหา</button>
+					</form>	
+				</h3>
+			</div>
 		</div>
-		<div class="col-lg-12">
-			<form class="form-inline" >
-				<div class="form-group" >
-					<select class="form-control input-sm" >
-						<option>ลบ</option>
-					</select>
+		<div class="row">
+			<div class="col-lg-8">
+				<form class="form-inline" >
+					<div class="form-group" >
+						<select class="form-control input-sm" >
+							<option>ลบ</option>
+						</select>
 
-				</div>
-				<button class="btn btn-default btn-sm" >ยืนยัน</button>
-			</form>
+					</div>
+					<button class="btn btn-default btn-sm btn-edit-product" >ยืนยัน</button>
+					<div class="form-group" >
+						<select class="form-control input-sm" >
+							<option>หมวดหมู่ทั้งหมด</option>
+						</select>
+
+					</div>
+					<button class="btn btn-default btn-sm" >กรอง</button>		
+				</form>	
+
+			</div>
+
+			<div class="col-lg-4">
+
+				<ul class="pagination pagination-sm pagination-product pull-right">
+					<li>
+						<a href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="active" ><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li>
+						<a href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+
+			</div>
 		</div>
-		<div class="col-lg-12">
-			<table class="table table-responsive table-bordered" >
-				<thead>
-					<th><input type="checkbox" ></th>
-					<th>ชื่อ</th>
-					<th>รุ่น</th>
-					<th>สี</th>
-				</thead>
-				<tfoot>
-					<th><input type="checkbox" ></th>
-					<th>ชื่อ</th>
-					<th>รุ่น</th>
-					<th>สี</th>
-				</tfoot>
-				<tbody>
-					<tr data-ng-repeat="product in products" >
-						<td><input type="checkbox" ></td>
-						<td>{{product.name}}</td>
-						<td>{{product.model}}</td>
-						<td>{{product.color}}</td>
-					</tr>
-				</tbody>	
-			</table>
-		</section>
-	</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<table class="table table-responsive table-bordered table-list-product" >
+					<thead>
+						<th><input type="checkbox" ></th>
+						<th>ชื่อ</th>
+						<th>รุ่น</th>
+						<th>สี</th>
+					</thead>
+					<tfoot>
+						<th><input type="checkbox" ></th>
+						<th>ชื่อ</th>
+						<th>รุ่น</th>
+						<th>สี</th>
+					</tfoot>
+					<tbody>
+						<tr data-ng-repeat="product in products" >
+							<td><input type="checkbox" ></td>
+							<td>{{product.name}}</td>
+							<td>{{product.model}}</td>
+							<td>{{product.color}}</td>
+						</tr>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-8">
+				<form class="form-inline" >
+					<div class="form-group" >
+						<select class="form-control input-sm" >
+							<option>ลบ</option>
+						</select>
+
+					</div>
+					<button class="btn btn-default btn-sm btn-edit-product" >ยืนยัน</button>
+					<div class="form-group" >
+						<select class="form-control input-sm" >
+							<option>หมวดหมู่ทั้งหมด</option>
+						</select>
+
+					</div>
+					<button class="btn btn-default btn-sm" >กรอง</button>		
+				</form>	
+			</div>
+			<div class="col-lg-4">
+
+				<ul class="pagination pagination-sm pagination-product pull-right">
+					<li>
+						<a href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="active" ><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li>
+						<a href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+
+			</div>
+		</div>
+
+	</section>
+
 </section>

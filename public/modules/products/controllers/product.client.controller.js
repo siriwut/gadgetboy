@@ -18,17 +18,6 @@ angular.module('products').controller('ProductController', ['$scope','$rootScope
 			tags:['speaker','tape'],
 			photos:[]
 		};
-
-		
-
-		$scope.$on('photoUploadCompleted',function(event,photo){
-			$scope.product.photos.push(photo._id);		
-		});
-
-		$scope.$on('photoRemoved',function(event,photoIndex){
-			$scope.product.photos.splice(photoIndex,1);			
-		});
-
 		
 
 		$scope.create = function(){
@@ -43,5 +32,17 @@ angular.module('products').controller('ProductController', ['$scope','$rootScope
 		$scope.list = function(){
 			$scope.products =  Products.query();			
 		};
+
+		$scope.delete = function(products){
+			console.log(products);
+		};
+
+		$scope.$on('photoUploadCompleted',function(event,photo){
+			$scope.product.photos.push(photo._id);		
+		});
+
+		$scope.$on('photoRemoved',function(event,photoIndex){
+			$scope.product.photos.splice(photoIndex,1);			
+		});
 	}
 	]);

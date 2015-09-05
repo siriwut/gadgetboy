@@ -88,3 +88,14 @@
 	text-decoration: none;
 }
 
+.table-list-product{
+	margin-top: 10px;
+}
+
+.pagination-product{
+	margin:0;
+}
+
+.btn-edit-product{
+	margin-right:15px;
+}

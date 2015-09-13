@@ -32,6 +32,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 					}
 				}
 			} else {
+				
 				$scope.article.$remove(function() {
 					$location.path('articles');
 				});

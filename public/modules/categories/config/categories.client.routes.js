@@ -5,9 +5,21 @@ angular.module('categories').config(['$stateProvider',
 	function($stateProvider) {
 		// Categories state routing
 		$stateProvider.
-		state('categories', {
+		state('adminPanel.listCategories', {
 			url: '/categories',
-			templateUrl: 'modules/categories/views/categories.client.view.html'
+			templateUrl: 'modules/categories/views/list-categories.client.view.html'
+		}).
+		state('adminPanel.createCategory', {
+			url: '/categories/create',
+			templateUrl: 'modules/categories/views/create-category.client.view.html'
+		}).
+		state('viewCategory', {
+			url: '/categories/:categoryId',
+			templateUrl: 'modules/categories/views/view-category.client.view.html'
+		}).
+		state('adminPanel.editCategory', {
+			url: '/categories/edit/:categoryId',
+			templateUrl: 'modules/categories/views/edit-category.client.view.html'
 		});
 	}
 ]);

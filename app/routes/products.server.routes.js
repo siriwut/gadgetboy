@@ -7,14 +7,12 @@ products = require('../../app/controllers/products.server.controller.js');
 module.exports = function(app) {
 	app.route('/api/products').
 	get(products.list).
-	post(users.hasAuthorization(['admin']),products.create);
+	post(users.requiresLogin,users.hasAuthorization(['admin']),products.create);
 
 	app.route('/api/products/:productId').
 	get(products.read).
-	delete(users.hasAuthorization(['admin']),products.delete).
-	put(users.hasAuthorization(['admin']),products.update);
+	put(users.requiresLogin,users.hasAuthorization(['admin']),products.hasAuthorization,products.update).
+	delete(users.requiresLogin,users.hasAuthorization(['admin']),products.hasAuthorization,products.delete);
 	
-
-
 	app.param('productId',products.productByID);
 };

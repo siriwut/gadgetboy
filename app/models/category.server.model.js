@@ -18,26 +18,20 @@
  		type:String,
  		default:''
  	},
- 	subCategories:[{
- 		name:String,
- 		description:{
- 			type:String,
- 			default:''
- 		},
- 		created:{
- 			type:Date,
- 			default:Date.now
- 		},
- 		updated:{
- 			type:Date
- 		}
- 	}],
+ 	parentCategory:{
+ 		type:Schema.ObjectId,
+ 		ref:'Category'
+ 	},
  	created:{
  		type:Date,
  		default:Date.now
  	},
  	updated:{
  		type:Date
+ 	},
+ 	user:{
+ 		type:Schema.ObjectId,
+ 		ref:'User'
  	}
  });
 

@@ -99,3 +99,8 @@
 .btn-edit-product{
 	margin-right:15px;
 }
+
+
+.row-action a{
+	text-decoration: none !important;
+}

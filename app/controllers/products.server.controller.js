@@ -25,7 +25,6 @@ slash = require('slash');
  	
  	product.save(function(err){	
  		if(err){
- 			console.log(err);
  			return res.status(400).send({
  				message:errorHandler.getErrorMessage(err)
  			});
@@ -41,13 +40,28 @@ slash = require('slash');
  * Show the current Product
  */
  exports.read = function(req, res) {
-
+ 	res.json(req.product);
  };
 
 /**
  * Update a Product
  */
  exports.update = function(req, res) {
+ 	var product = req.product;
+ 	req.body.category = req.body.category._id;
+ 	product = _.extend(req.product,req.body);
+
+ 	console.log(product);
+
+ 	product.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json(product);
+		}
+	});
 
  };
 
@@ -55,6 +69,18 @@ slash = require('slash');
  * Delete an Product
  */
  exports.delete = function(req, res) {
+ 	var product = req.product;
+
+ 	product.remove(function(err){
+ 		if(err){
+ 			return res.status(400).send({
+ 				message:errorHandler.getErrorMessage(err)
+ 			});
+ 		}else{
+ 			res.json(product);
+ 		}
+
+ 	});
 
  };
 
@@ -62,19 +88,19 @@ slash = require('slash');
  * List of Products
  */
  exports.list = function(req, res) {
- 	Product.find().sort('-created').populate('user', 'displayName').exec(function(err, products) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json(products);
-		}
-	});
+ 	Product.find().sort('-created').populate('user','displayName').populate('category','name').populate('photos','url').exec(function(err, products) {
+ 		if (err) {
+ 			return res.status(400).send({
+ 				message: errorHandler.getErrorMessage(err)
+ 			});
+ 		} else {
+ 			res.json(products);
+ 		}
+ 	});
  };
 
  exports.productByID = function(req,res,next,id){
- 	Product.find(id).populate('user').exec(function(err,product){
+ 	Product.findById(id).populate('user').populate('category').populate('photos').exec(function(err,product){
  		if(err)return next(err);
  		if(!product)return next(new Error('Failed to load product ' + id));
 
@@ -83,16 +109,11 @@ slash = require('slash');
  	});
  };
 
- exports.uploadPhotos = function(req, res){
- 	var temp = req.files.file;
- 	var dest = './public/photos_upload/'+uuid.v1()+path.extname(temp.path);
-
- 	var photoReviewPaths = url.resolve(req.protocol+'://'+req.get('host'),'/tmp/'+path.basename(req.files.file.path));
-
- 	res.json({photoTempUrl:photoReviewPaths});
-
- 	/*fs.move(temp.path,dest,function(err){
- 		if(err)console.log(err);
- 		res.json(req.files);
- 	});*/
+ exports.hasAuthorization = function(req, res, next) {
+	if (req.product.user.id !== req.user.id) {
+		return res.status(403).send('User is not authorized');
+	}
+	next();
 };
+
+

@@ -10,11 +10,22 @@
  * Photo Schema
  */
  var PhotoSchema = new Schema({
- 	name:String,
- 	extension:String,
- 	size:Number,
- 	url:String,
- 	user:{type:Schema.ObjectId,ref:'User'}
+ 	name:{
+ 		type:String
+ 	},
+ 	extension:{
+ 		type:String
+ 	},
+ 	size:{
+ 		type:Number
+ 	},
+ 	url:{
+ 		type:String
+ 	},
+ 	user:{
+ 		type:Schema.ObjectId,
+ 		ref:'User'
+ 	}
  });
 
  mongoose.model('Photo', PhotoSchema);

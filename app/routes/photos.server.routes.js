@@ -6,10 +6,10 @@ var users = require('../../app/controllers/users.server.controller'),
 
 module.exports = function(app) {
 	app.route('/api/photos').
-	post(users.hasAuthorization(['admin']),photos.create);
+	post(users.requiresLogin,users.hasAuthorization(['admin']),photos.create);
 
 	app.route('/api/photos/:photoId').
-	delete(users.hasAuthorization(['admin']),photos.delete);
+	delete(users.requiresLogin,users.hasAuthorization(['admin']),photos.hasAuthorization,photos.delete);
 
 	app.param('photoId',photos.photoByID);
 };

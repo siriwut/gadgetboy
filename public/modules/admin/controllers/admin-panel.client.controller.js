@@ -11,8 +11,5 @@ angular.module('admin').controller('AdminPanelController', ['$scope','$location'
 			$location.path('/');
 		}
 
-
-			
-
 	}
 	]);

@@ -49,7 +49,10 @@
  		type:String,
  		default:''
  	},
- 	photos:[{type:Schema.ObjectId,ref:'Photo'}],
+ 	photos:[{
+ 		type:Schema.ObjectId,
+ 		ref:'Photo'
+ 	}],
  	tags:{
  		type:[String],
  		index:true
@@ -75,4 +78,4 @@
  	}	
  });
 
-mongoose.model('Product', ProductSchema);
+ mongoose.model('Product', ProductSchema);

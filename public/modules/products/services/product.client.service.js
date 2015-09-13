@@ -3,7 +3,7 @@
 angular.module('products').factory('Products', ['$resource',
 	function($resource) {
 		return $resource('/api/products/:productId',{
-			productId:'@_Id'
+			productId:'@_id'
 		},{
 			update:{
 				method:'PUT'

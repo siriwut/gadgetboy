@@ -1,4 +1,4 @@
-<nav >
+<nav data-ng-controller="adminSidebarController" >
 	<ul class="list-group admin-sidebar" >
 		<li class="admin-sidebar-menu admin-sidebar-header " >Admin Panel</li>
 		<li  class="admin-sidebar-menu" >	
@@ -36,13 +36,13 @@
 			</a> 
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
 				<li>
-					<a ui-sref="admin-panel.create-product" ui-sref-active="active" href> 
+					<a ui-sref="adminPanel.createProduct" ui-sref-active="active" href> 
 						<span class="glyphicon glyphicon-plus" ></span>เพิ่มสินค้า
 					</a>
 				</li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a ui-sref="admin-panel.list-product"  ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></li>
+				<li><a ui-sref="adminPanel.listProducts"  ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
 				<li><a href ui-sref-active="active" >ลดราคา<span class="badge bg-red pull-right">20</span></a></li>
@@ -58,10 +58,17 @@
 				<span class="glyphicon glyphicon-th-list"  ></span> 
 				หมวดหมู่สินค้า
 				<span ng-class="{'glyphicon-menu-down':collapseVar==3,'glyphicon-menu-left':collapseVar!=3}" class="glyphicon  pull-right" ></span>
-			</a> 
+			</a>
+			<ul class="admin-sidebar-list" collapse="collapseVar!=3"  >
+				<li>
+					<a ui-sref="adminPanel.createCategory" ui-sref-active="active" href> 
+						<span class="glyphicon glyphicon-plus" ></span>เพิ่มหมวดหมู่
+					</a>
+				</li>
+			</ul>
 			
 			<ul class="admin-sidebar-list" collapse="collapseVar!=3"  >
-				<li><a href>ทั้งหมด<span class="badge pull-right">20</span></a></a></li>
+				<li><a ui-sref="adminPanel.listCategories" ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></a></li>
 			</ul>
 		</li>
 

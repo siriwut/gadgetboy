@@ -5,13 +5,17 @@ angular.module('products').config(['$stateProvider',
 	function($stateProvider) {
 		// Products state routing
 		$stateProvider.
-		state('admin-panel.create-product', {
-			url: '/create-product',
+		state('adminPanel.createProduct', {
+			url: '/products/create',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
-		state('admin-panel.list-product', {
-			url: '/list-product',
+		state('adminPanel.listProducts', {
+			url: '/products',
 			templateUrl: 'modules/products/views/list-product.client.view.html'
+		}).
+		state('adminPanel.editProduct', {
+			url: '/products/edit/:productId',
+			templateUrl: 'modules/products/views/edit-product.client.view.html'
 		}).
 		state('product-detail', {
 			url: '/product-detail',

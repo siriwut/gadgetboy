@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$http','$location','$window', 'Authentication', 'Menus',
-	function($scope,$http,$location,$window, Authentication, Menus) {
+angular.module('core').controller('HeaderController', ['$scope', '$http','$location','$window', 'Authentication', 'Menus','Categories',
+	function($scope,$http,$location,$window, Authentication, Menus,Categories) {
 		$scope.authentication = Authentication;
 		$scope.isCollapsed = false;
 		$scope.menu = Menus.getMenu('topbar');
@@ -23,6 +23,11 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 				$scope.authentication = undefined;
 				$window.location.href = '/';
 			});
+		};
+
+		$scope.initCategories = function(){
+			$scope.categories = Categories.query();
+			console.log($scope.categories);
 		};
 	}
 ]);

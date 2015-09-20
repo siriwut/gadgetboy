@@ -1,21 +1,53 @@
-<section data-ng-controller="CategoriesController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1 data-ng-bind="category.name"></h1>
+<section class="category" data-ng-controller="CategoriesController" data-ng-init="findOne()">
+	<div class="row">
+		<div class="col-lg-12">
+			<ol class="breadcrumb category-breadcrumb">
+				<li><a href="/">หน้าแรก</a></li>
+				<li><a href="#">หมวดหมู่สินค้า</a></li>
+				<li class="active" data-ng-bind="category.name"></li>
+			</ol>
+		</div>
 	</div>
-	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == category.user._id))">
-		<a class="btn btn-primary" href="/#!/categories/{{category._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
+
+	<div class="row">
+		<nav class="col-sm-3 col-md-3 col-lg-3" data-ng-init="find()" >
+			<ul class="list-group category-sidebar" >
+				<li class="category-sidebar-menu"   data-ng-repeat="category in categories" ><a ui-sref-active="active" ui-sref="viewCategory({categoryId:category._id})" >{{category.name}}</a></li>
+			</ul>
+		</nav>
+		<div class="col-sm-9 col-md-9 col-lg-9" data-ng-init="
+		findProductsByCategory()" >
+
+		<div  id="products" class="row list-group" style="margin-bottom:0px;"  >
+			<div  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4" data-ng-repeat="product in products"  >
+				<div  class="thumbnail" >
+					<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt=""   />
+					<article  class="caption">
+						<h4 class="group inner list-group-item-heading"><a href="/#!/product-detail" ><b>{{product.name}}</b></a></h4>	
+						<p class="group inner list-group-item-text" data-ng-bind="product.shortDescription">
+						</p>
+						<div  class="row">
+							<div  class="col-xs-12 col-md-12">
+								<p class="lead"><b>{{product.price|currency:'':0}}</b> บาท</p>
+
+							</div >
+							<div  class="col-xs-12 col-md-12">
+								<a class="btn btn-primary" href="#">ใส่ตะกร้า</a>
+							</div >
+						</div >
+						
+					</article >
+				</div >
+			</div >
+		</div >
+
+		<div class="row" >
+			<div class="text-right col-lg-12">
+				<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()"></pagination>
+			</div>
+
+		</div>
+
 	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="category.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="category.user.displayName"></span>
-		</em>
-	</small>
+</div>
 </section>

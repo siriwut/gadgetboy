@@ -1,8 +1,8 @@
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('CategoriesController', ['$scope', '$location','$state','$stateParams', 'Authentication', 'Categories',
-	function($scope, $location,$state,$stateParams, Authentication, Categories) {
+angular.module('categories').controller('CategoriesController', ['$scope', '$location','$state','$stateParams', 'Authentication', 'Categories','Products','ProductsByCategory',
+	function($scope, $location,$state,$stateParams, Authentication, Categories,Products,ProductsByCategory) {
 		$scope.authentication = Authentication;
 
 		// Create new Category
@@ -25,7 +25,7 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 		// Remove existing Category
 		$scope.remove = function(category) {
 			if ( category ) { 
-			
+
 				category.$remove();
 
 				for (var i in $scope.categories) {
@@ -62,5 +62,10 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 				categoryId: $stateParams.categoryId
 			});
 		};
+
+		$scope.findProductsByCategory = function(){
+			$scope.products = Products.query({categoryId:$stateParams.categoryId});				
+			
+		};
 	}
-]);
+	]);

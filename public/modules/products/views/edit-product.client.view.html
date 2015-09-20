@@ -4,9 +4,9 @@
 			<div class="col-lg-12">
 				<h3 class="admin-panel-header" >แก้ไขสินค้า</h3>
 			</div>
+
 		</div>
 		<div class="row" >
-
 			<form data-ng-submit="update()" >
 				<div class="col-lg-8">
 					<div class="form-group">
@@ -74,13 +74,22 @@
 							<span class="soleout-text" >Sole Out</span>
 						</div>	
 					</div>
-
 				</div>
-				<div class="col-lg-12">
-					<button type="submit" class="btn btn-primary btn-lg"  >บันทึก</button>
+				<div  class="col-lg-12"  >
+					<div  class="col-lg-2 desktop-col-nopadding" >
+						<button type="submit" class="btn btn-primary btn-lg"  >บันทึก</button>
+					</div>
+					<div  class="col-lg-6" >
+						<div flash-message="5000"></div>
+					</div>
 				</div>
 			</form>
-			
+
+
 		</div>
-	</section>
+
+
+
+	</div>
+</section>
 </section>

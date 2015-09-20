@@ -18,10 +18,14 @@
  		type:String,
  		default:''
  	},
- 	parentCategory:{
+ 	parent:{
  		type:Schema.ObjectId,
  		ref:'Category'
  	},
+ 	subs:[{
+ 		type:Schema.ObjectId,
+ 		ref:'Category'
+ 	}],
  	created:{
  		type:Date,
  		default:Date.now

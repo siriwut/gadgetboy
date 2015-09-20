@@ -27,7 +27,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
-			console.log($scope.categories);
 		};
 	}
 ]);

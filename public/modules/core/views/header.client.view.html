@@ -13,21 +13,13 @@
 		</header>
 
 		<nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation" >
-			<ul class="nav navbar-nav navbar-left" data-ng-hide="authentication.user">
-				<li dropdown on-toggle="toggled(open)">
-					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>หมวดหมู่สินค้า<b class="caret" ></b></a>
-					<ul class="dropdown-menu" data-ng-init="initCategories()"  >
-						<li><a href="/#!/categories" ><span class="glyphicon glyphicon-tags" ></span> ลำโพง</a></li>
-						
-					</ul>
-				</li>
-			</ul>
-			<ul class="nav navbar-nav navbar-left" data-ng-show="authentication.user">
+			
+			<ul class="nav navbar-nav navbar-left" >
 				<li dropdown on-toggle="toggled(open)">
 					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>
 						<span class="hidden-sm" >หมวดหมู่สินค้า</span><b class="caret" ></b></a>
 					<ul class="dropdown-menu" data-ng-init="initCategories()" >
-						<li data-ng-repeat="category in categories" ><a href="/#!/categories" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
+						<li data-ng-repeat="category in categories" ><a ui-sref="viewCategory({categoryId:category._id})" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
 						
 					</ul>
 				</li>

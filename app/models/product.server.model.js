@@ -23,14 +23,13 @@
  		default:''
  	},
  	color:{
- 		type:String,
- 		enum:['red','green','blue','yellow','purple','brown','grey','black','white']
+ 		type:String
  	},
  	price:{
  		type:Number
  	},
  	sale:{
- 		percen:{
+ 		salePrice:{
  			type:Number
  		},
  		onSale:{

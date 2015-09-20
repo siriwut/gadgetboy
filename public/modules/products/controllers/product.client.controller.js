@@ -1,24 +1,39 @@
 'use strict';
 
-angular.module('products').controller('ProductsController', ['$scope','$rootScope','$location','$state','$stateParams','Authentication','Products','Categories','filterFilter',
-	function($scope,$rootScope,$location,$state,$stateParams,Authentication,Products,Categories,filterFiler) {
+angular.module('products').controller('ProductsController', ['$scope','$rootScope','$location','$state','$stateParams','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
+	function($scope,$rootScope,$location,$state,$stateParams,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
 
 		var photoIdList = [];
 		var productCheckedList = [];
 
 		$scope.create = function(){
 			var product = new Products(this.product);
+			
 			product.photos = photoIdList;
 
+			if(this.product.category){
+				product.category = this.product.category._id;
+			}else{
+				return;
+			}
+
 			product.$save(function(data){
+				var message = 'เพิ่มสินค้า '+data.name+' <strong> เรียบร้อยแล้ว</strong>';
+
+				Flash.create('success',message);
+
 				$scope.product = null;
 				photoIdList = [];
 				$scope.$broadcast('onClearForm');
-				$state.go('adminPanel.editProduct',{productId:product._id});
-				//$location.path('articles/' + article._id);
 
-			},function(err){
-				if(err) console.log(err);
+
+				$state.go('adminPanel.editProduct',{productId:product._id});
+
+			},function(err){		
+				if(err){
+					var message = 'เพิ่มสินค้า <strong>ล้มเหลว</strong>';
+					Flash.create('error',message);
+				}
 			});
 		};
 
@@ -26,12 +41,22 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 		$scope.update = function(){
 			var product = $scope.product;
 			product.photos = photoIdList;
-			$scope.categories = Categories.query();
 
-			product.$update(function() {
+			if($scope.product.category){
+				product.category = $scope.product.category._id;
+			}
+			
+			product.$update(function(response) {
+				
+
+				$scope.product = response;
 				$scope.$broadcast('updated');
-				//$state.go('adminPanel.editProduct',{productId:product._id});
-				$state.go('adminPanel.editProduct',{productId:product._id},{reload:true});
+
+				var message = 'แก้ไขสินค้า '+response.name+' <strong> เรียบร้อยแล้ว</strong>';
+
+				Flash.create('success',message);
+
+				$state.go('adminPanel.editProduct',{productId:product._id});
 
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
@@ -76,6 +101,7 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 						return product.selected === true;
 					});
 
+
 					angular.forEach(products,function(product,index){
 						product.$remove(function(){
 							for(var i in $scope.products){
@@ -99,11 +125,17 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 			});
 
 
-			
+
 		};
 
-		$scope.initProductCreation = function(){
+		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
+
+		};
+
+		$scope.initColors = function(){
+			$scope.colors = EventColors;
+			
 		};
 
 
@@ -111,7 +143,7 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 			select:function($event,index){
 				var checkbox = $event.target;
 				this.updateSelect(checkbox.checked,index);
-				
+
 			},
 			selectAll:function($event){
 				var checkbox = $event.target;
@@ -150,7 +182,7 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 			photoIdList.splice(photoIndex,1);			
 		});
 
-		
+
 
 				/*$scope.product = {
 				name:'Speaker',

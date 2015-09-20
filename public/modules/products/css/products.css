@@ -104,3 +104,8 @@
 .row-action a{
 	text-decoration: none !important;
 }
+
+.product-thumbnail{
+	width: 400px !important;
+	height: 250px !important;
+}

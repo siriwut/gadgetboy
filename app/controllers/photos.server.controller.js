@@ -33,7 +33,7 @@
  			var newFilename = uuid.v1().concat(extension);
  			var dest = './public/photos_upload/'.concat(newFilename);
  			var size = n.size;
- 			var photoUrl = url.resolve(req.protocol+'://'+req.get('host'),'/photos_upload/'+newFilename);
+ 			var photoUrl = '/photos_upload/'+newFilename;
 
 
  			fs.move(src,dest,function(err){

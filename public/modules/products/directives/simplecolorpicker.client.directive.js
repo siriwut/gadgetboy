@@ -2,15 +2,17 @@
 
 angular.module('products').constant('EventColors', {
  Black:  '#000000',
+ White:  '#ffffff',
  Red:    '#ff0000',
- Blue:   '#5484ed',
+ Blue:   '#0000ff',
+ SkyBlue:'#00ffff',
  Green:  '#51b749',
  Yellow: '#ffff00',
- Orange: '#ffa500',
+ Orange: '#ff4500',
  Pink:   '#ff1493',
  Purple: '#800080',
  Brown:  '#a52a2a', 
- Gray:   '#e1e1e1'
+ Gray:   '#808080'
 })
 .controller('EventColorsCtrl',['$scope', 'EventColors',function($scope, EventColors) {
 	$scope.color = EventColors.Orange;
@@ -21,7 +23,7 @@ angular.module('products').constant('EventColors', {
 		restrict: 'A',
 		require: 'ngModel',
 
-		link: function(scope, element, attrs, ngModel) {
+		link: function postLink (scope, element, attrs, ngModel) {
 			var colorPicker = null;
 			var initialSelectedColor = null;
 

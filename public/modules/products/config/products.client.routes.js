@@ -3,6 +3,7 @@
 //Setting up route
 angular.module('products').config(['$stateProvider',
 	function($stateProvider) {
+
 		// Products state routing
 		$stateProvider.
 		state('adminPanel.createProduct', {
@@ -10,7 +11,7 @@ angular.module('products').config(['$stateProvider',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
 		state('adminPanel.listProducts', {
-			url: '/products',
+			url: '/products?page',
 			templateUrl: 'modules/products/views/list-product.client.view.html'
 		}).
 		state('adminPanel.editProduct', {

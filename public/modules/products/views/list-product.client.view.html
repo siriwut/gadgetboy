@@ -41,17 +41,14 @@
 
 				<ul class="pagination pagination-sm pagination-product pull-right">
 					<li>
-						<a href="#" aria-label="Previous">
+						<a ui-sref="adminPanel.listProducts({page:(page-1)>=1?page-1:1})" href="#" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<li class="active" ><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
+					<li data-ng-repeat="page in pages" ><a ui-sref="adminPanel.listProducts({page:page})" href="#">{{page}}</a></li>
+					
 					<li>
-						<a href="#" aria-label="Next">
+						<a ui-sref="adminPanel.listProducts({page:(page + 1})" href="#" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>
@@ -101,10 +98,16 @@
 							</td>
 							<td data-ng-bind="product.name" ></td>
 							<td data-ng-bind="product.model" ></td>
-							<td data-ng-bind="product.color" ></td>
+							<td  >
+								<div data-ng-if="product.color" class="color-tag" style="background-color:{{product.color}}" ></div>
+								<span data-ng-if="!product.color" >ไม่มีสี</span>
+							</td>
 							<td >{{product.price|currency:'':0}} บาท </td>
 							<td >{{product.quantity+' ชิ้น'}} </td>
-							<td data-ng-bind="product.category.name" ></td>					
+							<td  >
+								<span data-ng-if="product.category" >{{product.category.name}}</span>	
+								<span data-ng-if="!product.category" >ไม่มีหมวดหมู่</span>	
+							</td>					
 						</tr>
 					</tbody>	
 				</table>
@@ -138,11 +141,7 @@
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-					<li class="active" ><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
+					<li data-ng-repeat="page in pages" ><a ui-sref="adminPanel.listProducts({page:page})" href="#">{{page}}</a></li>
 					<li>
 						<a href="#" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>

@@ -22,4 +22,4 @@ angular.module('articles').config(['$stateProvider',
 			templateUrl: 'modules/articles/views/edit-article.client.view.html'
 		});
 	}
-]);
+	]);

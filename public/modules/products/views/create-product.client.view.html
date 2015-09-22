@@ -10,20 +10,18 @@
 		</div>
 		<div class="row" >
 
-			<form  name="productForm" data-ng-submit="create()" novalidate>
+			<form id="productForm"  name="productForm" data-ng-submit="create()" product-form  novalidate>
 				<div class="col-lg-8">
 					<div class="form-group" ng-class="{'has-error':(productForm.$submitted||productForm.$touched) && productForm.name.$invalid}">
 						<label>ชื่อสินค้า</label>
 						<input name="name" type="text" class="form-control " data-ng-model="product.name"     required>
 						<p ng-show="(productForm.$submitted||productForm.$touched) && productForm.name.$invalid" class="text-danger">กรุณากรอกชื่อ สินค้า</p>						
 					</div>
-					<div class="form-group" data-ng-init="initCategories()" ng-class="{'has-error':(productForm.$submitted||productForm.$touched) && productForm.category.$invalid}">
+					<div class="form-group" data-ng-init="initCategories()" >
 						<label>หมวดหมู่สินค้า</label>
-						<select name="category" class="form-control"   data-ng-options="category.name for category in categories track by category._id" data-ng-model="product.category" required>
+						<select name="category" class="form-control"   data-ng-options="category.name for category in categories track by category._id" data-ng-model="product.category">
 							<option value="">---กรุณาเลือกหมวดหมู่---</option>
 						</select>
-						<p ng-show="(productForm.$submitted||productForm.$touched) && productForm.category.$invalid" class="text-danger">กรุณากรอก หมวดหมู่สินค้า</p>
-
 					</div>
 					<div class="form-group">
 						<label>รุ่น</label>
@@ -67,10 +65,11 @@
 					</div>
 					<div class="form-group" data-ng-init="initColors()"  >
 						<label>สี</label>
-						<select simplecolorpicker data-ng-controller="EventColorsCtrl"  data-ng-options="key for (key , value) in colors track by value" data-ng-model="product.color" >
+						<div class="colorpicker" >
+							<select simplecolorpicker data-ng-controller="EventColorsCtrl"  data-ng-options="key for (key , value) in colors track by value" data-ng-model="product.color" >
 
-
-						</select>
+							</select>
+						</div>
 					</div>
 
 					<div class="form-group">

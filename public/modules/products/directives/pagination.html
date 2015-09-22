@@ -1,0 +1,14 @@
+<ul class="pagination pagination-sm pagination-product pull-right">
+	<li>
+		<a ui-sref="adminPanel.listProducts({page:(page-1)>=1?page-1:1})" href="#" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+		</a>
+	</li>
+	<li data-ng-repeat="page in pages" ><a ui-sref="adminPanel.listProducts({page:page})" href="#">{{page}}</a></li>
+	
+	<li>
+		<a ui-sref="adminPanel.listProducts({page:(page + 1})" href="#" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+	</li>
+</ul>

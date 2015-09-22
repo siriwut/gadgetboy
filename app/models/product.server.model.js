@@ -6,13 +6,16 @@
  var mongoose = require('mongoose'),
  Schema = mongoose.Schema;
 
+
+
 /**
  * Product Schema
  */
  var ProductSchema = new Schema({
  	name:{
  		type:String,
- 		required:'Name cannot be blank'
+ 		required:'Name cannot be blank',
+ 		trim:true
  	},
  	model:{
  		type:String,
@@ -60,6 +63,10 @@
  		type:Boolean,
  		default:false
  	},
+ 	slugName:{
+ 		type:String,
+ 		trim:true
+ 	},
  	created: {
  		type: Date,
  		default: Date.now
@@ -76,5 +83,15 @@
  		ref:'User'
  	}	
  });
+
+ ProductSchema.pre('save',function(next){
+ 	this.createSlugName();
+ 	next();
+ });
+
+ 
+ ProductSchema.methods.createSlugName = function(){
+ 	this.slugName = this.name;
+ };
 
  mongoose.model('Product', ProductSchema);

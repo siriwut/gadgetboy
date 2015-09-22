@@ -19,7 +19,7 @@
 					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>
 						<span class="hidden-sm" >หมวดหมู่สินค้า</span><b class="caret" ></b></a>
 					<ul class="dropdown-menu" data-ng-init="initCategories()" >
-						<li data-ng-repeat="category in categories" ><a ui-sref="viewCategory({categoryId:category._id})" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
+						<li data-ng-repeat="category in categories" ><a ui-sref="productCategory({categoryId:category._id})" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
 						
 					</ul>
 				</li>

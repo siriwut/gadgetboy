@@ -1,7 +1,10 @@
 'use strict';
 
-angular.module('products').controller('ProductsController', ['$scope','$rootScope','$location','$state','$stateParams','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
-	function($scope,$rootScope,$location,$state,$stateParams,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
+angular.module('products').controller('ProductsController', ['$scope','$location','$state','$rootScope','$stateParams','$anchorScroll','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
+	function($scope,$location,$state,$rootScope,$stateParams,$anchorScroll,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
+		$scope.pages = [];
+		$scope.page = $stateParams.page;
+	
 
 		var photoIdList = [];
 		var productCheckedList = [];
@@ -13,13 +16,11 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 
 			if(this.product.category){
 				product.category = this.product.category._id;
-			}else{
-				return;
 			}
 
 			product.$save(function(data){
 				var message = 'เพิ่มสินค้า '+data.name+' <strong> เรียบร้อยแล้ว</strong>';
-
+				Flash.dismiss();
 				Flash.create('success',message);
 
 				$scope.product = null;
@@ -31,8 +32,11 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 
 			},function(err){		
 				if(err){
-					var message = 'เพิ่มสินค้า <strong>ล้มเหลว</strong>';
-					Flash.create('error',message);
+					var message = 'เพิ่มสินค้า <strong>ล้มเหลว</strong> กรุณาลองใหม่อีกครั้ง';
+					Flash.create('danger',message);
+					$location.hash('top');
+					$anchorScroll();
+
 				}
 			});
 		};
@@ -46,24 +50,28 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 				product.category = $scope.product.category._id;
 			}
 			
-			product.$update(function(response) {
+			product.$update(function(data) {
 				
 
-				$scope.product = response;
+				$scope.product = data;
 				$scope.$broadcast('updated');
 
-				var message = 'แก้ไขสินค้า '+response.name+' <strong> เรียบร้อยแล้ว</strong>';
+				var message = 'แก้ไขสินค้า '+data.name+' <strong> เรียบร้อยแล้ว</strong>';
 
+				Flash.dismiss();
 				Flash.create('success',message);
 
-				$state.go('adminPanel.editProduct',{productId:product._id});
 
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
+
+				$state.go('adminPanel.editProduct',{productId:product._id},{reload:true});
+
+			}, function(error) {
+				$scope.error = error.data.message;
 			});
 		};
 
 		$scope.list = function(){
+
 			$scope.tableHeader = {
 				name:'ชื่อ',
 				model:'รุ่น',
@@ -74,14 +82,17 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 				photo:'รูป',
 				category:'หมวดหมู่'
 			};
-			$scope.products =  Products.query(function(){
+			Products.get({page:$stateParams.page>1?$stateParams.page:1},function(data){
+				$scope.products = data.products;
+
 				for(var i=0; i<$scope.products.length;i++){
 					$scope.products[i].selected = false;
 				}
 
+				for(var r=1; r<=data.pages;r++){
+					$scope.pages.push(r);
+				}
 			});
-
-
 		};
 
 
@@ -119,12 +130,12 @@ angular.module('products').controller('ProductsController', ['$scope','$rootScop
 		};
 
 		$scope.findOneEdit = function(){
+			console.log($stateParams.productId);
+
 			$scope.product = Products.get({productId:$stateParams.productId},function(){
 				$scope.$broadcast('findEditPhotos');
 				$scope.categories = Categories.query();
 			});
-
-
 
 		};
 

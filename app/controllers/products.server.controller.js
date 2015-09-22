@@ -23,7 +23,11 @@ slash = require('slash');
  exports.create = function(req, res) {
 
  	var product = new Product(req.body);
+ 	var message = null;
+
  	product.user = req.user;
+ 	
+
  	
  	product.save(function(err){	
  		if(err){
@@ -129,32 +133,32 @@ slash = require('slash');
  * List of Products
  */
  exports.list = function(req, res) {
- 	if(req.query.categoryId){
- 		Product.find({category:req.query.categoryId}).sort('-created').populate('user','displayName').populate('category','name').populate('photos').exec(function(err, products) {
- 			
- 			if (err) {
- 				return res.status(400).send({
- 					message: errorHandler.getErrorMessage(err)
- 				});
- 			} else {
- 				res.json(products);
- 			}
- 		});
- 	}else{
+ 	var message = null;
+ 	var page = 0;
+ 	var nPerPage = 3;
 
- 		Product.find().sort('-created').populate('user','displayName').populate('category','name').populate('photos').exec(function(err, products) {
- 			if (err) {
- 				return res.status(400).send({
- 					message: errorHandler.getErrorMessage(err)
- 				});
- 			} else {
- 				res.json(products);
- 			}
- 		});
+ 	if(req.query.page) page = req.query.page;
 
- 	}
+ 	//query for admin can see
+ 	Product.find().skip(page>0?(page-1)*nPerPage:0).limit(nPerPage).sort('-created').populate('user','displayName').populate('category','name').populate('photos').exec(function(err, products) {
+ 		if (err) {
+ 			return res.status(400).send({
+ 				message: errorHandler.getErrorMessage(err)
+ 			});
+ 		} else {
+ 			Product.count(function(err,count){
+ 				if(err) return res.status(400).send({message: errorHandler.getErrorMessage(err)});
 
- 	
+
+ 				var pages = Math.ceil(count / nPerPage);
+
+ 				
+ 				res.json({products:products,pages:pages});
+ 			});
+ 		}
+ 	});
+
+
  };
 
  exports.listByCategoryId = function(req,res){
@@ -167,7 +171,7 @@ slash = require('slash');
  	Product.findById(id).populate('user').populate('category').populate('photos').exec(function(err,product){
  		if(err)return next(err);
  		if(!product)return next(new Error('Failed to load product ' + id));
- 		
+
  		req.product = product;
  		next();
  	});

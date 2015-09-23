@@ -10,6 +10,9 @@ module.exports = function(app) {
 	get(products.list).
 	post(users.requiresLogin,users.hasAuthorization(['admin']),products.create);
 
+	app.route('/api/products/quantity').
+	get(products.getQuantity);
+
 	app.route('/api/products/:productId').
 	get(products.read).
 	put(users.requiresLogin,users.hasAuthorization(['admin']),products.hasAuthorization,products.update).

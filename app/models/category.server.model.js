@@ -26,6 +26,11 @@
  		type:Schema.ObjectId,
  		ref:'Category'
  	}],
+ 	slug:{
+ 		type:String,
+ 		require:'Slug cannot be blank',
+ 		index:{unique:true}
+ 	},
  	created:{
  		type:Date,
  		default:Date.now

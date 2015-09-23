@@ -1,13 +1,11 @@
 'use strict';
 
-angular.module('products').controller('ProductsController', ['$scope','$location','$state','$rootScope','$stateParams','$anchorScroll','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
-	function($scope,$location,$state,$rootScope,$stateParams,$anchorScroll,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
-		$scope.pages = [];
-		$scope.page = $stateParams.page;
-	
+angular.module('products').controller('ProductsController', ['$scope','$http','$location','$state','$rootScope','$stateParams','$anchorScroll','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
+	function($scope,$http,$location,$state,$rootScope,$stateParams,$anchorScroll,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
 
 		var photoIdList = [];
 		var productCheckedList = [];
+
 
 		$scope.create = function(){
 			var product = new Products(this.product);
@@ -71,6 +69,7 @@ angular.module('products').controller('ProductsController', ['$scope','$location
 		};
 
 		$scope.list = function(){
+			$scope.totalQuantity = 1;
 
 			$scope.tableHeader = {
 				name:'ชื่อ',
@@ -82,15 +81,11 @@ angular.module('products').controller('ProductsController', ['$scope','$location
 				photo:'รูป',
 				category:'หมวดหมู่'
 			};
-			Products.get({page:$stateParams.page>1?$stateParams.page:1},function(data){
-				$scope.products = data.products;
 
+			$scope.products=Products.query(function(){
+				$scope.getQuantity();
 				for(var i=0; i<$scope.products.length;i++){
 					$scope.products[i].selected = false;
-				}
-
-				for(var r=1; r<=data.pages;r++){
-					$scope.pages.push(r);
 				}
 			});
 		};
@@ -98,43 +93,71 @@ angular.module('products').controller('ProductsController', ['$scope','$location
 
 
 		$scope.remove = function(product){	
-			if(product){	
+			if(product){
+
 				product.$remove(function(){
 					for(var i in $scope.products){
 						if($scope.products[i] === product){
 							$scope.products.splice(i,1);
 						}
 					}
+
+					$scope.pageChange();
 				});
+
+				$scope.productChecked = false;
 			}else{
+				
 				if($scope.products.length){
 					var products = filterFiler($scope.products,function(product){
 						return product.selected === true;
 					});
-
+					
 
 					angular.forEach(products,function(product,index){
+
 						product.$remove(function(){
 							for(var i in $scope.products){
 								if($scope.products[i] === product){
 									$scope.products.splice(i,1);
 								}	
 							}
+
+							$scope.pageChange();
 						});
 
 					});
-
+					$scope.productChecked = false;
 
 				}
 			}
+
+		};
+
+		$scope.getQuantity = function(){
+			$http.get('/api/products/quantity').then(function(quantity){
+				$scope.totalQuantity = quantity.data;
+			}, function(errorResponse) {
+				console.log(errorResponse);
+			});
 		};
 
 		$scope.findOneEdit = function(){
-			console.log($stateParams.productId);
 
 			$scope.product = Products.get({productId:$stateParams.productId},function(){
 				$scope.$broadcast('findEditPhotos');
 				$scope.categories = Categories.query();
+			});
+
+		};
+
+
+		$scope.pageChange = function(){
+			$scope.products=Products.query({page:$scope.currentPage},function(){
+					$scope.getQuantity();
+				for(var i=0; i<$scope.products.length;i++){
+					$scope.products[i].selected = false;
+				}
 			});
 
 		};
@@ -146,7 +169,7 @@ angular.module('products').controller('ProductsController', ['$scope','$location
 
 		$scope.initColors = function(){
 			$scope.colors = EventColors;
-			
+
 		};
 
 

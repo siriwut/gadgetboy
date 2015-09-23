@@ -146,23 +146,26 @@ slash = require('slash');
  				message: errorHandler.getErrorMessage(err)
  			});
  		} else {
- 			Product.count(function(err,count){
- 				if(err) return res.status(400).send({message: errorHandler.getErrorMessage(err)});
-
-
- 				var pages = Math.ceil(count / nPerPage);
-
- 				
- 				res.json({products:products,pages:pages});
- 			});
+ 			res.json(products);
  		}
  	});
 
 
  };
 
- exports.listByCategoryId = function(req,res){
- 	console.log('Match Method!!');
+
+ exports.getQuantity = function(req,res){
+ 	
+ 	Product.count(function(err,quantity){
+ 		if (err) {
+ 			return res.status(400).send({
+ 				message: errorHandler.getErrorMessage(err)
+ 			});
+ 		} else {
+ 			res.json(quantity);
+ 		}
+ 	}); 		
+
  };
 
 
@@ -184,14 +187,5 @@ slash = require('slash');
  	next();
  };
 
- exports.productByCategoryID = function(req,res,next,id){
- 	Product.find({'category':id}).populate('user').populate('category','name').populate('photos').exec(function(err,product){
- 		if(err)return next(err);
- 		if(!product)return next(new Error('Failed to load product ' + id));
- 		console.log('Match Params!!');
- 		req.product = product;
- 		next();
- 	});
- };
 
 

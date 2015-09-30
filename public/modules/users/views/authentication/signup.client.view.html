@@ -11,36 +11,56 @@
 		<h2 class="signup-header-or text-center hidden-lg" >-หรือ-</h2>
 		
 		<div class="col-lg-6">
-			<h3 class="text-center" >ด้วยบัญชี Email ของคุณ</h3>
-			<form name="userForm" data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
+			<h3 class="text-center" >ด้วย Email ของคุณ</h3>
+			<form name="userForm" data-ng-submit="userForm.$valid && signup()" class="signin form-horizontal" novalidate autocomplete="off">
 				<fieldset class="col-lg-offset-2 col-lg-8" >
-					<div class="form-group">
-						<label for="firstName">First Name</label>
-						<input type="text" required id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name">
+					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.firstName.$invalid}" >
+						<label for="firstName">ชื่อ</label>
+						<input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name" required >
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.firstName.$invalid" class="text-danger">กรุณากรอก <strong>ชื่อ</strong> ด้วยค่ะ</p>
 					</div>
-					<div class="form-group">
-						<label for="lastName">Last Name</label>
-						<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name">
+					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.lastName.$invalid}">
+						<label for="lastName">นามสกุล</label>
+						<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name" required>
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.lastName.$invalid" class="text-danger">กรุณากรอก <strong>นามสกุล</strong> ด้วยค่ะ</p>
 					</div>
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
+					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.email.$error.required}">
+						<label for="email">อีเมล์</label>
+						<input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" ng-pattern="/.+\@.+\..+/" placeholder="Email" required>
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.email.$error.required" class="text-danger">กรุณากรอก <strong>email</strong> ด้วยค่ะ</p>
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) &&  userForm.email.$error.email" class="text-danger">กรุณากรอกรูปแบบ <strong>email</strong> ให้ถูกต้องด้วยค่ะ ตัวอย่าง เช่น gadgetboy@mail.com</p>
+
 					</div>
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Username">
+					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.password.$invalid}">
+						<label for="password">รหัสผ่าน</label>
+						<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password 6 ตัวอักษรขึ้นไป" ng-minlength="6" required>
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.password.$error.required" class="text-danger">กรุณากรอก <strong>password</strong> ด้วยค่ะ</p>
+						
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.password.$error.minlength" class="text-danger">กรุณากรอก <strong>password 6 ตัวอักษรขึ้นไป</strong> ด้วยค่ะ</p>
 					</div>
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+
+					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.passwordConfirm.$invalid}" >
+						<label for="password">ยืนยันรหัสผ่าน</label>
+						<input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" data-ng-model="credentials.passwordConfirm" placeholder="ยืนยัน Password"  password-match="credentials.password" required>
+
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.passwordConfirm.$error.required" class="text-danger">กรุณายืนยัน <strong> password</strong> ด้วยค่ะ</p>
+
+						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.passwordConfirm.$error.passwordMatch" class="text-danger">การยืนยัน <strong>password</strong> ไม่ตรงกันค่ะ</p>
+						
 					</div>
+					
 					<div class="text-center form-group">
 						<button type="submit" class="btn btn-large btn-primary">ตกลง</button>&nbsp; หรือ&nbsp;
 						<a href="/#!/signin" class="show-signup">เข้าสู่ระบบ</a>
 					</div>
-					<div data-ng-show="error" class="text-center text-danger">
-						<strong data-ng-bind="error"></strong>
-					</div>
+					
+					<div data-ng-show="error" flash-message="5000"></div>
+					
 				</fieldset>
 			</form>
 		</div>

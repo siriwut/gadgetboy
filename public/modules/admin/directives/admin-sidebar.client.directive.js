@@ -21,6 +21,8 @@ angular.module('admin')
 		break;
 		case 'adminPanel.createCategory':$scope.check(3);
 		break;
+		case 'adminPanel.editCategory':$scope.check(3);
+		break;
 	}
 
 }])

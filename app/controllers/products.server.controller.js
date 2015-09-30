@@ -26,9 +26,8 @@ slash = require('slash');
  	var message = null;
 
  	product.user = req.user;
- 	
+ 	product.slug = product.name;
 
- 	
  	product.save(function(err){	
  		if(err){
  			return res.status(400).send({
@@ -135,7 +134,7 @@ slash = require('slash');
  exports.list = function(req, res) {
  	var message = null;
  	var page = 0;
- 	var nPerPage = 3;
+ 	var nPerPage = 20;
 
  	if(req.query.page) page = req.query.page;
 

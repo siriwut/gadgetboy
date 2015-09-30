@@ -17,6 +17,7 @@ var _ = require('lodash'),
  * Forgot for reset password (forgot POST)
  */
 exports.forgot = function(req, res, next) {
+
 	async.waterfall([
 		// Generate random token
 		function(done) {
@@ -27,6 +28,7 @@ exports.forgot = function(req, res, next) {
 		},
 		// Lookup user by username
 		function(token, done) {
+
 			if (req.body.username) {
 				User.findOne({
 					username: req.body.username
@@ -58,7 +60,7 @@ exports.forgot = function(req, res, next) {
 			res.render('templates/reset-password-email', {
 				name: user.displayName,
 				appName: config.app.title,
-				url: 'http://' + req.headers.host + '/auth/reset/' + token
+				url: 'http://' + req.headers.host + '/api/auth/reset/' + token
 			}, function(err, emailHTML) {
 				done(err, emailHTML, user);
 			});
@@ -69,16 +71,15 @@ exports.forgot = function(req, res, next) {
 			var mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
-				subject: 'Password Reset',
+				subject: 'กู้คืนรหัสผ่าน (Password)',
 				html: emailHTML
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
 				if (!err) {
 					res.send({
-						message: 'An email has been sent to ' + user.email + ' with further instructions.'
+						message: 'Email สำหรับกู้คืนรหัสผ่านได้ส่งไปที่  ' + user.email + ' เรียบร้อยแล้ว กรุณาตรวจสอบ Email ด้วยค่ะ'
 					});
 				}
-
 				done(err);
 			});
 		}

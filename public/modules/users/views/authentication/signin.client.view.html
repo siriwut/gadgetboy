@@ -18,8 +18,8 @@
 				<form data-ng-submit="signin()" class="signin form-horizontal login-box-form" autocomplete="off">
 					<fieldset class="col-lg-8" >
 						<div class="form-group">
-							<label for="username">อีเมล</label>
-							<input type="text" id="username" name="username" class="form-control" data-ng-model="credentials.username" placeholder="Email">
+							<label for="email">อีเมล</label>
+							<input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
 						</div>
 						<div class="form-group">
 							<label for="password">รหัสผ่าน</label>
@@ -32,9 +32,7 @@
 						<div class="forgot-password">
 							<a href="/#!/password/forgot">ลืมรหัสผ่าน?</a>
 						</div>
-						<div data-ng-show="error" class="text-center text-danger">
-							<strong data-ng-bind="error"></strong>
-						</div>
+						<div data-ng-show="error" flash-message="5000"></div>
 					</fieldset>
 				</form>
 			</div>

@@ -8,6 +8,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 
 		$scope.create = function(){
+			
 			var product = new Products(this.product);
 			
 			product.photos = photoIdList;
@@ -34,7 +35,6 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 					Flash.create('danger',message);
 					$location.hash('top');
 					$anchorScroll();
-
 				}
 			});
 		};
@@ -61,7 +61,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 
 
-				$state.go('adminPanel.editProduct',{productId:product._id},{reload:true});
+				$state.go('adminPanel.editProduct',{productId:data._id},{reload:true});
 
 			}, function(error) {
 				$scope.error = error.data.message;
@@ -143,7 +143,6 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 		};
 
 		$scope.findOneEdit = function(){
-
 			$scope.product = Products.get({productId:$stateParams.productId},function(){
 				$scope.$broadcast('findEditPhotos');
 				$scope.categories = Categories.query();
@@ -154,7 +153,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 		$scope.pageChange = function(){
 			$scope.products=Products.query({page:$scope.currentPage},function(){
-					$scope.getQuantity();
+				$scope.getQuantity();
 				for(var i=0; i<$scope.products.length;i++){
 					$scope.products[i].selected = false;
 				}

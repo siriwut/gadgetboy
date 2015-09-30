@@ -10,7 +10,7 @@
 
 		</div>
 		<div class="row" >
-			<form data-ng-submit="update()" product-form >
+			<form data-ng-submit="productForm.$valid && update()" product-form >
 				<div class="col-lg-8">
 					<div class="form-group">
 						<label>ชื่อสินค้า</label>
@@ -18,7 +18,8 @@
 					</div>
 					<div class="form-group">
 						<label>หมวดหมู่สินค้า</label>
-						<select class="form-control"  data-ng-options="category.name for category in categories track by category._id"   data-ng-model="product.category"  >							
+						<select class="form-control"  data-ng-options="category.name for category in categories track by category._id"   data-ng-model="product.category"  >
+						<option value="" >กรุณาเลือกหมวดหมู่</option>						
 						</select>
 					</div>
 					<div class="form-group">

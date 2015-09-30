@@ -3,9 +3,9 @@
 var shop = require('../../app/controllers/shop.server.controller');
 
 module.exports = function(app) {
-	app.route('/api/shop/catalog/:categoryId')
+	app.route('/api/shop/catalog/:catelogId')
 	.get(shop.listProductByCategory);
 
 
-	app.param('categoryId',shop.productByCategoryID);
+	app.param('catelogId',shop.productByCategoryID);
 };

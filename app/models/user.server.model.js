@@ -18,8 +18,9 @@
  * A Validation function for local strategy password
  */
  var validateLocalStrategyPassword = function(password) {
- 	return (this.provider !== 'local' || (password && password.length > 6));
+ 	return (this.provider !== 'local' || (password && password.length >= 6));
  };
+
 
 /**
  * User Schema
@@ -29,13 +30,13 @@
  		type: String,
  		trim: true,
  		default: '',
- 		validate: [validateLocalStrategyProperty, 'Please fill in your first name']
+ 		validate: [validateLocalStrategyProperty, 'กรุณากรอก ชื่อ ด้วยค่ะ']
  	},
  	lastName: {
  		type: String,
  		trim: true,
  		default: '',
- 		validate: [validateLocalStrategyProperty, 'Please fill in your last name']
+ 		validate: [validateLocalStrategyProperty, 'กรุณากรอก นามสกุล ด้วยค่ะ']
  	},
  	displayName: {
  		type: String,
@@ -44,20 +45,21 @@
  	email: {
  		type: String,
  		trim: true,
+ 		index:{unique:true},
  		default: '',
- 		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
- 		match: [/.+\@.+\..+/, 'Please fill a valid email address']
+ 		validate: [validateLocalStrategyProperty, 'กรุณากรอก Email ด้วยค่ะ'],
+ 		match: [/.+\@.+\..+/, 'กรุณากรอก Email ให้ถูกต้องด้วยค่ะ']
  	},
  	username: {
  		type: String,
- 		unique: 'testing error message',
- 		required: 'Please fill in a username',
+ 		index:{unique:true},
+ 		required: 'กรุณากรอก Username ให้ถูกต้องด้วยค่ะ',
  		trim: true
  	},
  	password: {
  		type: String,
  		default: '',
- 		validate: [validateLocalStrategyPassword, 'Password should be longer']
+ 		validate: [validateLocalStrategyPassword, 'กรุณากรอก Password 6 ตัวขึ้นไปด้วยค่ะ']
  	},
  	salt: {
  		type: String

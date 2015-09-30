@@ -1,21 +1,21 @@
 'use strict';
 
-angular.module('products').directive('productForm', [
+
+angular.module('categories').directive('categoryForm', [
 	function() {
 		return {
 			restrict: 'A',
 			link: function (scope, element, attrs) {
 				element.ready(function(){
-
-					//element.find('input')[0].focus();
-
-					
-					element.on('submit',function(){	
+					element.on('submit',function(event){	
+						
 						var firstInvalidElem = element.find('.ng-invalid')[0];
 
 						if(firstInvalidElem){
 							firstInvalidElem.focus();
 						}
+
+					
 					});
 
 				});

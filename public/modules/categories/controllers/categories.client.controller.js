@@ -1,24 +1,44 @@
 'use strict';
 
 // Categories controller
-angular.module('categories').controller('CategoriesController', ['$scope', '$location','$state','$stateParams', 'Authentication', 'Categories','Products','ProductsByCategory',
-	function($scope, $location,$state,$stateParams, Authentication, Categories,Products,ProductsByCategory) {
+angular.module('categories').controller('CategoriesController', ['$scope', '$location','$state','$stateParams','$anchorScroll', 'Authentication', 'Categories','Products','ProductsByCategory','Flash','filterFilter',
+	function($scope, $location,$state,$stateParams,$anchorScroll, Authentication, Categories,Products,ProductsByCategory,Flash,filterFilter) {
 		$scope.authentication = Authentication;
 
 		// Create new Category
 		$scope.create = function() {
+			if(!this.category){
+				var message = 'กรุณากรอกข้อมูลเกี่ยวกับหมวดหมู่สินค้า';
+				Flash.create('danger',message);
+				$location.hash('top');
+				$anchorScroll();
+				return;
+			}
 			// Create new Category object
 			var category = new Categories (this.category);
 
 			// Redirect after save
 			category.$save(function(response) {
-				
-				$state.go('adminPanel.editCategory',{categoryId:response._id});
+				var message = 'สร้างหมวดหมู่ <strong>'+response.name+'</strong> เรียบร้อยแล้ว';
 
+				//console.log(response);
+				Flash.dismiss();
+				Flash.create('success',message);
 				// Clear form fields
 				$scope.category = null;
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
+
+				$state.go('adminPanel.editCategory',{categoryId:response._id});
+				
+			}, function(err) {
+				if(err){				
+					var message = 'เพิ่มหมวดหมู่ <strong>ล้มเหลว</strong> กรุณาลองใหม่อีกครั้ง';
+
+					$location.hash('top');
+					$anchorScroll();
+
+					Flash.dismiss();
+					Flash.create('danger',message);
+				}
 			});
 		};
 
@@ -34,9 +54,26 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 					}
 				}
 			} else {
-				$scope.category.$remove(function() {
-					$location.path('categories');
-				});
+
+				if($scope.categories.length){
+					var categories = filterFilter($scope.categories,function(category){
+						return category.selected === true;
+					});
+					
+					angular.forEach(categories,function(category,index){
+						category.$remove(function(){
+							for(var i in $scope.categories){
+								if($scope.categories[i] === category){
+									$scope.categories.splice(i,1);
+								}	
+							}
+						});
+
+					});
+					$scope.categoryChecked = false;
+
+				}
+			
 			}
 		};
 
@@ -44,8 +81,19 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 		$scope.update = function() {
 			var category = $scope.category;
 
-			category.$update(function() {
-				$location.path('categories/' + category._id);
+			if(category.parent){
+				category.parent =  category.parent._id;
+			}
+
+			category.$update(function(response) {
+				var message = 'แก้ไขหมวดหมู่ <strong>'+response.name+'</strong> เรียบร้อยแล้ว';
+
+				//console.log(response);
+				Flash.dismiss();
+				Flash.create('success',message);
+			
+
+				$state.go('adminPanel.editCategory',{categoryId:response._id},{reload:true});
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -53,7 +101,11 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 
 		// Find a list of Categories
 		$scope.find = function() {
-			$scope.categories = Categories.query();
+			$scope.categories = Categories.query(function(){
+				for(var i=0; i<$scope.categories.length;i++){
+					$scope.categories[i].selected = false;
+				}
+			});
 		};
 
 		// Find existing Category
@@ -64,8 +116,41 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 		};
 
 		$scope.findProductsByCategory = function(){
-			$scope.products = Products.query({categoryId:$stateParams.categoryId});				
-			
+			$scope.products = Products.query({categoryId:$stateParams.categoryId});	
+		};
+
+
+		$scope.action = {
+			select:function($event,index){
+				var checkbox = $event.target;
+				this.updateSelect(checkbox.checked,index);
+
+			},
+			selectAll:function($event){
+				var checkbox = $event.target;
+				this.updateSelectAll(checkbox.checked);
+			},
+			updateSelect:function(isChecked,index){
+				if(isChecked){
+					$scope.categories[index].selected = true;
+				}else{
+					$scope.categories[index].selected = false;
+					$scope.categoryChecked = false;
+				}
+			},
+			updateSelectAll:function(isChecked){
+				if(isChecked){
+					for(var i=0 ; i<$scope.categories.length;i++){
+						$scope.categories[i].selected = true;
+					}
+
+				}else{
+					for(var a=0 ; a<$scope.categories.length;a++){
+						$scope.categories[a].selected = false;
+					}
+
+				}
+			}
 		};
 	}
 	]);

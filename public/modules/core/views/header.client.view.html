@@ -61,7 +61,7 @@
 						 <b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
-						<li data-ng-if="authentication.user.roles[0]=='admin'" >
+						<li data-ng-if="checkRole()" >
 							<a href="/#!/admin-panel"><span class="glyphicon glyphicon-sunglasses" ></span>Admin Panel</a>
 						</li>
 

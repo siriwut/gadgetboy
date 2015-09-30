@@ -82,13 +82,13 @@
 								</div>
 							</td>
 							<td data-ng-bind="product.name" ></td>
-							<td data-ng-bind="product.model" ></td>
+							<td >{{product.model||'ไม่มีรุ่น'}}</td>
 							<td  >
 								<div data-ng-if="product.color" class="color-tag" style="background-color:{{product.color}}" ></div>
 								<span data-ng-if="!product.color" >ไม่มีสี</span>
 							</td>
-							<td >{{product.price|currency:'':0}} บาท </td>
-							<td >{{product.quantity+' ชิ้น'}} </td>
+							<td >{{(product.price|currency:'':0)||0}} บาท </td>
+							<td >{{(product.quantity||0)+' ชิ้น'}} </td>
 							<td  >
 								<span data-ng-if="product.category" >{{product.category.name}}</span>	
 								<span data-ng-if="!product.category" >ไม่มีหมวดหมู่</span>	
@@ -108,7 +108,7 @@
 						</select>
 
 					</div>
-					<button class="btn btn-default btn-sm btn-edit-product" >ยืนยัน</button>
+					<button class="btn btn-default btn-sm btn-edit-product" data-ng-click="remove()" >ยืนยัน</button>
 					<div class="form-group" >
 						<select class="form-control input-sm" >
 							<option>หมวดหมู่ทั้งหมด</option>

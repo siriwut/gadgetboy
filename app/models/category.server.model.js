@@ -12,24 +12,23 @@
  var CategorySchema = new Schema({
  	name:{
  		type:String,
- 		require:'Name cannot be blank'
+ 		required:'Name cannot be blank',
+ 		index:true
  	},
  	description:{
  		type:String,
  		default:''
  	},
  	parent:{
- 		type:Schema.ObjectId,
- 		ref:'Category'
+ 		type:Schema.ObjectId
  	},
  	subs:[{
- 		type:Schema.ObjectId,
- 		ref:'Category'
+ 		type:Schema.ObjectId
  	}],
  	slug:{
  		type:String,
- 		require:'Slug cannot be blank',
- 		index:{unique:true}
+ 		required:true,
+ 		index:{unique:true}	
  	},
  	created:{
  		type:Date,
@@ -43,5 +42,27 @@
  		ref:'User'
  	}
  });
+
+
+
+
+
+
+ CategorySchema.statics.buildSubs = function(id,parentId,cb){
+ 	var _this = this;	
+
+ 	_this.findOne({_id:parentId}).select({subs:1}).exec(function(err,parent){
+ 		if(!err){
+ 			if(!parent) return;
+
+ 			parent.subs.push(id);
+ 			_this.update({_id:parent._id},{$set:{subs:parent.subs}},cb);
+ 			
+ 		}else{
+ 			cb(null);
+ 		}
+
+ 	});
+ };
 
  mongoose.model('Category', CategorySchema);

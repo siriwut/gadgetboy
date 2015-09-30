@@ -18,7 +18,7 @@
  	Product.find({'category':id}).populate('user').populate('category','name').populate('photos').exec(function(err,products){
  		if(err)return next(err);
  		if(!products)return next(new Error('Failed to load product ' + id));
- 		console.log('Match Product');
+ 		
  		req.products = products;
  		next();
  	});

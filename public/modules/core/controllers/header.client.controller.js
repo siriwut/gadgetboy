@@ -8,6 +8,12 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 
 		//console.log($scope.authentication.user);
 
+		$scope.checkRole = function(){
+			if(!$scope.authentication.user) return; 
+
+			return $scope.authentication.user.roles.indexOf('admin')===1;
+		};
+
 		$scope.toggleCollapsibleMenu = function() {
 			$scope.isCollapsed = !$scope.isCollapsed;
 		};
@@ -27,6 +33,7 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
+			
 		};
 	}
 ]);

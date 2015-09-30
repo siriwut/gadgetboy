@@ -15,7 +15,8 @@
  	name:{
  		type:String,
  		required:'Name cannot be blank',
- 		trim:true
+ 		trim:true,
+ 		index:true
  	},
  	model:{
  		type:String,
@@ -63,9 +64,11 @@
  		type:Boolean,
  		default:false
  	},
- 	slugName:{
+ 	slug:{
  		type:String,
- 		trim:true
+ 		trim:true,
+ 		required:true,
+ 		index:{unique:true}
  	},
  	created: {
  		type: Date,
@@ -84,14 +87,7 @@
  	}	
  });
 
- ProductSchema.pre('save',function(next){
- 	this.createSlugName();
- 	next();
- });
 
- 
- ProductSchema.methods.createSlugName = function(){
- 	this.slugName = this.name;
- };
+
 
  mongoose.model('Product', ProductSchema);

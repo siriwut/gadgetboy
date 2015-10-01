@@ -4,7 +4,7 @@
 		<section class="col-md-12 col-lg-6">
 			<div class="login-facebook-box">
 				<h3>ด้วยบัญชี Facebook ของคุณ</h3>
-				<a href="/auth/facebook" class="undecorated-link">
+				<a href="#" data-ng-click="signupWithFacebook()" class="undecorated-link">
 					<img src="/modules/users/img/buttons/facebook.png">
 				</a>
 
@@ -15,15 +15,19 @@
 		<section class="col-md-12 col-lg-6">
 			<div class="login-box" >			
 				<h3 class="login-box-header" >ด้วย Email ของคุณ</h3>
-				<form data-ng-submit="signin()" class="signin form-horizontal login-box-form" autocomplete="off">
+				<form name="signinForm" data-ng-submit="signinForm.$valid && signin()" class="signin form-horizontal login-box-form" autocomplete="off" novalidate>
 					<fieldset class="col-lg-8" >
-						<div class="form-group">
+						<div class="form-group" ng-class="{'has-error':(signinForm.$submitted||signinForm.$touched) && signinForm.email.$invalid}">
 							<label for="email">อีเมล</label>
-							<input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
+							<input type="text" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email" required>
+
+							<p ng-show="(signinForm.$submitted||signinForm.$touched) && signinForm.email.$error.required" class="text-danger">กรุณากรอก <strong>email</strong> ด้วยค่ะ</p>
 						</div>
-						<div class="form-group">
+						<div class="form-group" ng-class="{'has-error':(signinForm.$submitted||signinForm.$touched) && signinForm.password.$invalid}">
 							<label for="password">รหัสผ่าน</label>
-							<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+							<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password" required>
+
+							<p ng-show="(signinForm.$submitted||signinForm.$touched) && signinForm.password.$error.required" class="text-danger">กรุณากรอก <strong>password</strong> ด้วยค่ะ</p>
 						</div>
 						<div class="text-center form-group">
 							<button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>&nbsp; หรือ&nbsp;

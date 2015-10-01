@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication','Flash',
-	function($scope, $http, $location, Authentication,Flash) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location','$window', 'Authentication','Flash',
+	function($scope, $http, $location,$window, Authentication,Flash) {
 		$scope.authentication = Authentication;
 
 		// If user is signed in then redirect back home
@@ -38,6 +38,14 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 				Flash.dismiss();
 				Flash.create('danger',$scope.error);
 			});
+		};
+
+		$scope.signupWithFacebook = function(){
+			$window.location.assign('/api/auth/facebook');
+		};
+
+		$scope.signinWithFacebook = function(){
+			$window.location.assign('/api/auth/facebook');
 		};
 	}
 	]);

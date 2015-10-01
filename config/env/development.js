@@ -6,9 +6,9 @@ module.exports = {
 		title: 'gadgetboy - Development Environment'
 	},
 	facebook: {
-		clientID: process.env.FACEBOOK_ID || 'APP_ID',
-		clientSecret: process.env.FACEBOOK_SECRET || 'APP_SECRET',
-		callbackURL: '/auth/facebook/callback'
+		clientID: process.env.FACEBOOK_ID || '750701491722559',
+		clientSecret: process.env.FACEBOOK_SECRET || '0678f654f3f4e001fea07e3af7e53d44',
+		callbackURL: '/api/auth/facebook/callback'
 	},
 	twitter: {
 		clientID: process.env.TWITTER_KEY || 'CONSUMER_KEY',

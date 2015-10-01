@@ -11,7 +11,7 @@ angular.module('users').directive('passwordMatch', [
 					var e1 = scope.$eval(attrs.ngModel);
 					var e2 =  scope.$eval(attrs.passwordMatch);
 
-					return e1 == e2;
+					return e1 === e2;
 				};
 
 				scope.$watch(checkMatch,function(n){

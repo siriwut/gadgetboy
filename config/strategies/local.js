@@ -23,12 +23,12 @@ module.exports = function() {
 				}
 				if (!user) {
 					return done(null, false, {
-						message: 'Unknown user or invalid password'
+						message: 'email หรือ password ไม่ถูกต้อง'
 					});
 				}
 				if (!user.authenticate(password)) {
 					return done(null, false, {
-						message: 'Unknown user or invalid password'
+						message: 'email หรือ password ไม่ถูกต้อง'
 					});
 				}
 

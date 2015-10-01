@@ -6,7 +6,7 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 		$scope.isCollapsed = false;
 		$scope.menu = Menus.getMenu('topbar');
 
-		//console.log($scope.authentication.user);
+		
 
 		$scope.checkRole = function(){
 			if(!$scope.authentication.user) return; 

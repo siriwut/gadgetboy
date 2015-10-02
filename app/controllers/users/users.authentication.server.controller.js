@@ -3,16 +3,18 @@
 /**
  * Module dependencies.
  */
-var _ = require('lodash'),
-	errorHandler = require('../errors.server.controller'),
-	mongoose = require('mongoose'),
-	passport = require('passport'),
-	User = mongoose.model('User');
+ var _ = require('lodash'),
+ errorHandler = require('../errors.server.controller'),
+ mongoose = require('mongoose'),
+ passport = require('passport'),
+ User = mongoose.model('User'),
+ Token = mongoose.model('Token'),
+ crypto = require('crypto');
 
 /**
  * Signup
  */
-exports.signup = function(req, res) {
+ exports.signup = function(req, res) {
 	// For security measurement we remove the roles from the req.body object
 	delete req.body.roles;
 
@@ -49,60 +51,79 @@ exports.signup = function(req, res) {
 /**
  * Signin after passport authentication
  */
-exports.signin = function(req, res, next) {
-	passport.authenticate('local', function(err, user, info) {
-		if (err || !user) {
-			res.status(400).send(info);
-		} else {
+ exports.signin = function(req, res, next) {
+ 	passport.authenticate('local', function(err, user, info) {
+ 		if (err || !user) {
+ 			res.status(400).send(info);
+ 		} else {
+
 			// Remove sensitive data before login
 			user.password = undefined;
 			user.salt = undefined;
 
+			
 			req.login(user, function(err) {
 				if (err) {
 					res.status(400).send(err);
 				} else {
-					res.json(user);
+					if(req.body.rememberMe){
+						crypto.randomBytes(256, function(err, buffer) {
+							var tokenString = buffer.toString('hex'); 
+							var token = new Token({token:tokenString,userId:user._id});
+
+							token.save(function(err) {
+								if (err) res.status(400).send(err);
+
+								res.cookie('remember_me', tokenString, { path: '/', httpOnly: true, maxAge: 604800000 });
+								res.json(user);
+							});
+						});
+						
+					}else{
+						res.json(user);
+					}
 				}
 			});
 		}
 	})(req, res, next);
 };
 
+
 /**
  * Signout
  */
-exports.signout = function(req, res) {
-	req.logout();
-	res.redirect('/');
-};
+ exports.signout = function(req, res) {
+ 	req.logout();
+ 	res.clearCookie('remember_me');
+ 	res.redirect('/');
+ };
 
 /**
  * OAuth callback
  */
-exports.oauthCallback = function(strategy) {
-	return function(req, res, next) {
-		passport.authenticate(strategy, function(err, user, redirectURL) {
-			if (err || !user) {
-				return res.redirect('/#!/signin');
-			}
-			req.login(user, function(err) {
-				if (err) {
-					return res.redirect('/#!/signin');
-				}
+ exports.oauthCallback = function(strategy) {
+ 	return function(req, res, next) {
+ 		passport.authenticate(strategy, function(err, user, redirectURL) {
+ 			if (err || !user) {
+ 				return res.redirect('/#!/signin');
+ 			}
+ 			req.login(user, function(err) {
+ 				if (err) {
+ 					return res.redirect('/#!/signin');
+ 				}
 
-				return res.redirect(redirectURL || '/');
-			});
-		})(req, res, next);
-	};
-};
+ 				return res.redirect(redirectURL || '/');
+ 			});
+ 		})(req, res, next);
+ 	};
+ };
 
 /**
  * Helper function to save or update a OAuth user profile
  */
-exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
+ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 
-	if (!req.user) {
+ 	if (!req.user) {
 		// Define a search query fields
 		var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
 		var searchAdditionalProviderIdentifierField = 'additionalProvidersData.' + providerUserProfile.provider + '.' + providerUserProfile.providerIdentifierField;
@@ -175,11 +196,11 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 /**
  * Remove OAuth provider
  */
-exports.removeOAuthProvider = function(req, res, next) {
-	var user = req.user;
-	var provider = req.param('provider');
+ exports.removeOAuthProvider = function(req, res, next) {
+ 	var user = req.user;
+ 	var provider = req.param('provider');
 
-	if (user && provider) {
+ 	if (user && provider) {
 		// Delete the additional provider
 		if (user.additionalProvidersData[provider]) {
 			delete user.additionalProvidersData[provider];

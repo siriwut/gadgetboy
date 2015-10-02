@@ -3,28 +3,28 @@
 /**
  * Module dependencies.
  */
-var fs = require('fs'),
-	http = require('http'),
-	https = require('https'),
-	express = require('express'),
-	morgan = require('morgan'),
-	bodyParser = require('body-parser'),
-	session = require('express-session'),
-	compress = require('compression'),
-	methodOverride = require('method-override'),
-	cookieParser = require('cookie-parser'),
-	helmet = require('helmet'),
-	passport = require('passport'),
-	mongoStore = require('connect-mongo')({
-		session: session
-	}),
-	flash = require('connect-flash'),
-	config = require('./config'),
-	consolidate = require('consolidate'),
-	path = require('path'),
-	modRewrite = require('connect-modrewrite');
+ var fs = require('fs'),
+ http = require('http'),
+ https = require('https'),
+ express = require('express'),
+ morgan = require('morgan'),
+ bodyParser = require('body-parser'),
+ session = require('express-session'),
+ compress = require('compression'),
+ methodOverride = require('method-override'),
+ cookieParser = require('cookie-parser'),
+ helmet = require('helmet'),
+ passport = require('passport'),
+ mongoStore = require('connect-mongo')({
+ 	session: session
+ }),
+ flash = require('connect-flash'),
+ config = require('./config'),
+ consolidate = require('consolidate'),
+ path = require('path'),
+ modRewrite = require('connect-modrewrite');
 
-module.exports = function(db) {
+ module.exports = function(db) {
 	// Initialize express app
 	var app = express();
 
@@ -97,9 +97,15 @@ module.exports = function(db) {
 		})
 	}));
 
+
+
+
+
+
 	// use passport session
 	app.use(passport.initialize());
 	app.use(passport.session());
+	app.use(passport.authenticate('remember-me'));
 
 	// connect flash for flash messages
 	app.use(flash());
@@ -115,8 +121,8 @@ module.exports = function(db) {
 	app.use(express.static(path.resolve('./public')));
 
 	app.use(modRewrite([  
-    	'!^/api/.*|\\_getModules|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]' 
-    ]));
+		'!^/api/.*|\\_getModules|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]' 
+		]));
 
 	// Globbing routing files
 	config.getGlobbedFiles('./app/routes/**/*.js').forEach(function(routePath) {

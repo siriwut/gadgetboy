@@ -9,6 +9,7 @@
  passport = require('passport'),
  User = mongoose.model('User'),
  Token = mongoose.model('Token'),
+ Customer = mongoose.model('Customer'),
  crypto = require('crypto');
 
 /**
@@ -22,7 +23,9 @@
 	var user = new User(req.body);
 	var message = null;
 
+
 	// Add missing user fields
+	user.username = user.email;
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
 	
@@ -33,6 +36,13 @@
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+			var customer = new Customer({_id:user._id});
+
+			customer.save(function(err){
+				if(err) res.status(400).send(err);
+			});
+
+
 			// Remove sensitive data before login
 			user.password = undefined;
 			user.salt = undefined;
@@ -47,6 +57,8 @@
 		}
 	});
 };
+
+
 
 /**
  * Signin after passport authentication
@@ -93,8 +105,11 @@
  * Signout
  */
  exports.signout = function(req, res) {
- 	req.logout();
+ 	Token.remove({token:req.cookies.remember_me},function(err,token){
+ 		if (err) res.status(400).send(err);
+ 	});
  	res.clearCookie('remember_me');
+ 	req.logout(); 	
  	res.redirect('/');
  };
 
@@ -107,6 +122,19 @@
  			if (err || !user) {
  				return res.redirect('/#!/signin');
  			}
+
+ 			//create customer if not exist.
+ 			Customer.findOne({_id:user._id}).exec(function(err,customer){
+ 				if(err) return res.redirect('/#!/signin');			
+
+ 				if(!customer){
+ 					var newCustomer = new Customer({_id:user._id});
+ 					newCustomer.save(function(err){
+ 						if(err) res.redirect('/#!/signin');
+ 					});
+ 				}
+ 			});
+
  			req.login(user, function(err) {
  				if (err) {
  					return res.redirect('/#!/signin');
@@ -226,3 +254,4 @@
 		});
 	}
 };
+

@@ -12,7 +12,8 @@ angular.module('products').constant('EventColors', {
  Pink:   '#ff1493',
  Purple: '#800080',
  Brown:  '#a52a2a', 
- Gray:   '#808080'
+ Gray:   '#808080',
+ Silver: '#F2F2F2'
 })
 .controller('EventColorsCtrl',['$scope', 'EventColors',function($scope, EventColors) {
 	$scope.color = EventColors.Orange;

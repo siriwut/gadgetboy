@@ -1,13 +1,12 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$http','$location','$window', 'Authentication', 'Menus','Categories',
-	function($scope,$http,$location,$window, Authentication, Menus,Categories) {
+angular.module('core').controller('HeaderController', ['$scope', '$http','$location','$window', 'Authentication', 'Menus','Categories','CartModal',
+	function($scope,$http,$location,$window, Authentication, Menus,Categories,CartModal) {
 		$scope.authentication = Authentication;
 		$scope.isCollapsed = false;
 		$scope.menu = Menus.getMenu('topbar');
 
 		
-
 		$scope.checkRole = function(){
 			if(!$scope.authentication.user) return; 
 
@@ -34,6 +33,10 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
 			
+		};
+
+		$scope.openCart = function(){
+			CartModal.open();
 		};
 	}
 ]);

@@ -10,16 +10,17 @@
 
 		</div>
 		<div class="row" >
-			<form data-ng-submit="productForm.$valid && update()" product-form >
+			<form name="productForm" data-ng-submit="productForm.$valid && update()" product-form >
 				<div class="col-lg-8">
-					<div class="form-group">
+					<div class="form-group" ng-class="{'has-error':(productForm.$submitted||productForm.$touched) && productForm.name.$invalid}">
 						<label>ชื่อสินค้า</label>
-						<input type="text" class="form-control" data-ng-model="product.name" >
+						<input  type="text" class="form-control" data-ng-model="product.name"  required>
+						<p ng-show="(productForm.$submitted||productForm.$touched) && productForm.name.$invalid" class="text-danger">กรุณากรอกชื่อ สินค้า</p>
 					</div>
 					<div class="form-group">
 						<label>หมวดหมู่สินค้า</label>
 						<select class="form-control"  data-ng-options="category.name for category in categories track by category._id"   data-ng-model="product.category"  >
-						<option value="" >กรุณาเลือกหมวดหมู่</option>						
+							<option value="" >กรุณาเลือกหมวดหมู่</option>						
 						</select>
 					</div>
 					<div class="form-group">

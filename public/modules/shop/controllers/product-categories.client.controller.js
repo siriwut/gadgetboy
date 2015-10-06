@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('shop').controller('ProductCategoriesCtrl', ['$scope','$http','$stateParams','Products','Categories',
+angular.module('shop').controller('ShopCtrl', ['$scope','$http','$stateParams','Products','Categories',
 	function($scope,$http,$stateParams,Products,Categories) {
 		$scope.viewProductCategory = function(){
 
@@ -22,6 +22,12 @@ angular.module('shop').controller('ProductCategoriesCtrl', ['$scope','$http','$s
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
+		};
+
+		$scope.findProduct = function(){
+			$scope.product = Products.get({
+				productId:$stateParams.productId
+			});
 		};
 	}
 	]);

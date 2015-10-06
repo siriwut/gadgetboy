@@ -1,0 +1,38 @@
+.shop{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.product-container{
+	padding-left:15px;
+	padding-right:15px;
+
+}
+
+.product-container-inner{
+	background-color: #FFF;
+	padding-top:15px;
+	padding-bottom:15px;
+}
+
+.shop-breadcrumb{
+	background: #FFF;
+	padding: 15px 10px 15px 20px;
+	border:1px solid #D8D8D8;
+}
+
+.product-detail-col{
+	padding-left:0;
+	padding-right:0;
+}
+
+.addtocart-box{
+	padding:18px 20px 18px 20px;
+	margin-left:5px;
+}
+
+.product-description{
+	padding-left:50px;
+	padding-right:50px;
+	margin-top:10px;
+}

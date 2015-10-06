@@ -18,84 +18,75 @@
 				<li dropdown on-toggle="toggled(open)">
 					<a href dropdown-toggle><span class="glyphicon glyphicon-th-list" ></span>
 						<span class="hidden-sm" >หมวดหมู่สินค้า</span><b class="caret" ></b></a>
-					<ul class="dropdown-menu" data-ng-init="initCategories()" >
-						<li data-ng-repeat="category in categories" ><a ui-sref="productCategory({categoryId:category._id})" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
-						
-					</ul>
-				</li>
-			</ul>
+						<ul class="dropdown-menu" data-ng-init="initCategories()" >
+							<li data-ng-repeat="category in categories" ><a ui-sref="productCategory({categoryId:category._id})" ><span class="glyphicon glyphicon-tags" ></span><span data-ng-bind="category.name" ></span> </a></li>
 
-			<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
+						</ul>
+					</li>
+				</ul>
 
-
-
-			<ul class="nav navbar-nav navbar-right" data-ng-hide="authentication.user">
-
-				<li ui-route="/signin" ng-class="{active: $uiRoute}" title="ลงชื่อเข้าใช้" >
-					<a href="/#!/signin">
-						<span class="glyphicon glyphicon-lock" ></span>
-						<span class="hidden-sm" >ลงชื่อเข้าใช้</span>
-					</a>
-				</li>
-				<li ui-route="/signup" ng-class="{active: $uiRoute}" title="สมัครสมาชิก">
-					<a href="/#!/signup">
-						<span class="glyphicon glyphicon-user" ></span> 
-						<span class="hidden-sm" >สมัครสมาชิก</span>
-					</a>
-				</li>
-				<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
-					<a href="#">
-						<span class="glyphicon glyphicon-shopping-cart" ></span>
-						<span class="hidden-sm" >ตระกร้า</span> 
-						<span class="badge">5</span>
-					</a>
-				</li>
+				<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
 
 
-			</ul>
 
-			<ul class="nav navbar-nav navbar-right" data-ng-show="authentication.user">
-				<li class="dropdown" dropdown >
-					<a href="#" class="dropdown-toggle" dropdown-toggle >
-						<span data-ng-bind="authentication.user.displayName"></span>
-						 <b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li data-ng-if="checkRole()" >
-							<a href="/#!/admin-panel"><span class="glyphicon glyphicon-sunglasses" ></span>Admin Panel</a>
+
+
+				<ul class="nav navbar-nav navbar-right" >
+					
+						<li ui-route="/signin" ng-class="{active: $uiRoute}" title="ลงชื่อเข้าใช้" data-ng-hide="authentication.user" >
+							<a href="/#!/signin">
+								<span class="glyphicon glyphicon-lock" ></span>
+								<span class="hidden-sm" >ลงชื่อเข้าใช้</span>
+							</a>
 						</li>
-
-						<li>
-							<a href="/#!/customer-panel"><span class="glyphicon glyphicon-user" ></span>มุมลูกค้า</a>
+						<li ui-route="/signup" ng-class="{active: $uiRoute}" title="สมัครสมาชิก" data-ng-hide="authentication.user" >
+							<a href="/#!/signup">
+								<span class="glyphicon glyphicon-user" ></span> 
+								<span class="hidden-sm" >สมัครสมาชิก</span>
+							</a>
 						</li>
-						<li class="divider"></li>
-						<li>
-							<a href="/#!/settings/profile"></span>แก้ไขบัญชีผู้ใช้</a>
-						</li>
-						
-						<li data-ng-show="authentication.user.provider === 'local'">
-							<a href="/#!/settings/password">เปลี่ยนรหัสผ่าน</a>
-						</li>
-						<li class="divider"></li>
-						<li >
-							<a href="#" ng-click="signout()">ออกจากระบบ</a>
-						</li>
+					
+					<li class="dropdown" dropdown data-ng-show="authentication.user" >
+						<a href="#" class="dropdown-toggle" dropdown-toggle >
+							<span data-ng-bind="authentication.user.displayName"></span>
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li data-ng-if="checkRole()" >
+								<a href="/#!/admin-panel"><span class="glyphicon glyphicon-sunglasses" ></span>Admin Panel</a>
+							</li>
 
-					</ul>
-				</li>
-				<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
-					<a href="#">
-						<span class="glyphicon glyphicon-shopping-cart" ></span>
-						<span class="hidden-sm" >ตระกร้า</span> 
-						<span class="badge">10</span>
-					</a>
-				</li>
-			</ul>
+							<li>
+								<a href="/#!/customer-panel"><span class="glyphicon glyphicon-user" ></span>มุมลูกค้า</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="/#!/settings/profile"></span>แก้ไขบัญชีผู้ใช้</a>
+							</li>
+
+							<li data-ng-show="authentication.user.provider === 'local'">
+								<a href="/#!/settings/password">เปลี่ยนรหัสผ่าน</a>
+							</li>
+							<li class="divider"></li>
+							<li >
+								<a href="#" ng-click="signout()">ออกจากระบบ</a>
+							</li>
+
+						</ul>
+					</li>
+					<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
+						<a href="#" data-ng-click="openCart()">
+							<span class="glyphicon glyphicon-shopping-cart" ></span>
+							<span class="hidden-sm" >ตะกร้า</span> 
+							<span class="badge">10</span>
+						</a>
+					</li>
+				</ul>
 
 
 
-		</nav>
-	</section>
-</nav>
-
+			</nav>
+		</section>
+	</nav>
+	<cart></cart>
 

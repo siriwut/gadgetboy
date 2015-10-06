@@ -1,4 +1,4 @@
-<section data-ng-controller="ProductsController" data-ng-init="list()">
+<section  data-ng-controller="ProductsController" data-ng-init="list()">
 	
 	<section class="row admin-content item-box" >	
 		<div class="row admin-panel-header" >	
@@ -38,7 +38,7 @@
 			</div>
 
 			<div class="col-lg-4 col-xs-12">
-				   <pagination  boundary-links="true" total-items="totalQuantity" items-per-page="3"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				   <pagination  boundary-links="true" total-items="totalQuantity" items-per-page="20"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 			</div>
 		</div>
 		<div class="row"   >
@@ -64,7 +64,7 @@
 						<th data-ng-bind="tableHeader.quantity" ></th>
 						<th data-ng-bind="tableHeader.category" ></th>
 					</tfoot>
-					<tbody>
+					<tbody ng-init="limit=30">
 						<tr data-ng-repeat="product in products track by $index" ng-mouseover="isRowActionShow=true" ng-mouseleave="isRowActionShow=false" >
 							<td>
 								<input type="checkbox" data-ng-model="product.selected" ng-click="action.select($event,$index)"  >
@@ -81,8 +81,8 @@
 									</div>
 								</div>
 							</td>
-							<td data-ng-bind="product.name" ></td>
-							<td >{{product.model||'ไม่มีรุ่น'}}</td>
+							<td class="word-breakline" >{{product.name | limitTo:limit}}{{product.name.length > limit?'...':''}}</td>
+							<td class="word-breakline" >{{product.model | limitTo:limit ||'ไม่มีรุ่น'}}{{product.model.length > limit?'...':''}}</td>
 							<td  >
 								<div data-ng-if="product.color" class="color-tag" style="background-color:{{product.color}}" ></div>
 								<span data-ng-if="!product.color" >ไม่มีสี</span>
@@ -90,8 +90,8 @@
 							<td >{{(product.price|currency:'':0)||0}} บาท </td>
 							<td >{{(product.quantity||0)+' ชิ้น'}} </td>
 							<td  >
-								<span data-ng-if="product.category" >{{product.category.name}}</span>	
-								<span data-ng-if="!product.category" >ไม่มีหมวดหมู่</span>	
+								<span  >{{product.category.name || 'ไม่มีหมวดหมู่'}}</span>	
+									
 							</td>					
 						</tr>
 					</tbody>	

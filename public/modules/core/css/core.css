@@ -18,84 +18,93 @@ body{
 
 }
 
-	.desktop-col-nopadding {
-		padding-left:0; 
-		padding-right:0;
-	}
+.desktop-col-nopadding {
+	padding-left:0; 
+	padding-right:0;
+}
 
-	.desktop-row-nomargin {
-		margin-left:0; 
-		margin-right:0;
-	}
+.desktop-row-nomargin {
+	margin-left:0; 
+	margin-right:0;
+}
 
-	.item-box {
-		border: 1px solid #D8D8D8;
-	}
+.item-box {
+	border: 1px solid #D8D8D8;
+}
 
-	.app-navbar{
-		background: #000;
-	}
+.app-navbar{
+	background: #000;
+}
 
-	.app-logo{
-		width: 130px;
-		height: 50px;
-		background: url("../img/brand/logo-header.png") #000;
-	}
-	.app-header{
-		background: #000;
-		color:#FFF;
-		min-height: 60px;
-		padding: 5px 5px 5px 5px;
-		position: fixed;
-		right: 0;
-		left: 0;
-		top: 0;
-		z-index: 1030;
-	}
+.app-logo{
+	width: 130px;
+	height: 50px;
+	background: url("../img/brand/logo-header.png") #000;
+}
+.app-header{
+	background: #000;
+	color:#FFF;
+	min-height: 60px;
+	padding: 5px 5px 5px 5px;
+	position: fixed;
+	right: 0;
+	left: 0;
+	top: 0;
+	z-index: 1030;
+}
 
-	.app-search-form{
-		padding-top:5px;
-		padding-bottom:5px;
-		margin-bottom: 0;
-	}
+.app-search-form{
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-bottom: 0;
+}
 
-	.bg-grey{
-		background: #777;
-	}
+.bg-grey{
+	background: #777;
+}
 
-	.bg-red{
-		background: #D9534F;
-	}
+.bg-red{
+	background: #D9534F;
+}
 
-	.bg-green{
-		background: #5EB85C;
-	}
+.bg-green{
+	background: #5EB85C;
+}
 
-	.bg-orange{
-		background: #F0AD4E;
-	}
-
-
-	.bg-skyblue{
-		background: #5bc0de;
-	}
+.bg-orange{
+	background: #F0AD4E;
+}
 
 
-	.thumbnail-frame {
-		padding: 4px !important;
-	}
+.bg-skyblue{
+	background: #5bc0de;
+}
 
 
-	.undecorated-link:hover {
-		text-decoration: none;
-	}
-	[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-		display: none !important;
-	}
-	.ng-invalid.ng-dirty {
-		border-color: #FA787E;
-	}
-	.ng-valid.ng-dirty {
-		border-color: #78FA89;
-	}
+.thumbnail-frame {
+	padding: 4px !important;
+}
 
+
+.undecorated-link:hover {
+	text-decoration: none;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+.ng-invalid.ng-dirty {
+	border-color: #FA787E;
+}
+.ng-valid.ng-dirty {
+	border-color: #78FA89;
+}
+
+.word-breakline{
+	word-break: break-all;
+
+	/* Non standard for webkit */
+	word-break: break-word;
+
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}

@@ -35,11 +35,11 @@ exports.forgot = function(req, res, next) {
 				}, '-salt -password', function(err, user) {
 					if (!user) {
 						return res.status(400).send({
-							message: 'No account with that username has been found'
+							message: 'ไม่มีชื่อผู้ใช้นี้อยู่ในระบบ'
 						});
 					} else if (user.provider !== 'local') {
 						return res.status(400).send({
-							message: 'It seems like you signed up using your ' + user.provider + ' account'
+							message: 'คุณได้สมัครสมาชิกด้วยบัญชี ' + user.provider + ' แล้ว'
 						});
 					} else {
 						user.resetPasswordToken = token;
@@ -52,7 +52,7 @@ exports.forgot = function(req, res, next) {
 				});
 			} else {
 				return res.status(400).send({
-					message: 'Username field must not be blank'
+					message: 'กรุณากรอก Email ด้วยค่ะ'
 				});
 			}
 		},

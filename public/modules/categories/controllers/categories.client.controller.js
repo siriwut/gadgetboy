@@ -7,13 +7,7 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 
 		// Create new Category
 		$scope.create = function() {
-			if(!this.category){
-				var message = 'กรุณากรอกข้อมูลเกี่ยวกับหมวดหมู่สินค้า';
-				Flash.create('danger',message);
-				$location.hash('top');
-				$anchorScroll();
-				return;
-			}
+			
 			// Create new Category object
 			var category = new Categories (this.category);
 

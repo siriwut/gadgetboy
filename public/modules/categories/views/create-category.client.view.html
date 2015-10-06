@@ -12,7 +12,7 @@
         </div>
         <div class="row" >
 
-          <form name="categoryForm" data-ng-submit="create()" category-form  novalidate>
+          <form name="categoryForm" data-ng-submit="categoryForm.$valid && create()" category-form  novalidate>
             <div class="col-lg-8">
                 <div class="form-group"  ng-class="{'has-error':(categoryForm.$submitted||categoryForm.$touched) && categoryForm.name.$invalid}">
                     <label>ชื่อหมวดหมู่</label>

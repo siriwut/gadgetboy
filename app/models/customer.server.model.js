@@ -12,7 +12,7 @@
  var CustomerSchema = new Schema({
  	_id:{
  		type: Schema.ObjectId,
- 		ref: 'User'
+ 		ref:'User'
  	},
  	addresses:[{
  		name:{
@@ -21,38 +21,33 @@
  		},
  		address:{type:String,require:true},
  		province:{type:String,require:true},
- 		district:{type:String,require:true},
+ 		district:{type:String,require:true}
  	}],
  	favourite:[{
  		type:Schema.ObjectId,
  		ref:'Product'
  	}],
  	orders:[{
- 		products:[{
- 			product:{
- 				_id:Schema.ObjectId ,name:{
- 				type:String,
- 				required:'Name cannot be blank'
- 			},
- 			model:{
- 				type:String
- 			},
- 			brand:{
- 				type:String
- 			},
- 			color:{
- 				type:String
- 			},
- 			price:{
- 				type:Number
- 			}},
- 			quantity:{type:Number,default:1}
- 		}],
+ 		products:[{type:Schema.ObjectId,ref:'User'}],
  		totalPrice:Number,
  		status:{
  			type:String,
  			enum:['new','confirmed','paid','delivered','completed','overtime','canceled'],
  			default:'new'
+ 		},
+ 		created: {
+ 			type: Date,
+ 			default: Date.now
+ 		}
+ 	}],
+ 	cart:[{
+ 		product:{
+ 			type:Schema.ObjectId,
+ 			ref:'Product'
+ 		},
+ 		quantity:{
+ 			type:Number,
+ 			default:1
  		}
  	}],
  	created: {
@@ -60,5 +55,8 @@
  		default: Date.now
  	}
  });
+
+
+ 
 
  mongoose.model('Customer', CustomerSchema);

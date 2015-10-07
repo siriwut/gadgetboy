@@ -2,6 +2,13 @@
 
 angular.module('shop').controller('ShopCtrl', ['$scope','$http','$stateParams','Products','Categories',
 	function($scope,$http,$stateParams,Products,Categories) {
+		
+		$scope.selectedQuantity = 1;
+
+		$scope.$watch('selectedQuantity',function(){
+			console.log($scope.selectedQuantity);
+		});
+
 		$scope.viewProductCategory = function(){
 
 			$http.get('/api/shop/catalog/'+$stateParams.categoryId)

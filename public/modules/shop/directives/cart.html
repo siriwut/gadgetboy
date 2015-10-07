@@ -1,18 +1,47 @@
 <script type="text/ng-template" id="cartModal.html">
         <div class="modal-header">
-        <button type="button" class="close" data-ng-click="dismiss()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close hidden-xs" data-ng-click="dismiss()"><span>&times;</span></button>
             <h3 class="modal-title"><span class="glyphicon glyphicon-shopping-cart" ></span>ตะกร้าสินค้า</h3>
         </div>
-        <div class="modal-body">
-          <ul>
-            <li data-ng-repeat="cart in productsInCart" >{{cart.product.name}} จำนวน {{cart.quantity}} ชิ้น</li>
+        <div class="modal-body" ng-init="initCart()"  >
+        <div flash-message="5000"></div>
+        <div class="table-responsive" data- data-ng-if="productsInCart.length" >
+          <table class="table" >
+            <thead>
+             <tr>
+                <th colspan="2">สินค้า</th>
+                <th>ราคาต่อชิ้น (บาท)</th>
+                <th >จำนวน</th>
+                <th colspan="2" >มูลค่าสินค้า (บาท)</th>
+              <tr>
+            </thead>
+          <tbody>
+            <tr data-ng-repeat="cart in productsInCart track by $index" >
+              <td><img src="{{cart.product.photos[0].url}}" width="80" height="80" /></td>
+              <td class="col-md-6" >
+              <span><a data-ng-click="dismiss()" href="#" ui-sref="product({productId:cart.product._id})" >{{cart.product.name}}
+              </a>
+              </span>
+              
+              </td>
+              <td>{{cart.product.price | currency:'' }}</td>
+               <td  >
+                <select  update-cart="{{cart.product._id}}" >
+                  <option data-ng-selected="(n)==cart.quantity" data-ng-repeat="n in [] | range:cart.product.quantity" >{{n}}</option>              
+                </select>
 
-          </ul>
+               </td>
+               <td>{{(cart.product.price * cart.quantity) | currency:'' }}</td>
+              <td><button data-ng-click="deleteProduct(cart.product)" >ลบ</button></td>
+            </tr>
+            </tbody>
+          </table>
+         </div>
 
-
-          <p class="text-center text-muted" style="font-size:20px;" data-ng-if="!productsInCart" ><strong>ไม่มีสินค้าในตะกร้า</strong></p>
+          <p class="text-center text-muted" style="font-size:20px;" data-ng-if="productsInCart.length<=0" ><strong>ไม่มีสินค้าในตะกร้า</strong></p>
         </div> 
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" >สั่งซื้อ</button>
+             <button class="btn btn-primary" type="button" data-ng-click="dismiss()" >กลับไปช็อปต่อ</button>
+            <button class="btn btn-success" type="button" >สั่งซื้อ</button>
         </div>
 </script>

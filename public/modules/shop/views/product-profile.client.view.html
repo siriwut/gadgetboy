@@ -1,14 +1,14 @@
-<section class="shop word-breakline" data-ng-controller="ShopCtrl" >
-	<div class="row" data-ng-init="initCategory()">
+<section class="shop word-breakline" data-ng-controller="ShopCtrl" data-ng-init="findProduct()" >
+	<div class="row" >
 		<div class="col-lg-12">
 			<ol class="breadcrumb shop-breadcrumb">
 				<li><a href="/">หน้าแรก</a></li>
 				<li><a href="#">หมวดหมู่สินค้า</a></li>
-				<li class="active" data-ng-bind="category.name"></li>
+				<li class="active" data-ng-bind="product.name"></li>
 			</ol>
 		</div>
 	</div>
-	<div class="row product-container" data-ng-init="findProduct()">
+	<div class="row product-container" >
 		<div class="col-lg-12 product-container-inner item-box" >
 			<article>
 				<div class="col-lg-5 " >
@@ -16,31 +16,31 @@
 				</div>
 				<div class="col-lg-7 " >
 					<h2>{{product.name}}</h2>
-				
+
 					<div class="col-lg-6 product-detail-col" >
 						<span style="font-size:30px;"  >{{product.price | currency:''}} บาท</span>
 						<p>{{product.shortDescription}}</p>
 					</div>
 					<div class="col-lg-6 product-detail-col" >	
-						<form class="addtocart-box item-box" >
+						<form class="addtocart-box item-box"  >
 							<div class="form-group">
-							เลือกจำนวน:<select class="form-control" >
-								<option data-ng-repeat="n in [] | range:product.quantity "  >{{n+1}}</option>
+								เลือกจำนวน:<select data-ng-model="selectedQuantity"  class="form-control" data-ng-options="value for value in [] | range:product.quantity " >
 							</select>
-							</div>
-							<button class="btn btn-primary form-control" >หยิบใส่ตระกร้า</button>
-						</form>				
-					</div>
+							
+						</div>
+						<button class="btn btn-primary form-control" add-to-cart product-id="{{product._id}}" quantity="{{selectedQuantity}}" >หยิบใส่ตระกร้า</button>
+					</form>				
 				</div>
-			</article>
-		</div>
-		<div class="col-lg-12 product-container-inner product-description item-box" style="margin-top:10px;" >
-			<article>
-				<h2>รายระเอียดสินค้า</h2>
-				<p >{{product.description}}</p>
-			</article>
-		</div>
-
+			</div>
+		</article>
 	</div>
+	<div class="col-lg-12 product-container-inner product-description item-box" style="margin-top:10px;" >
+		<article>
+			<h2>รายระเอียดสินค้า</h2>
+			<p >{{product.description}}</p>
+		</article>
+	</div>
+
+</div>
 </div>
 </section>

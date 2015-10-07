@@ -10,6 +10,7 @@ angular.module('shop').factory('CartModal', ['$modal',
 					animation:true,
 					templateUrl:'cartModal.html',
 					controller: 'cartModalCtrl',
+					size:'lg',
 					resolve:{
 						cartWithProducts:function(){
 							return cartWithProducts;

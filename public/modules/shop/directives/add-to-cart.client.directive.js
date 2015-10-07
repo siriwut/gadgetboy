@@ -1,24 +1,30 @@
 'use strict';
 
-angular.module('shop').directive('addToCart', ['$http','CartModal',
-	function($http,CartModal) {
+angular.module('shop').directive('addToCart', ['$http','CartModal','Flash',
+	function($http,CartModal,Flash) {
 		return {
-			scope:true,
+			scope:{
+				productId:'@',
+				quantity:'@'
+			},
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				element.on('click',function(event){
-					if(!attrs.addToCart)
-						throw 'addToCart cannot be undefined';
 
-					if(!angular.isString(scope.$eval(attrs.addToCart)))
+					if(!(scope.productId && scope.quantity) )
+						throw 'addToCart and Quantity argument cannot be undefined';
+
+					if(!angular.isString(scope.productId))
 						throw 'addToCart argument must be String';
-						
+					if(!angular.isNumber(parseInt(scope.quantity)))
+						throw 'Quantity argument must be Number';
 
-					$http.post('/api/carts/add',{productId:scope.$eval(attrs.addToCart)})
-					.success(function(cart){
-						CartModal.open(cart);
-					}).error(function(err){
-
+					$http.post('/api/carts/add',{productId:scope.productId,quantity:scope.quantity})
+					.then(function(response){
+						CartModal.open(response.data);
+					},function(err){
+						Flash.create('warning',err.data.message);
+						CartModal.open();
 					});
 				});
 			}

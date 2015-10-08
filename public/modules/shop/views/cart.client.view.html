@@ -1,0 +1,69 @@
+<section class="cart item-box" data-ng-controller="CartCtrl" ng-init="initCart()" >
+	<div class="row" data-ng-if="productsInCart.length && productsInCart">
+		<div class="col-md-9 " >
+			<h3 ><span class="glyphicon glyphicon-shopping-cart" ></span>ตะกร้าสินค้า</h3>
+		</div>
+		<div class="col-md-3" >
+			<p class="continue-shopping text-right" ><a href="/"><span class="glyphicon glyphicon-backward" ></span> กลับไปเลือกซื้อสินค้าต่อ</a></p>
+		</div>
+
+	</div>
+	<div class="row " data-ng-if="productsInCart.length && productsInCart" >
+		<div class="col-md-8 " >
+			
+			<div flash-message="5000"></div>
+			<div class="table-responsive"   >
+				<table class="table" >
+					<thead>
+						<tr>
+							<th colspan="2">สินค้า</th>
+							<th>ราคาต่อชิ้น (บาท)</th>
+							<th >จำนวน</th>
+							<th colspan="2" >มูลค่าสินค้า (บาท)</th>
+							<tr>
+							</thead>
+							<tbody>
+								<tr data-ng-repeat="cart in productsInCart | reverse  track by $index " >
+									<td><img src="{{cart.product.photos[0].url}}" width="150" height="150" /></td>
+									<td class="col-md-6" >
+										<span><a data-ng-click="dismiss()" href="#" ui-sref="product({productId:cart.product._id})" >{{cart.product.name}}
+										</a>
+									</span>
+
+								</td>
+								<td>{{cart.product.price | currency:'' }}</td>
+								<td  >
+									<select  update-cart="{{cart.product._id}}" >
+										<option data-ng-selected="n==cart.quantity" data-ng-repeat="n in [] | range:cart.product.quantity" >{{n}}</option>              
+									</select>
+
+								</td>
+								<td>{{(cart.product.price * cart.quantity) | currency:'' }}</td>
+								<td><button data-ng-click="deleteProduct(cart.product)" >ลบ</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				
+			</div>
+			<div class="col-md-4 "  >
+
+				<h5 class="summary-header summary-box" >สรุปการสั่งซื้อ</h5>
+				<p class="summary-box" >มูลค่าสินค้า (บาท): {{totalPrice | currency:''}}</p>
+				<p class="summary-box" ><b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{totalPrice | currency:''}} </b></span>บาท</p>
+				<button class="btn btn-success form-control" type="button" >สั่งซื้อ</button>
+
+				
+			</div>
+
+		</div>
+		<div class="row " data-ng-if="!(productsInCart.length && productsInCart)">
+			<div class="col-md-4 col-md-offset-4"  >
+
+				<p class="text-center text-muted" style="font-size:20px;"  ><strong>ไม่มีสินค้าในตะกร้า</strong></p>
+				<a class="btn btn-primary form-control" type="button" href="/" >กลับไปเลือกซื้อสินค้า</a>
+			</div>
+		</div>
+
+	</section>

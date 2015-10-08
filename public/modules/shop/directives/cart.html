@@ -1,11 +1,16 @@
 <script type="text/ng-template" id="cartModal.html">
         <div class="modal-header">
-        <button type="button" class="close hidden-xs" data-ng-click="dismiss()"><span>&times;</span></button>
-            <h3 class="modal-title"><span class="glyphicon glyphicon-shopping-cart" ></span>ตะกร้าสินค้า</h3>
+        <button type="button" class="close" data-ng-click="dismiss()"><span>&times;</span></button>
+            <h3 class="modal-title"><span class="glyphicon glyphicon-shopping-cart" ></span>ตะกร้าสินค้า
+
+            </h3>
+
+            <p class="edit-cart-header"><a href="" ui-sref="cart" data-ng-click="dismiss()" ><span class="glyphicon glyphicon-pencil" ><span>แก้ไขจำนวนสินค้า</a><p>
+
         </div>
         <div class="modal-body" ng-init="initCart()"  >
         <div flash-message="5000"></div>
-        <div class="table-responsive" data- data-ng-if="productsInCart.length" >
+        <div class="table-responsive" data- data-ng-if="productsInCart.length && productsInCart" >
           <table class="table" >
             <thead>
              <tr>
@@ -16,7 +21,7 @@
               <tr>
             </thead>
           <tbody>
-            <tr data-ng-repeat="cart in productsInCart track by $index" >
+            <tr data-ng-repeat="cart in productsInCart | reverse track by $index" >
               <td><img src="{{cart.product.photos[0].url}}" width="80" height="80" /></td>
               <td class="col-md-6" >
               <span><a data-ng-click="dismiss()" href="#" ui-sref="product({productId:cart.product._id})" >{{cart.product.name}}
@@ -26,19 +31,27 @@
               </td>
               <td>{{cart.product.price | currency:'' }}</td>
                <td  >
-                <select  update-cart="{{cart.product._id}}" >
-                  <option data-ng-selected="(n)==cart.quantity" data-ng-repeat="n in [] | range:cart.product.quantity" >{{n}}</option>              
-                </select>
-
+                {{cart.quantity}}
                </td>
                <td>{{(cart.product.price * cart.quantity) | currency:'' }}</td>
-              <td><button data-ng-click="deleteProduct(cart.product)" >ลบ</button></td>
+              
             </tr>
             </tbody>
           </table>
          </div>
 
-          <p class="text-center text-muted" style="font-size:20px;" data-ng-if="productsInCart.length<=0" ><strong>ไม่มีสินค้าในตะกร้า</strong></p>
+        <div class="row" >
+
+          <div class="col-md-12 modal-cart-sum">
+            <div class="col-md-6 pull-right" >
+                <h5 class="summary-header summary-box" >สรุปการสั่งซื้อ</h5>
+                <p class="summary-box" >มูลค่าสินค้า (บาท): {{totalPrice | currency:''}}</p>
+                <p class="summary-box " ><b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{totalPrice | currency:''}} </b></span>บาท</p>
+            </div>
+          </div>
+         </div>
+
+          <p class="text-center text-muted" style="font-size:20px;" data-ng-if="!(productsInCart.length && productsInCart)" ><strong>ไม่มีสินค้าในตะกร้า</strong></p>
         </div> 
         <div class="modal-footer">
              <button class="btn btn-primary" type="button" data-ng-click="dismiss()" >กลับไปช็อปต่อ</button>

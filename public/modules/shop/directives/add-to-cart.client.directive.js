@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('shop').directive('addToCart', ['$http','CartModal','Flash',
-	function($http,CartModal,Flash) {
+angular.module('shop').directive('addToCart', ['$http','$state','CartModal','Flash',
+	function($http,$state,CartModal,Flash) {
 		return {
 			scope:{
 				productId:'@',
@@ -19,7 +19,7 @@ angular.module('shop').directive('addToCart', ['$http','CartModal','Flash',
 					if(!angular.isNumber(parseInt(scope.quantity)))
 						throw 'Quantity argument must be Number';
 
-					$http.post('/api/carts/add',{productId:scope.productId,quantity:scope.quantity})
+					$http.post('/api/carts/add',{productId:scope.productId,quantity:parseInt(scope.quantity)})
 					.then(function(response){
 						CartModal.open(response.data);
 					},function(err){

@@ -21,7 +21,9 @@
 		<div  id="products" class="row list-group" style="margin-bottom:0px;"  >
 			<div  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4" data-ng-repeat="product in products"  >
 				<div  class="thumbnail" >
-					<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" width="300" height="250" />
+					<a href="#" ui-sref="product({productId:product._id})" >
+						<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" width="300" height="250" />
+					</a>
 					<article  class="caption">
 						<h4 class="group inner list-group-item-heading" ng-init="limit=23">
 							<a href="#" ui-sref="product({productId:product._id})" >

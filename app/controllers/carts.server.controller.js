@@ -46,14 +46,14 @@
 
  			if(!hasThisProductInCart){
  				if(product.quantity > 0){
- 					console.log('Add');
+ 					//console.log('Add');
  					customer.cart.push({product:req.body.productId,quantity:req.body.quantity});
  					customer.save(function(err,customer){
  						
  						done(err,customer);
  					});
  				}else{
- 					return res.status(400).send({message:'สิน้คาชิ้นนี้หมดแล้วค่ะ'});
+ 					return res.status(400).send({message:'สิน้คา '+product.name+' หมดแล้วค่ะ'});
  				}
 
  			}else{
@@ -61,22 +61,21 @@
  				
  				var checkCart = _.findIndex(customer.cart,'product',mongoose.Types.ObjectId(req.body.productId));
  				
- 				if(customer.cart[checkCart].quantity <= product.quantity){
- 					
- 					Customer.update({_id:customer._id,'cart.product':req.body.productId},
- 						{'$inc':{'cart.$.quantity':req.body.quantity}},function(err,isUpdated){
- 							console.log('Update');
- 							if(isUpdated){
- 								Customer.findById(customer._id,function(err,customer){
- 									done(err,customer);
- 								});
- 							}	
- 							
- 						});
+ 				if(customer.cart[checkCart].quantity >= product.quantity)
+ 					return res.status(400).send({message:'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ'});
 
- 				}else{
- 					return res.status(400).send({message:'สินค้า <strong>'+product.name+'<strong> มีเพียง '+product.quantity+' ชิ้นค่ะ'});
- 				}
+ 				Customer.update({_id:customer._id,'cart.product':req.body.productId},
+ 					{'$inc':{'cart.$.quantity':req.body.quantity}},function(err,isUpdated){
+
+ 						if(isUpdated){
+ 							Customer.findById(customer._id,function(err,customer){
+ 								done(err,customer);
+ 							});
+ 						}	
+
+ 					});
+
+ 				
  			}
  		},function(customer,done){
  			//find cart with products
@@ -104,11 +103,57 @@
 
 }else{
 
-	if(req.cookies.cart){
-		console.log('Cookies');
+	if(!req.body.quantity) return res.status(400).send({message:'กรุณาระบุจำนวนสินค้า'});
+
+	if(!req.cookies.cart){
+		var cartWithProducts = [];
+
+		Product.findById(req.body.productId).populate('photos').exec(function(err,product){
+			if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+			if(!product) return res.status(400).send({message:'ไม่พบสินค้าชิ้นนี้'});
+			if(req.body.quantity >= product.quantity) return res.status(400).send({message:'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ'}); 
+			
+			cartWithProducts.push({product:product,quantity:req.body.quantity});
+
+			res.cookie('cart',cartWithProducts, { path: '/', httpOnly: true, maxAge: 365 * 24 * 60 * 60 });
+			res.jsonp(cartWithProducts);
+		});
+
 	}else{
 
-		console.log('No Cookies Class');
+		var cartWithProducts2 = req.cookies.cart;		
+		var productInCartIndex = _.findIndex(cartWithProducts2,'product._id',req.body.productId);
+
+		
+		if(productInCartIndex > -1){
+
+			cartWithProducts2[productInCartIndex].quantity += req.body.quantity;
+
+
+			if(cartWithProducts2[productInCartIndex].quantity > cartWithProducts2[productInCartIndex].product.quantity)
+				return res.status(400).send({message:'มีสินค้า <strong>'+cartWithProducts2[productInCartIndex].product.name+'<strong> ในร้านจำนวน '+cartWithProducts2[productInCartIndex].product.quantity+' ชิ้นค่ะ'});
+			
+			res.cookie('cart',cartWithProducts2, { path: '/', httpOnly: true, maxAge: 365 * 24 * 60 * 60 });
+			
+			res.jsonp(cartWithProducts2);
+		}else{
+
+
+			
+			Product.findById(req.body.productId).populate('photos').exec(function(err,product){
+				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+				if(!product) return res.status(400).send({message:'ไม่พบสินค้าชิ้นนี้'});
+				if(req.body.quantity > product.quantity) return res.status(400).send({message:'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ'}); 
+
+				cartWithProducts2.push({product:product,quantity:req.body.quantity});
+
+				console.log(cartWithProducts2.length);
+
+				res.cookie('cart',cartWithProducts2, { path: '/', httpOnly: true, maxAge: 365 * 24 * 60 * 60 });
+				res.jsonp(cartWithProducts2);
+			});
+		}
+		
 	}
 
 }
@@ -126,37 +171,42 @@
  * Update a Cart
  */
  exports.edit = function(req, res) {
+ 	if(!req.body.productId) return res.status(400).send({message:'กรุณาระบุสินค้าด้วยค่ะ'});
+ 	if(!req.body.quantity) return res.status(400).send({message:'กรุณาระบบจำนวนสนิค้าด้วยค่ะ'});
 
  	if(req.user){
- 		if(req.body.productId){
- 			if(!req.body.quantity) return res.status(400).send({message:'กรุณาระบบจำนวนสนิค้าด้วยค่ะ'});
+ 		Customer.findOne({_id:req.user}).populate('cart.product').exec(function(err,customer){
+ 			if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+ 			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
 
- 			Customer.findOne({_id:req.user}).populate('cart.product').exec(function(err,customer){
- 				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
- 				if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
+ 			var checkCart = _.findIndex(customer.cart,'product._id',mongoose.Types.ObjectId(req.body.productId));
 
- 				var checkCart = _.findIndex(customer.cart,'product._id',mongoose.Types.ObjectId(req.body.productId));
- 				
- 				if(req.body.quantity <= customer.cart[checkCart].product.quantity){
- 					
- 					customer.cart[checkCart].quantity = req.body.quantity;
+ 			if(req.body.quantity > customer.cart[checkCart].product.quantity)
+ 				return res.status(400).send({message:'มีสินค้า <strong>'+customer.cart[checkCart].product.name+'<strong> ในร้านจำนวน '+customer.cart[checkCart].product.quantity+' ชิ้นค่ะ'});
 
- 					customer.save(function(err,customer){
+ 			customer.cart[checkCart].quantity = req.body.quantity;
 
- 						if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
- 						if(customer)
- 							res.jsonp(customer.cart);
- 					});
+ 			customer.save(function(err,customer){
 
- 				}else{
- 					return res.status(400).send({message:'สินค้า <strong>'+customer.cart[checkCart].product.name+'<strong> มีเพียง '+customer.cart[checkCart].product.quantity+' ชิ้นค่ะ'});
- 				}
+ 				if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
+ 				if(customer)
+ 					res.jsonp(customer.cart);
  			});
- 		}else{
- 			return res.status(400).send({message:'กรุณาระบุสินค้าด้วยค่ะ'});
- 		}
+
+ 			
+ 		});
+ 		
  	}else{
- 		console.log('not login');
+ 		var cartWithProducts = req.cookies.cart;
+ 		var productInCartIndex = _.findIndex(cartWithProducts,'product._id',req.body.productId);
+
+ 		if(req.body.quantity > cartWithProducts[productInCartIndex].product.quantity)
+ 			return res.status(400).send({message:'มีสินค้า <strong>'+cartWithProducts[productInCartIndex].product+'<strong> ในร้านจำนวน '+cartWithProducts[productInCartIndex].product.quantity+' ชิ้นค่ะ'});
+
+ 		cartWithProducts[productInCartIndex].quantity = req.body.quantity;
+
+ 		res.cookie('cart',cartWithProducts, { path: '/', httpOnly: true, maxAge: 365 * 24 * 60 * 60 });
+ 		res.jsonp(cartWithProducts);
  	}
  };
 
@@ -164,29 +214,36 @@
  * Delete an Cart
  */
  exports.delete = function(req, res) {
+
+ 	if(!req.params.productId) return res.status(400).send({message:'กรุณาระบุสินค้าด้วยค่ะ'});
+
  	if(req.user){
- 		if(req.params.productId){
- 			Customer.findOne({_id:req.user}).exec(function(err,customer){
- 				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
- 				if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
- 				
+ 		
+ 		Customer.findOne({_id:req.user}).exec(function(err,customer){
+ 			if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+ 			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
 
- 				var checkCart = _.findIndex(customer.cart,'product',mongoose.Types.ObjectId(req.params.productId));
- 				customer.cart.splice(checkCart,1);
 
- 				customer.save(function(err,customer){
+ 			var checkCart = _.findIndex(customer.cart,'product',mongoose.Types.ObjectId(req.params.productId));
+ 			customer.cart.splice(checkCart,1);
 
- 					if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
- 					if(customer)
+ 			customer.save(function(err,customer){
 
- 						res.jsonp(customer.cart);
- 				});
+ 				if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
+ 				if(customer)
+ 					res.jsonp(customer.cart);
  			});
- 		}else{
- 			return res.status(400).send({message:'กรุณาระบุสินค้าด้วยค่ะ'});
- 		}
+ 		});
  	}else{
- 		console.log('not login');
+ 		var cartWithProducts = req.cookies.cart;
+ 		var productInCartIndex = _.findIndex(cartWithProducts,'product._id',req.params.productId);
+
+ 		cartWithProducts.splice(productInCartIndex,1);
+
+
+ 		res.cookie('cart',cartWithProducts, { path: '/', httpOnly: true, maxAge: 365 * 24 * 60 * 60 });
+ 		res.jsonp(cartWithProducts);
+
  	}
  };
 
@@ -209,5 +266,9 @@
  			});
  			
  		});
+ 	}else{
+ 		var cartWithProducts = req.cookies.cart;
+ 		res.jsonp(cartWithProducts);
+
  	}
  };

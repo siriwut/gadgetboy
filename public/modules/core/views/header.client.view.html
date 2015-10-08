@@ -75,7 +75,7 @@
 						</ul>
 					</li>
 					<li ui-route="#" ng-class="{active: $uiRoute}" title="ตระกร้า">
-						<a href="#" data-ng-click="openCart()">
+						<a href="#" ui-sref="cart({page:$stateParams})">
 							<span class="glyphicon glyphicon-shopping-cart" ></span>
 							<span class="hidden-sm" >ตะกร้า</span> 
 							<span class="badge">10</span>
@@ -88,5 +88,5 @@
 			</nav>
 		</section>
 	</nav>
-	<cart></cart>
 
+<cart></cart>

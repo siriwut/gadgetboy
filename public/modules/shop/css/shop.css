@@ -3,6 +3,50 @@
 	margin-bottom:10px;
 }
 
+.cart{
+
+	padding: 20px 40px 20px 40px;
+	background: #FFFFFF;
+	margin-top:30px;
+	margin-bottom:10px;
+	margin-left: 10px;
+}
+
+.cart-pay{
+	margin-left: 10px;
+}
+
+.edit-cart-header{
+	margin-top:10px;
+	margin-left: 5px;
+
+	font-size: 18px;
+}
+
+.continue-shopping{
+	margin-top: 30px;
+	font-size: 16px;
+}
+
+.summary-header{
+	margin-top:52px;
+	font-weight: bold;
+}
+
+.summary-box{
+	padding-bottom: 10px;
+	border-bottom: 1px solid #D8D8D8;
+}
+
+.net-sum-box{
+	font-size: 18px;
+}
+
+.modal-cart-sum{
+	border-top:1px solid #D8D8D8;
+}
+
+
 .product-container{
 	padding-left:15px;
 	padding-right:15px;

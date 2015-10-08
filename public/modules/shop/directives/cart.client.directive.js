@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('shop')
-.controller('cartModalCtrl',['$scope','$http','$modalInstance','cartWithProducts','Flash',function($scope ,$http , $modalInstance,cartWithProducts,Flash){
-	
-	$scope.seletedQuantity = [];
+.controller('cartModalCtrl',['$scope','$http','$modalInstance','cartWithProducts','Flash','CartCalculator',function($scope ,$http , $modalInstance,cartWithProducts,Flash,CartCalculator){
+
+	$scope.productsInCart = [];
+	$scope.totalPrice = 0;
 
 	$scope.initCart = function(){
 		if(cartWithProducts){
-			$scope.productsInCart = cartWithProducts;
+			$scope.productsInCart = cartWithProducts;	
+
 		}else{
 
 			$http.get('/api/carts/show').then(function(response){
@@ -18,6 +20,12 @@ angular.module('shop')
 		}
 
 	};
+
+	$scope.$watch('productsInCart',function(){
+		$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart);
+	});
+
+
 
 	$scope.$on('cartUpdated',function(){
 		$http.get('/api/carts/show').then(function(response){

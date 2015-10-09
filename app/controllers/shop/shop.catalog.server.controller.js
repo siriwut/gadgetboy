@@ -15,7 +15,7 @@
  };
 
  exports.productByCategoryID = function(req,res,next,id){
- 	Product.find({'category':id}).populate('user').populate('category','name').populate('photos').exec(function(err,products){
+ 	Product.find({category:id, price:{$gt:0}}).populate('user').populate('category','name').populate('photos').exec(function(err,products){
  		if(err)return next(err);
  		if(!products)return next(new Error('Failed to load product ' + id));
  		

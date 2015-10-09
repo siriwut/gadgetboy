@@ -24,6 +24,10 @@
  path = require('path'),
  modRewrite = require('connect-modrewrite');
 
+ 
+
+
+
  module.exports = function(db) {
 	// Initialize express app
 	var app = express();
@@ -32,6 +36,8 @@
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
 		require(path.resolve(modelPath));
 	});
+
+	var customers = require('../app/controllers/customers.server.controller');
 
 	// Setting application local variables
 	app.locals.title = config.app.title;
@@ -106,6 +112,10 @@
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.use(passport.authenticate('remember-me'));
+
+	//create guest if not authentication
+	app.use(customers.guest);
+
 
 	// connect flash for flash messages
 	app.use(flash());

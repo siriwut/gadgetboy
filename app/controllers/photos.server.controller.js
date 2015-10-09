@@ -22,10 +22,13 @@
  * Create a Photo upload
  */
  exports.create = function(req, res) {
- 	var tmp  = './public/tmp/';
- 	var form = new multipart.Form({autoFiles:true,uploadDir:tmp});
+ 	//var tmp  = './public/tmp/';
+ 	var form = new multipart.Form({autoFiles:true});
 
  	form.parse(req,function(err,fields,files){
+ 		  if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+ 		  if(!files) return res.status(400).send({message:'กรุณาเลือกไฟล์'});
+
  		_.forEach(files,function(n,key){
 
  			var src = n[0].path;

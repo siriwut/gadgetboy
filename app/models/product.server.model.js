@@ -30,7 +30,8 @@
  		type:String
  	},
  	price:{
- 		type:Number
+ 		type:Number,
+ 		default:0
  	},
  	sale:{
  		salePrice:{
@@ -42,7 +43,8 @@
  		}
  	},
  	quantity:{
- 		type:Number
+ 		type:Number,
+ 		default:0
  	},
  	shortDescription:{
  		type:String,

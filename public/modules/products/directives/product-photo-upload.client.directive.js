@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('products')
-.controller('productPhotoUploadController',['$scope','$timeout','$interval','$state','Authentication','Upload','Photos',function($scope,$timeout,$interval,$state,Authentication,Upload,Photos){
+.controller('productPhotoUploadController',['$scope','$timeout','$interval','$state','Authentication','Upload','Photos','Flash',function($scope,$timeout,$interval,$state,Authentication,Upload,Photos,Flash){
 	$scope.log='';
 	$scope.photoPreviewList = [];
 
 	var photoTrash = [];
+	var upload = [];
 
 	$scope.$watch('files',function(){
 		$scope.upload($scope.files);
@@ -14,6 +15,7 @@ angular.module('products')
 	$scope.upload = function (files) {
 
 		if (files && files.length) {	
+			
 
 			angular.forEach(files,function(file,index){
 
@@ -22,10 +24,13 @@ angular.module('products')
 
 				var lastIndex = $scope.photoPreviewList.length - 1;
 
-				Upload.upload({
+
+				upload[index] = Upload.upload({
 					url: '/api/photos',
 					file: file
-				}).progress(function (evt) {
+				});
+
+				upload[index].progress(function (evt) {
 					var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
 					$scope.photoPreviewList[lastIndex].progressPercentage = progressPercentage;
 					$scope.photoPreviewList[lastIndex].isAbort = true;
@@ -39,7 +44,7 @@ angular.module('products')
 					});
 
 				}).error(function (data, status, headers, config) {
-					console.log('error status: ' + status);
+					Flash.create('danger',data.message);
 				});
 
 			});
@@ -57,7 +62,7 @@ angular.module('products')
 				$scope.photoPreviewList.splice(index,1);
 			}else{
 				$scope.photoPreviewList.splice(index,1);
-				Upload.abort();
+				upload[index].abort();
 			}
 
 		}else{
@@ -69,7 +74,7 @@ angular.module('products')
 
 			}else{
 				$scope.photoPreviewList.splice(index,1);
-				Upload.abort();
+				upload[index].abort();
 			}
 
 		}

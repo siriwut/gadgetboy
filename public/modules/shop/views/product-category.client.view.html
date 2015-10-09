@@ -32,12 +32,12 @@
 						</h4>	
 						
 						<div  class="row">
-							<div  class="col-xs-12 col-md-12" ng-init="limit=23">
-								<p  >{{product.shortDescription | limitTo:limit}}{{product.name.length > limit?'...':''}}</p>
+							<div  class="col-xs-12 col-md-12" ng-init="shortDesclimit=35">
+								<p  >{{product.shortDescription | limitTo:shortDesclimit}}{{product.shortDescription.length > shortDesclimit?'...':''}}</p>
 
 							</div >
 							<div  class="col-xs-12 col-md-12">
-								<p class="lead"><b>{{product.price|currency:'':0}}</b> บาท</p>
+								<p class="lead"><b>{{product.price |currency:'':0 }}</b> บาท</p>
 
 							</div >
 							<div  class="col-xs-12 col-md-12">

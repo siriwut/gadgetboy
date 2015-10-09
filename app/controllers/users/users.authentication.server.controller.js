@@ -28,6 +28,8 @@
 	user.username = user.email;
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
+
+		
 	
 	// Then save the user 
 	user.save(function(err) {
@@ -36,24 +38,27 @@
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			var customer = new Customer({_id:user._id});
+			var customer = new Customer({user:user._id});
 
 			customer.save(function(err){
-				if(err) res.status(400).send(err);
+				
+				if(err) return res.status(400).send(err);
+	
+				// Remove sensitive data before login
+				user.password = undefined;
+				user.salt = undefined;
+
+				req.login(user, function(err) {
+					if (err) {
+						res.status(400).send(err);
+					} else {
+						res.json(user);
+					}
+				});
 			});
 
 
-			// Remove sensitive data before login
-			user.password = undefined;
-			user.salt = undefined;
-
-			req.login(user, function(err) {
-				if (err) {
-					res.status(400).send(err);
-				} else {
-					res.json(user);
-				}
-			});
+			
 		}
 	});
 };
@@ -80,6 +85,8 @@
 				} else {
 					if(req.body.rememberMe){
 						crypto.randomBytes(256, function(err, buffer) {
+							if (err) res.status(400).send(err);
+							
 							var tokenString = buffer.toString('hex'); 
 							var token = new Token({token:tokenString,userId:user._id});
 
@@ -128,7 +135,7 @@
  				if(err) return res.redirect('/#!/signin');			
 
  				if(!customer){
- 					var newCustomer = new Customer({_id:user._id});
+ 					var newCustomer = new Customer({user:user._id});
  					newCustomer.save(function(err){
  						if(err) res.redirect('/#!/signin');
  					});

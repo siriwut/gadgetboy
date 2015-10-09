@@ -10,10 +10,6 @@
  * Customer Schema
  */
  var CustomerSchema = new Schema({
- 	_id:{
- 		type: Schema.ObjectId,
- 		ref:'User'
- 	},
  	addresses:[{
  		name:{
  			first:{type:String,require:true},
@@ -50,6 +46,14 @@
  			default:1
  		}
  	}],
+ 	user:{
+ 		type: Schema.ObjectId,
+ 		ref:'User'
+ 	},
+ 	guestToken:{
+ 		type:String,
+ 		index:true
+ 	},
  	created: {
  		type: Date,
  		default: Date.now

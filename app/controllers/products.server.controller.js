@@ -180,6 +180,7 @@ slash = require('slash');
  };
 
  exports.hasAuthorization = function(req, res, next) {
+ 	console.log(req.user.id);
  	if (req.product.user.id !== req.user.id) {
  		return res.status(403).send('User is not authorized');
  	}

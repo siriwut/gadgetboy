@@ -15,8 +15,8 @@ module.exports = function(app) {
 
 	app.route('/api/products/:productId').
 	get(products.read).
-	put(users.requiresLogin,users.hasAuthorization(['admin']),products.hasAuthorization,products.update).
-	delete(users.requiresLogin,users.hasAuthorization(['admin']),products.hasAuthorization,products.delete);
+	put(users.requiresLogin,users.hasAuthorization(['admin']),products.update).
+	delete(users.requiresLogin,users.hasAuthorization(['admin']),products.delete);
 	
 	
 	app.param('productId',products.productByID);

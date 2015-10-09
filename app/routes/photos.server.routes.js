@@ -9,7 +9,7 @@ module.exports = function(app) {
 	post(users.requiresLogin,users.hasAuthorization(['admin']),photos.create);
 
 	app.route('/api/photos/:photoId').
-	delete(users.requiresLogin,users.hasAuthorization(['admin']),photos.hasAuthorization,photos.delete);
+	delete(users.requiresLogin,users.hasAuthorization(['admin']),photos.delete);
 
 	app.param('photoId',photos.photoByID);
 };

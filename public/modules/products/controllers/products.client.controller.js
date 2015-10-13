@@ -47,7 +47,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 			if($scope.product.category){
 				product.category = $scope.product.category._id;
 			}
-			console.log('TAPEEEEEEEEE');
+			
 			
 			product.$update(function(data) {
 				

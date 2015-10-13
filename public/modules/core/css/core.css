@@ -4,6 +4,7 @@
 
 body{
 	background: #F5F5F5;
+	font-family: Helvetica,Arial,sans-serif;
 }
 
 @media(max-width: 768px){

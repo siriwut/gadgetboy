@@ -7,19 +7,27 @@
  Schema = mongoose.Schema;
 
 /**
- * Photo Schema
+ * Banner Schema
  */
- var PhotoSchema = new Schema({
- 	name:{
+ var BannerSchema = new Schema({
+ 	image:{
+ 		name:{
+ 			type:String
+ 		},
+ 		extension:{
+ 			type:String
+ 		},
+ 		size:{
+ 			type:Number
+ 		},
+ 		url:{
+ 			type:String
+ 		}
+ 	},
+ 	text:{
  		type:String
  	},
- 	extension:{
- 		type:String
- 	},
- 	size:{
- 		type:Number
- 	},
- 	url:{
+ 	productUrl:{
  		type:String
  	},
  	user:{
@@ -32,4 +40,4 @@
  	}
  });
 
- mongoose.model('Photo', PhotoSchema);
+ mongoose.model('Banner', BannerSchema);

@@ -19,7 +19,7 @@
 		findProductsByCategory()" >
 
 		<div  id="products" class="row list-group" style="margin-bottom:0px;"  >
-			<div  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4" data-ng-repeat="product in products"  >
+			<div  class="item  col-xs-12 col-sm-6 col-md-6 col-lg-4" data-ng-repeat="product in products"  >
 				<div  class="thumbnail" >
 					<a href="#" ui-sref="product({productId:product._id})" >
 						<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" width="300" height="250" />
@@ -32,16 +32,20 @@
 						</h4>	
 						
 						<div  class="row">
-							<div  class="col-xs-12 col-md-12" ng-init="shortDesclimit=35">
+							<div  class="col-xs-12 col-md-12" ng-init="shortDesclimit=28">
 								<p  >{{product.shortDescription | limitTo:shortDesclimit}}{{product.shortDescription.length > shortDesclimit?'...':''}}</p>
 
 							</div >
 							<div  class="col-xs-12 col-md-12">
-								<p class="lead"><b>{{product.price |currency:'':0 }}</b> บาท</p>
+								<p class="lead text-danger" data-ng-if="!product.sale.onSale"  ><b>{{product.price |currency:'':0 }} บาท</b> </p>
+								<p class="lead " data-ng-if="product.sale.onSale" ><del>{{product.price |currency:'':0 }}</del> <b class="text-danger" >{{product.sale.salePrice |currency:'':0 }} บาท</b> </p>
+
 
 							</div >
 							<div  class="col-xs-12 col-md-12">
-								<a class="btn btn-primary" href="#" add-to-cart product-id="{{product._id}}" quantity="1" >หยิบใส่ตะกร้า</a>
+								<a class="btn btn-primary form-control" href="#" add-to-cart product-id="{{product._id}}" quantity="1" data-ng-if="product.quantity" >หยิบใส่ตะกร้า</a>
+
+								<span data-ng-if="product.quantity <= 0" class="text-muted text-soldout" >สินค้าหมด</span>
 							</div >
 						</div >
 						

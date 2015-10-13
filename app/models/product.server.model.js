@@ -4,6 +4,7 @@
  * Module dependencies.
  */
  var mongoose = require('mongoose'),
+ random = require('mongoose-random'),
  Schema = mongoose.Schema;
 
 
@@ -90,6 +91,6 @@
  });
 
 
+ProductSchema.plugin(random, { path: 'r' });
 
-
- mongoose.model('Product', ProductSchema);
+mongoose.model('Product', ProductSchema);

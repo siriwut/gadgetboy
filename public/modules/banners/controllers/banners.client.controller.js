@@ -1,19 +1,44 @@
 'use strict';
 
-angular.module('banners').controller('BannersController', ['$scope',
-	function($scope) {
-		$scope.myInterval = 5000;
-		var slides = $scope.slides = [];
-		$scope.addSlide = function() {
-			var newWidth = 1200 + slides.length + 1;
-			slides.push({
-				image: 'http://placekitten.com/' + newWidth + '/400',
-				text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
-				['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
+angular.module('banners').controller('BannersCtrl', ['$scope','$http','Upload','Flash',
+	function($scope,$http,Upload,Flash) {
+
+		$scope.banners = [];
+
+		$scope.$watch('file',function(){
+			$scope.addBanner($scope.file);
+		});
+		
+		$scope.addBanner = function(file){
+			if(!file) return;
+			// banner image width:1200 and height:400
+			var upload = Upload.upload({url:'/api/banners',file:file});
+
+			upload.progress(function(evt){
+
+			}).success(function(data, status, headers, config){
+				//console.log(data);
+				$scope.banners.unshift(data);
+
+			}).error(function(data, status, headers, config){
+				Flash.create('danger',data);
 			});
 		};
-		for (var i=0; i<4; i++) {
-			$scope.addSlide();
-		}
+
+		$scope.displayBanners = function(){
+			$http.get('/api/banners').then(function(res){
+				$scope.banners = res.data;
+			},function(err){
+				console.log(err.data);
+			});
+		};
+
+		$scope.removeBanner = function(id,index){
+			$http.delete('/api/banners/'+id).then(function(res){
+				$scope.banners.splice(index,1);
+			},function(err){
+				console.log(err.data);
+			});
+		};
 	}
 	]);

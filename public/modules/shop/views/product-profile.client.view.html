@@ -18,18 +18,22 @@
 					<h2>{{product.name}}</h2>
 
 					<div class="col-lg-6 product-detail-col" >
-						<span style="font-size:30px;"  >{{product.price | currency:''}} บาท</span>
+						<p class="lead" data-ng-if="!product.sale.onSale" style="font-size:32px;"  ><b>{{product.price |currency:'':0 }} บาท</b> </p>
+								<p class="lead " data-ng-if="product.sale.onSale" ><del>{{product.price |currency:'':0 }}</del> <b  style="font-size:32px;" >{{product.sale.salePrice |currency:'':0 }} บาท</b> </p>
 						<p>{{product.shortDescription}}</p>
 					</div>
-					<div class="col-lg-6 product-detail-col" >	
-						<form class="addtocart-box item-box"  >
+					<div class="col-lg-6 product-detail-col " >	
+						<form class="addtocart-box item-box" data-ng-if="product.quantity"  >
 							<div class="form-group">
 								เลือกจำนวน:<select data-ng-model="selectedQuantity"  class="form-control" data-ng-options="value for value in [] | range:product.quantity " >
 							</select>
 							
 						</div>
 						<button class="btn btn-primary form-control" add-to-cart product-id="{{product._id}}" quantity="{{selectedQuantity}}" >หยิบใส่ตระกร้า</button>
-					</form>				
+					</form>
+					<div class="col-xs-offset-4 col-sm-offset-5 col-md-offset-2 soldout-box">
+						<span data-ng-if="product.quantity <= 0" class="text-danger text-soldout-profile" >สินค้าหมด</span>
+					</div>		
 				</div>
 			</div>
 		</article>

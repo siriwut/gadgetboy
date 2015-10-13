@@ -1,147 +1,45 @@
-<section  data-ng-controller="ProductWallController">
+<section  data-ng-controller="ProductWallController" data-ng-init="displayWalls()" >
 
-	<section  id="products" class="row list-group" style="margin-top:10px;">
-		<header class="product-wall-header col-xs-12 col-lg-12 " style="padding-right:0;" >
-			<h2>Smart Watch</h2>
+	<section  id="products" class="row list-group" style="margin-top:10px;" data-ng-repeat="category in categories" >
+		<header class="product-wall-header col-xs-12 col-lg-12 " style="padding-right:0;"  >
+			<h2>{{category.name}}</h2>
 			<hr>
 		</header>
-		<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4"  >
-			<section  class="thumbnail" >
-				<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+		<section  class="item  col-xs-12 col-sm-6 col-md-6 col-lg-3 "  data-ng-repeat="product in category.products"   >
+			<div  class="thumbnail" >
+				<a href="#" ui-sref="product({productId:product._id})" >
+					<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" />
+				</a>
 				<article  class="caption">
-					<h4 class="group inner list-group-item-heading">Product title</h4>	
-					<p class="group inner list-group-item-text">
-						Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-						sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-						<section  class="row">
-							<section  class="col-xs-12 col-md-6">
-								<p class="lead">$21.000</p>
+					<h4 class="group inner list-group-item-heading" ng-init="limit=23">
+						<a href="#" ui-sref="product({productId:product._id})" >
+							<b>{{product.name | limitTo:limit}}{{product.name.length > limit?'...':''}}</b>
+						</a>
+					</h4>	
 
-							</section >
-							<section  class="col-xs-12 col-md-6">
-								<a class="btn btn-primary" href="#">Add to cart</a>
-							</section >
-						</section >
-					</article >
-				</section >
-			</section >
-			<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4">
-				<section  class="thumbnail">
-					<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-					<article class="caption">
-						<h4 class="group inner list-group-item-heading">Product title</h4>
+					<div  class="row">
+						<div  class="col-xs-12 col-md-12" ng-init="shortDesclimit=28">
+							<p  >{{product.shortDescription | limitTo:shortDesclimit}}{{product.shortDescription.length > shortDesclimit?'...':''}}</p>
 
-						<p class="group inner list-group-item-text">
-							Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-							sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-						</p>
-						<section  class="row">
-							<section  class="col-xs-12 col-md-6">
-								<p class="lead">$21.000</p>
+						</div >
+						<div  class="col-xs-12 col-md-12">
+							<p class="lead text-danger" data-ng-if="!product.sale.onSale"  ><b>{{product.price |currency:'':0 }} บาท</b> </p>
+								<p class="lead " data-ng-if="product.sale.onSale" ><del>{{product.price |currency:'':0 }}</del> <b class="text-danger" >{{product.sale.salePrice |currency:'':0 }} บาท</b> </p>
 
-							</section >
-							<section  class="col-xs-12 col-md-6">
-								<a class="btn btn-primary" href="#">Add to cart</a>
-							</section >
-						</section >
-					</article >
-				</section >
-			</section >
-			<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4" >
-				<section  class="thumbnail">
-					<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-					<article  class="caption">
-						<h4 class="group inner list-group-item-heading">Product title</h4>
+						</div >
+						<div  class="col-xs-12 col-md-12">
+							<a class="btn btn-primary form-control" href="#" add-to-cart product-id="{{product._id}}" quantity="1" >หยิบใส่ตะกร้า</a>
+						</div >
+					</div >
 
-						<p class="group inner list-group-item-text">
-							Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-							sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-						</p>
-						<section  class="row">
-							<section  class="col-xs-12 col-md-6">
-								<p class="lead">$21.000</p>
-
-							</section >
-							<section  class="col-xs-12 col-md-6">
-								<a class="btn btn-primary" href="#">Add to cart</a>
-							</section >
-						</section >
-					</article >
-				</section >
-			</section >
+				</article >
+			</div >
 		</section >
 
-
-		<section  id="products" class="row list-group" style="margin-top:10px;">
-			<header class="product-wall-header col-xs-12 col-lg-12 " style="padding-right:0;" >
-				<h2>Speaker</h2>
-				<hr>
-			</header>
-			<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4"  >
-				<section  class="thumbnail" >
-					<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-					<article  class="caption">
-						<h4 class="group inner list-group-item-heading">Product title</h4>	
-						<p class="group inner list-group-item-text">
-							Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-							sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-							<section  class="row">
-								<section  class="col-xs-12 col-md-6">
-									<p class="lead">$21.000</p>
-
-								</section >
-								<section  class="col-xs-12 col-md-6">
-									<a class="btn btn-primary" href="#">Add to cart</a>
-								</section >
-							</section >
-						</article >
-					</section >
-				</section >
-				<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4">
-					<section  class="thumbnail">
-						<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-						<article class="caption">
-							<h4 class="group inner list-group-item-heading">Product title</h4>
-
-							<p class="group inner list-group-item-text">
-								Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-								sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-							</p>
-							<section  class="row">
-								<section  class="col-xs-12 col-md-6">
-									<p class="lead">$21.000</p>
-
-								</section >
-								<section  class="col-xs-12 col-md-6">
-									<a class="btn btn-primary" href="#">Add to cart</a>
-								</section >
-							</section >
-						</article >
-					</section >
-				</section >
-				<section  class="item  col-xs-12 col-sm-4 col-md-4 col-lg-4" >
-					<section  class="thumbnail">
-						<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-						<article  class="caption">
-							<h4 class="group inner list-group-item-heading">Product title</h4>
-
-							<p class="group inner list-group-item-text">
-								Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-								sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-							</p>
-							<section  class="row">
-								<section  class="col-xs-12 col-md-6">
-									<p class="lead">$21.000</p>
-
-								</section >
-								<section  class="col-xs-12 col-md-6">
-									<a class="btn btn-primary" href="#">Add to cart</a>
-								</section >
-							</section >
-						</article >
-					</section >
-				</section >
-			</section >
+	</section >
 
 
-		</section>
+
+
+
+</section>

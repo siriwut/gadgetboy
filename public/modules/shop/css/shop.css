@@ -80,3 +80,19 @@
 	padding-right:50px;
 	margin-top:10px;
 }
+
+.text-soldout{
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.text-soldout-profile{
+	font-size: 28px;
+	font-weight: bold;
+
+}
+
+.soldout-box{
+	padding-top:50px;
+	padding-bottom: 40px;
+}

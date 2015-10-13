@@ -85,6 +85,10 @@
 				หน้าร้าน
 				<span ng-class="{'glyphicon-menu-down':collapseVar==5,'glyphicon-menu-left':collapseVar!=5}" class="glyphicon  pull-right" ></span>
 			</a>
+
+			<ul class="admin-sidebar-list" collapse="collapseVar!=5"  >
+				<li><a href ui-sref-active="active" ui-sref="adminPanel.banners" >banners<span class="badge  pull-right">20</span></a></li>
+			</ul>
 		</li>
 		<li class="admin-sidebar-menu" >
 			<a href ng-class="{active:collapseVar==6}" data-ng-click="check(6)" >

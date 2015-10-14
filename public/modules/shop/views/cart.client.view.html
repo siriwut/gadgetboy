@@ -31,14 +31,21 @@
 									</span>
 
 								</td>
-								<td>{{cart.product.price | currency:'' }}</td>
+								<td>
+									{{(cart.product.sale.onSale?cart.product.sale.salePrice:cart.product.price) | currency:'' }}
+									<br>
+									<span style="font-size:12px;" data-ng-if="cart.product.sale.onSale" >
+										ราคาปกติ
+										<del>{{cart.product.price |currency:'':0 }} บาท</del>
+									</span>
+								</td>
 								<td  >
 									<select  update-cart="{{cart.product._id}}" >
 										<option data-ng-selected="n==cart.quantity" data-ng-repeat="n in [] | range:cart.product.quantity" >{{n}}</option>              
 									</select>
 
 								</td>
-								<td>{{(cart.product.price * cart.quantity) | currency:'' }}</td>
+								<td>{{((cart.product.sale.onSale?cart.product.sale.salePrice:cart.product.price) * cart.quantity) | currency:'' }}</td>
 								<td><button data-ng-click="deleteProduct(cart.product)" >ลบ</button></td>
 							</tr>
 						</tbody>

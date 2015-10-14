@@ -12,10 +12,29 @@
 		<div class="photo-upload-area" >
 			<div class="row">
 				<div class="col-xs-12 col-md-12 ">
+				  <form data-ng-submit="submit()" name="formBanner" >
+
+				  	<div class="form-group" >
+				  		<label>คำอธิบาย banner</label>
+				  		<input type="text" class="form-control" data-ng-model="text" >
+				  	</div>
+				  	<div class="form-group" >
+				  		<label>URL สินค้า</label>
+				  		<input type="text" class="form-control" data-ng-model="productUrl" >
+				  	</div>
+
 					<span>ไฟล์รูปขนาด 1200x400</span>
-					<div class="btn btn-primary btn-file form-control" ngf-select data-ng-model="file"  accept=".jpg,.png,.gif"  >
+					<div class="btn btn-primary btn-file form-control" ngf-select data-ng-model="file" name="file"  accept=".jpg,.png,.gif"  ngf-capture="'camera'" ng-required >
 						<span class="glyphicon glyphicon-picture" ></span> เลือกรูปภาพ 
 					</div>
+					
+					<img ngf-src="file" data-ng-if="file"   class="banner-image" width="1200" height="300" style="margin-top:10px;" >
+
+					<button type="submit" data-ng-if="file" class="btn btn-success" style="margin-top:20px;" >ยืนยัน</button>
+
+					<button type="reset" data-ng-if="file" data-ng-click="reset()" class="btn btn-danger" style="margin-top:20px;" >ยกเลิก</button>
+
+				  </form>
 				</div>	
 			</div>
 		</div>
@@ -23,6 +42,8 @@
 			<div class="row banner-section"  data-ng-repeat="banner in banners track by $index"  >
 				<div class="col-lg-12 ">
 					<img  src="{{banner.image.url}}" class="banner-image item-box" />
+					<p style="margin-top:10px;" ><b>คำอธิบาย banner:<b> {{banner.text}}<br>
+					<b>URL สินค้า:<b> {{banner.productUrl}}</p>
 					<button class="btn btn-danger form-control" data-ng-click="removeBanner(banner._id,$index)" >ลบ</button>
 				</div>
 			</div>

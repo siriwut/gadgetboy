@@ -8,7 +8,11 @@ angular.module('banners').controller('SlidesController', ['$scope','$http',
 
 		$http.get('/api/banners').then(function(res){
 			for (var i=0; i<res.data.length; i++) {
-				$scope.addSlide(res.data[i].image.url);
+				$scope.addSlide({
+					image:res.data[i].image.url,
+					productUrl:res.data[i].productUrl,
+					text:res.data[i].text
+				});
 			}		
 		},function(err){
 			console.log(err.data);
@@ -16,10 +20,8 @@ angular.module('banners').controller('SlidesController', ['$scope','$http',
 
 
 
-		$scope.addSlide = function(imageUrl) {
-			slides.push({
-				image: imageUrl
-			});
+		$scope.addSlide = function(image) {
+			slides.push(image);
 		};
 		
 		

@@ -50,7 +50,9 @@
     "passport-remember-me": "0.0.1",
     "passport-twitter": "~1.0.2",
     "slash": "^1.0.0",
+    "slug": "^0.9.1",
     "swig": "~1.4.1",
+    "uslug": "^1.0.3",
     "uuid": "^2.0.1"
   },
   "devDependencies": {

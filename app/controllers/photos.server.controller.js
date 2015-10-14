@@ -99,7 +99,7 @@
  		} else {
  			var photoRemove = './public/photos_upload/'.concat(photo.name);
  			fs.remove(photoRemove, function (err) {
- 				if (err) return console.error(err);
+ 				if (err) throw err;
  				res.json(photo);
  			});
  		}

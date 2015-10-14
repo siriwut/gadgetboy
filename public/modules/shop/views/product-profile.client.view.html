@@ -18,8 +18,17 @@
 					<h2>{{product.name}}</h2>
 
 					<div class="col-lg-6 product-detail-col" >
-						<p class="lead" data-ng-if="!product.sale.onSale" style="font-size:32px;"  ><b>{{product.price |currency:'':0 }} บาท</b> </p>
-								<p class="lead " data-ng-if="product.sale.onSale" ><del>{{product.price |currency:'':0 }}</del> <b  style="font-size:32px;" >{{product.sale.salePrice |currency:'':0 }} บาท</b> </p>
+						<p class="lead" data-ng-if="!product.sale.onSale" style="font-size:32px;"  >
+							<b>{{product.price |currency:'':0 }} บาท</b> 
+						</p>
+						<p class="lead " data-ng-if="product.sale.onSale" >
+							<b  style="font-size:32px;" >{{product.sale.salePrice |currency:'':0 }} บาท</b>
+							<br>
+							<span style="font-size:16px;" >
+								ราคาปกติ
+								<del>{{product.price |currency:'':0 }} บาท</del>
+							</span>
+						</p>
 						<p>{{product.shortDescription}}</p>
 					</div>
 					<div class="col-lg-6 product-detail-col " >	

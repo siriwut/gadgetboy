@@ -3,7 +3,8 @@ var fs = require('fs-extra'),
 path = require('path'),
 url  = require('url'),
 uuid = require('uuid'),
-slash = require('slash');
+slash = require('slash'),
+slug = require('slug');
 
 /**
  * Module dependencies.
@@ -23,10 +24,12 @@ slash = require('slash');
  exports.create = function(req, res) {
 
  	var product = new Product(req.body);
- 	var message = null;
+ 	
 
  	product.user = req.user;
- 	product.slug = product.name;
+ 	product.slug = slug(product.name,{lower:true});
+
+
 
  	product.save(function(err){	
  		if(err){
@@ -53,6 +56,8 @@ slash = require('slash');
  */
  exports.update = function(req, res) {
  	var product = req.product;
+
+ 	console.log(req.product);
  	
  	product = _.extend(req.product,req.body);
 

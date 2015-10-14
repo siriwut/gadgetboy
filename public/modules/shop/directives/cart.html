@@ -29,11 +29,19 @@
               </span>
               
               </td>
-              <td>{{cart.product.price | currency:'' }}</td>
+              <td>
+              {{(cart.product.sale.onSale?cart.product.sale.salePrice:cart.product.price) | currency:'' }}
+
+              <br>
+                  <span style="font-size:12px;" data-ng-if="cart.product.sale.onSale" >
+                    ราคาปกติ
+                    <del>{{cart.product.price |currency:'':0 }} บาท</del>
+                  </span>
+              </td>
                <td  >
                 {{cart.quantity}}
                </td>
-               <td>{{(cart.product.price * cart.quantity) | currency:'' }}</td>
+               <td>{{(cart.product.sale.onSale?cart.product.sale.salePrice:cart.product.price) * cart.quantity | currency:'' }}</td>
               
             </tr>
             </tbody>

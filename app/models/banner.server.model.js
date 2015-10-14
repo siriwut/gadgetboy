@@ -25,10 +25,12 @@
  		}
  	},
  	text:{
- 		type:String
+ 		type:String,
+ 		default:''
  	},
  	productUrl:{
- 		type:String
+ 		type:String,
+ 		default:''
  	},
  	user:{
  		type:Schema.ObjectId,

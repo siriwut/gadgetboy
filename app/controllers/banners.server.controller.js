@@ -14,11 +14,16 @@
  _ = require('lodash');
 
  exports.add = function(req,res){
+
  	
- 	var form = new multipart.Form({autoFiles:true});
+ 	
+ 	var form = new multipart.Form();
 
  	form.parse(req,function(err,fields,files){
+ 		
  		if(err) return res.status(400).send(err);
+ 		
+ 		var bannerFields = JSON.parse(fields.data[0]);
 
  		_.forEach(files,function(n,key){
  			var src = n[0].path;
@@ -27,6 +32,10 @@
  			var dest = './public/banner_images/'.concat(newFilename);
  			var size = n.size;
  			var url = '/banner_images/'+newFilename;
+
+ 			
+ 			//console.log(fields.data[0]['text']);
+ 			//console.log(fields.data[0].productUrl);
 
  			fs.move(src,dest,function(err){
  				if(err){
@@ -39,8 +48,12 @@
  							size:size,
  							url:url
  						},
+ 						text:bannerFields.text,
+ 						productUrl:bannerFields.productUrl,
  						user:req.user
  					});
+
+
 
  					banner.save(function(err){
  						if(err){
@@ -81,9 +94,17 @@ exports.remove = function(req,res){
 	var banner = req.banner;
 
 	banner.remove(function(err){
-		if(err) req.status(400).send({message:errorHandler.getErrorMessage(err)});
+		if(err){
+			return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+		}else{
+			
+			var bannerRemove = './public'.concat(banner.image.url);
 
-		res.end();
+			fs.remove(bannerRemove, function (err) {
+ 				if (err) throw err;
+ 				res.end();
+ 			});
+		}
 	});
 
 };

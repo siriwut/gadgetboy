@@ -5,20 +5,25 @@ angular.module('banners').controller('BannersCtrl', ['$scope','$http','Upload','
 
 		$scope.banners = [];
 
-		$scope.$watch('file',function(){
+		$scope.submit = function(){
 			$scope.addBanner($scope.file);
-		});
+		};
 		
 		$scope.addBanner = function(file){
 			if(!file) return;
 			// banner image width:1200 and height:400
-			var upload = Upload.upload({url:'/api/banners',file:file});
+			var upload = Upload.upload({url:'/api/banners',file:file,data:{text:$scope.text||'',productUrl:$scope.productUrl||''}});
 
 			upload.progress(function(evt){
 
 			}).success(function(data, status, headers, config){
 				//console.log(data);
 				$scope.banners.unshift(data);
+				$scope.text = null;
+				$scope.productUrl = null;
+				$scope.file = null;
+
+				
 
 			}).error(function(data, status, headers, config){
 				Flash.create('danger',data);
@@ -39,6 +44,12 @@ angular.module('banners').controller('BannersCtrl', ['$scope','$http','Upload','
 			},function(err){
 				console.log(err.data);
 			});
+		};
+
+		$scope.reset = function(){
+			$scope.text = null;
+			$scope.productUrl = null;
+			$scope.file = null;
 		};
 	}
 	]);

@@ -7,12 +7,12 @@
 		</header>
 		<section  class="item  col-xs-12 col-sm-6 col-md-6 col-lg-3 "  data-ng-repeat="product in category.products"   >
 			<div  class="thumbnail" >
-				<a href="#" ui-sref="product({productId:product._id})" >
+				<a href="#" ui-sref="product({productSlug:product.slug})" >
 					<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" />
 				</a>
 				<article  class="caption">
 					<h4 class="group inner list-group-item-heading" ng-init="limit=23">
-						<a href="#" ui-sref="product({productId:product._id})" >
+						<a href="#" ui-sref="product({productSlug:product.slug})" >
 							<b>{{product.name | limitTo:limit}}{{product.name.length > limit?'...':''}}</b>
 						</a>
 					</h4>	

@@ -80,7 +80,8 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 				color:'สี',
 				quantity:'จำนวน',
 				photo:'รูป',
-				category:'หมวดหมู่'
+				category:'หมวดหมู่',
+				slug:'slug'
 			};
 
 			$scope.products=Products.query(function(){

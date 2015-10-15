@@ -4,7 +4,8 @@ path = require('path'),
 url  = require('url'),
 uuid = require('uuid'),
 slash = require('slash'),
-slug = require('slug');
+slug = require('slug'),
+async = require('async');
 
 /**
  * Module dependencies.
@@ -27,12 +28,10 @@ slug = require('slug');
  	
 
  	product.user = req.user;
- 	product.slug = slug(product.name,{lower:true});
-
-
 
  	product.save(function(err){	
  		if(err){
+ 			
  			return res.status(400).send({
  				message:errorHandler.getErrorMessage(err)
  			});
@@ -48,38 +47,59 @@ slug = require('slug');
  * Show the current Product
  */
  exports.read = function(req, res) {
- 	res.json(req.product);
+
+ 	Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 		if(err)return res.status(400).send(err);
+ 		if(!product)return res.status(400).send(new Error('Failed to load product ' + req.params.productId));
+
+ 		res.jsonp(product);
+ 	});
+ };
+
+
+ exports.readBySlug = function(req,res){
+ 	Product.findOne(req.query).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 		if(err)return res.status(400).send(err);
+ 		if(!product)return res.status(400).send(new Error('Failed to load product'));
+
+ 		res.json(product);
+ 		
+ 	});
  };
 
 /**
  * Update a Product
  */
  exports.update = function(req, res) {
- 	var product = req.product;
 
- 	console.log(req.product);
- 	
- 	product = _.extend(req.product,req.body);
+ 	async.waterfall([function(done){
+ 		Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 			done(err,product);
+ 		});
+ 	},function(productReq,done){
+ 		if(!productReq)return res.status(400).send(new Error('Failed to load product'));
 
- 	product.save(function(err,product) {
- 		if (err) {
- 			return res.status(400).send({
- 				message: errorHandler.getErrorMessage(err)
- 			});
- 		} else {
- 			
- 			Category.findById(product.category).exec(function(err,category){
- 				if(err){
- 					return res.status(400).send({
- 						message: errorHandler.getErrorMessage(err)
- 					});
- 				}else{
- 					product.category = category;
- 					res.json(product);
- 				}
- 			});
- 			
- 		}
+ 		var product = productReq;
+
+ 		product = _.extend(productReq,req.body);
+ 		product.slug = slug(product.name,{lower:true});
+
+ 		product.save(function(err,product) {
+ 			done(err,product);
+ 		});
+
+ 	},function(product,done){
+ 		Category.findById(product.category).exec(function(err,category){
+ 			done(err,category,product);
+ 		});
+
+ 	},function(category,product,done){
+ 		product.category = category;
+ 		res.json(product);
+ 	}],function(err){
+ 		if(err)return res.status(400).send({
+ 			message: errorHandler.getErrorMessage(err)
+ 		});
  	});
 
  };
@@ -88,50 +108,58 @@ slug = require('slug');
  * Delete an Product
  */
  exports.delete = function(req, res) {
- 	var product = req.product;
 
- 	product.remove(function(err,product){
- 		if(err){
- 			return res.status(400).send({
- 				message:errorHandler.getErrorMessage(err)
- 			});
- 		}else{
+ 	Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 		if(err)return res.status(400).send(err);
+ 		if(!product)return res.status(400).send(new Error('Failed to load product'));
 
- 			_.forEach(product.photos,function(id,key){
- 				Photo.findById(id).exec(function(err,photo){
- 					if(err){
- 						return res.status(400).send({
- 							message: errorHandler.getErrorMessage(err)
- 						});
- 					}else{
- 						
- 						photo.remove(function(){
- 							if (err) {
- 								return res.status(400).send({
- 									message: errorHandler.getErrorMessage(err)
- 								});
- 							} else {
- 								var photoRemove = './public/photos_upload/'.concat(photo.name);
- 								fs.remove(photoRemove, function (err) {
- 									if (err){
- 										return res.status(400).send({
- 											message: errorHandler.getErrorMessage(err)
- 										});
- 									}
- 								});
- 							}
- 						});
- 					}
+ 		product.remove(function(err,product){
+ 			if(err){
+ 				return res.status(400).send({
+ 					message:errorHandler.getErrorMessage(err)
+ 				});
+ 			}else{
+
+ 				_.forEach(product.photos,function(id,key){
+ 					Photo.findById(id).exec(function(err,photo){
+ 						if(err){
+ 							return res.status(400).send({
+ 								message: errorHandler.getErrorMessage(err)
+ 							});
+ 						}else{
+
+ 							photo.remove(function(){
+ 								if (err) {
+ 									return res.status(400).send({
+ 										message: errorHandler.getErrorMessage(err)
+ 									});
+ 								} else {
+ 									var photoRemove = './public/photos_upload/'.concat(photo.name);
+ 									fs.remove(photoRemove, function (err) {
+ 										if (err){
+ 											return res.status(400).send({
+ 												message: errorHandler.getErrorMessage(err)
+ 											});
+ 										}
+ 									});
+ 								}
+ 							});
+ 						}
+ 					});
+
  				});
 
- 			});
- 			
- 			res.json(product);
- 		}
+ 				res.json(product);
+ 			}
 
+ 		});
  	});
 
- };
+
+
+
+
+};
 
 /**
  * List of Products
@@ -173,6 +201,11 @@ slug = require('slug');
  };
 
 
+ exports.search = function(req,res){
+
+ };
+
+
 
  exports.productByID = function(req,res,next,id){
  	Product.findById(id).populate('user').populate('category').populate('photos').exec(function(err,product){
@@ -184,8 +217,10 @@ slug = require('slug');
  	});
  };
 
+
+
+
  exports.hasAuthorization = function(req, res, next) {
- 	console.log(req.user.id);
  	if (req.product.user.id !== req.user.id) {
  		return res.status(403).send('User is not authorized');
  	}

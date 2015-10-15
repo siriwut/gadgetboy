@@ -1,10 +1,10 @@
 <section class="shop word-breakline" data-ng-controller="ShopCtrl" data-ng-init="viewProductCategory()" >
-	<div class="row" data-ng-init="initCategory()">
+	<div class="row" >
 		<div class="col-lg-12">
 			<ol class="breadcrumb shop-breadcrumb">
 				<li><a href="/">หน้าแรก</a></li>
 				<li><a href="#">หมวดหมู่สินค้า</a></li>
-				<li class="active" data-ng-bind="category.name"></li>
+				<li class="active" data-ng-bind="products[0].category.name"></li>
 			</ol>
 		</div>
 	</div>
@@ -12,21 +12,20 @@
 	<div class="row">
 		<nav class="col-sm-3 col-md-3 col-lg-3"      >
 			<ul class="list-group category-sidebar" data-ng-init="initCategories()" >
-				<li class="category-sidebar-menu"   data-ng-repeat="category in categories" ><a ui-sref-active="active" ui-sref="productCategory({categoryId:category._id})" >{{category.name}}</a></li>
+				<li class="category-sidebar-menu"   data-ng-repeat="category in categories" ><a ui-sref-active="active" ui-sref="productCategory({categorySlug:category.slug})" >{{category.name}}</a></li>
 			</ul>
 		</nav>
-		<div class="col-sm-9 col-md-9 col-lg-9" data-ng-init="
-		findProductsByCategory()" >
+		<div class="col-sm-9 col-md-9 col-lg-9"  >
 
 		<div  id="products" class="row list-group" style="margin-bottom:0px;"  >
 			<div  class="item  col-xs-12 col-sm-6 col-md-6 col-lg-4" data-ng-repeat="product in products"  >
 				<div  class="thumbnail" >
-					<a href="#" ui-sref="product({productId:product._id})" >
+					<a href="#" ui-sref="product({productSlug:product.slug})" >
 						<img class="group list-group-image product-thumbnail" src="{{product.photos[0].url}}" alt="" width="300" height="250" />
 					</a>
 					<article  class="caption">
 						<h4 class="group inner list-group-item-heading" ng-init="limit=23">
-							<a href="#" ui-sref="product({productId:product._id})" >
+							<a href="#" ui-sref="product({productSlug:product.slug})" >
 								<b>{{product.name | limitTo:limit}}{{product.name.length > limit?'...':''}}</b>
 							</a>
 						</h4>	

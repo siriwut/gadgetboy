@@ -11,7 +11,18 @@
 
 
  exports.listProductByCategory = function(req,res){
- 	res.json(req.products);
+ 	Category.findOne({slug:req.params.categorySlug}).exec(function(err,category){
+
+ 		Product.find({category:category._id, price:{$gt:0}}).populate('user').populate('category').populate('photos').exec(function(err,products){
+ 			if(err)return res.status(400).send(err);
+ 			if(!products)return res.status(400).send({message:'Cannot load Category'+req.params.categorySlug});
+
+ 			res.json(products);
+ 		});
+
+ 	});
+
+ 	
  };
 
  exports.productByCategoryID = function(req,res,next,id){
@@ -23,3 +34,5 @@
  		next();
  	});
  };
+
+ 

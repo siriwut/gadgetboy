@@ -5,8 +5,8 @@
  */
  var mongoose = require('mongoose'),
  random = require('mongoose-random'),
- Schema = mongoose.Schema;
-
+ Schema = mongoose.Schema,
+ slug = require('slug');
 
 
 /**
@@ -19,7 +19,7 @@
  		trim:true,
  		index:true
  	},
- 	model:{
+ 	models:{
  		type:String,
  		default:''
  	},
@@ -70,8 +70,8 @@
  	slug:{
  		type:String,
  		trim:true,
- 		required:true,
- 		index:{unique:true}
+ 		index:{unique:true},
+ 		default:''
  	},
  	created: {
  		type: Date,
@@ -90,7 +90,34 @@
  	}	
  });
 
+ ProductSchema.pre('save',function(next){
+ 	var self = this;
 
-ProductSchema.plugin(random, { path: 'r' });
+ 	this.generateSlug(this.name,function(slug){
+ 		self.slug = slug;
 
-mongoose.model('Product', ProductSchema);
+ 		next();
+ 	});
+ 	
+ });
+
+ ProductSchema.methods.generateSlug = function (name,cb) {
+ 	var slugName = slug(name,{lower:true});
+
+ 	this.model('Product').find({_id:{$ne:this._id},name:name}).exec(function(err,products){
+ 		if(err) return cb(slugName);
+
+ 		if(products.length){		
+ 			return cb(slugName+'-'+(products.length+1));
+ 		}
+
+ 		cb(slugName);
+
+ 	});
+ };
+
+
+
+ ProductSchema.plugin(random, { path: 'r' });
+
+ mongoose.model('Product', ProductSchema);

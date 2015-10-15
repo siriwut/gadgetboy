@@ -17,7 +17,6 @@
  	async.waterfall([
  		function(done){
  			Category.find().lean().exec(function(err,categories){
- 				//return res.status(400).send(err);
  				done(err,categories);
  			});
 
@@ -28,7 +27,7 @@
 
  				categories[index].products = [];
 
- 				Product.findRandom({category:category._id}).limit(4).populate('photos').exec(function(err,products){
+ 				Product.findRandom({category:category._id}).where({price:{$gt:0}}).limit(4).populate('photos').exec(function(err,products){
  					if(err) return done(err);
  					
  					categories[index].products = products;
@@ -52,20 +51,4 @@
  				return res.status(400).send(err);
  		});
 
- 	/*
-		categories[key].products = [];
-
- 				Product.findRandom({category:category._id}).limit(4).populate('photos').exec(function(err,products){
- 					if(err) return done(err);
-					console.log(products);
- 					categories[key].products = products;
-
- 					if(key===categories.length-1){
- 						
- 						res.json(categories);
- 					}	
- 				});
-	
-	
-*/
 };

@@ -11,16 +11,12 @@ angular.module('products').config(['$stateProvider',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
 		state('adminPanel.listProducts', {
-			url: '/products?page',
+			url: '/products/:page',
 			templateUrl: 'modules/products/views/list-product.client.view.html'
 		}).
 		state('adminPanel.editProduct', {
 			url: '/products/edit/:productId',
 			templateUrl: 'modules/products/views/edit-product.client.view.html'
-		}).
-		state('product-detail', {
-			url: '/product-detail',
-			templateUrl: 'modules/products/views/product-detail.client.view.html'
 		});
 	}
 ]);

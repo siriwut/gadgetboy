@@ -7,7 +7,7 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$stateParams','
 
 		$scope.viewProductCategory = function(){
 
-			$http.get('/api/shop/catalog/'+$stateParams.categoryId)
+			$http.get('/api/shop/catalog/'+$stateParams.categorySlug)
 			.then(function(response) {
 				$scope.products = response.data;
 			}, function(errorResponse) {
@@ -17,19 +17,14 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$stateParams','
 			//$scope.products = Products.query({categoryId:$stateParams.categoryId});	
 		};
 
-		$scope.initCategory = function() {
-			$scope.category = Categories.get({ 
-				categoryId: $stateParams.categoryId
-			});
-		};
-
+		
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
 		};
 
 		$scope.findProduct = function(){
-			$scope.product = Products.get({
-				productId:$stateParams.productId
+			$scope.product = Products.getBySlug({
+				slug:$stateParams.productSlug
 			});
 		};
 	}

@@ -48,6 +48,12 @@
 }
 
 
+.search-form  .ng-valid.ng-dirty {
+	border-color: #22DDFF !important;
+}
+
+
+
 .app-search-button{
 	background: #3c3c3c;
 	border-top: #22DDFF solid 1px ;

@@ -1,10 +1,9 @@
-<section class="shop word-breakline" data-ng-controller="ShopCtrl" data-ng-init="viewProductCategory()" >
+<section class="shop word-breakline"  data-ng-controller="ProductSearchController" data-ng-init="searchResult()">
 	<div class="row" >
 		<div class="col-lg-12">
 			<ol class="breadcrumb shop-breadcrumb">
 				<li><a href="/">หน้าแรก</a></li>
-				<li><a href="#">หมวดหมู่สินค้า</a></li>
-				<li class="active" data-ng-bind="products[0].category.name"></li>
+				<li class="active" >ผลการค้นหา {{products.length}} รายการ</li>
 				<div class="btn-group pull-right"  >
 					<a href="#" id="list" data-ng-click="format=true" >
 						<span class="glyphicon glyphicon-th-list">
@@ -28,7 +27,7 @@
 				</li>
 			</ul>
 		</nav>
-		<div class="col-sm-9 col-md-9 col-lg-9"  >
+		<div class="col-sm-9 col-md-9 col-lg-9" data-ng-if="products.length"  >
 
 			<div  id="products" class="row list-group " style="margin-bottom:0px;"   >
 				<div  class="item  col-xs-12 col-sm-6 col-md-6 col-lg-4 grid-group-item " data-ng-repeat="product in products"  >
@@ -76,4 +75,4 @@
 
 			</div>
 		</div>
-	</section>
+</section>

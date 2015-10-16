@@ -11,7 +11,7 @@ angular.module('products').config(['$stateProvider',
 			templateUrl: 'modules/products/views/create-product.client.view.html'
 		}).
 		state('adminPanel.listProducts', {
-			url: '/products/:page',
+			url: '/products',
 			templateUrl: 'modules/products/views/list-product.client.view.html'
 		}).
 		state('adminPanel.editProduct', {

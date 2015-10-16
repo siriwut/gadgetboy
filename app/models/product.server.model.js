@@ -8,7 +8,6 @@
  Schema = mongoose.Schema,
  slug = require('slug');
 
-
 /**
  * Product Schema
  */
@@ -16,8 +15,7 @@
  	name:{
  		type:String,
  		required:'Name cannot be blank',
- 		trim:true,
- 		index:true
+ 		trim:true
  	},
  	models:{
  		type:String,
@@ -60,8 +58,7 @@
  		ref:'Photo'
  	}],
  	tags:{
- 		type:[String],
- 		index:true
+ 		type:[String]
  	},
  	soleOut:{
  		type:Boolean,
@@ -70,7 +67,6 @@
  	slug:{
  		type:String,
  		trim:true,
- 		index:{unique:true},
  		default:''
  	},
  	created: {
@@ -89,6 +85,8 @@
  		ref:'User'
  	}	
  });
+
+ ProductSchema.index({name:'text',tags:'text',slug:{unique:true}});
 
  ProductSchema.pre('save',function(next){
  	var self = this;
@@ -115,7 +113,6 @@
 
  	});
  };
-
 
 
  ProductSchema.plugin(random, { path: 'r' });

@@ -13,6 +13,11 @@ angular.module('products').factory('Products', ['$resource',
 				params: {
 					controller: 'read-slug'
 				}
+			},
+			search: {
+				url:'/api/products/search',
+				method:'GET',
+				isArray:true
 			}
 		});
 	}

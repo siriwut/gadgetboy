@@ -202,7 +202,10 @@ async = require('async');
 
 
  exports.search = function(req,res){
-
+ 	Product.find({$text:{$search:req.query.q},price:{$gt:0},category:{$ne:null}}).populate('user').populate('category').populate('photos').exec(function(err,result){
+ 		if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+ 		res.jsonp(result);
+ 	});
  };
 
 

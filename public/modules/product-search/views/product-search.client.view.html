@@ -1,9 +1,9 @@
 <section data-ng-controller="ProductSearchController"  >	
-	<form class="navbar-form navbar-left" role="search" >
+	<form class="navbar-form navbar-left search-form" role="search" >
 		<section class="input-group" >
-			<input type="text" class="form-control app-search-text" placeholder="ค้นหาสินค้า">
+			<input data-ng-model="query" type="text" class="form-control app-search-text" placeholder="ค้นหาสินค้า"  novalidate>
 			<span class="input-group-btn">
-				<button type="button" class="btn app-search-button" ><span class="glyphicon glyphicon-search" ></span>
+				<button type="submit" class="btn app-search-button" data-ng-click="search()" ><span class="glyphicon glyphicon-search" ></span>
 				</button>
 			</span>
 		</section>

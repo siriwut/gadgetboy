@@ -16,6 +16,8 @@ module.exports = function(app) {
 	app.route('/api/products/quantity').
 	get(products.getQuantity);
 
+	app.route('/api/products/search').get(products.search);
+
 
 
 	app.route('/api/products/:productId').
@@ -23,9 +25,4 @@ module.exports = function(app) {
 	put(users.requiresLogin,users.hasAuthorization(['admin']),products.update).
 	delete(users.requiresLogin,users.hasAuthorization(['admin']),products.delete);
 
-	
-	
-	
-
-	
 };

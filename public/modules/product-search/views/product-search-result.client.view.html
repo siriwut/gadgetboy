@@ -63,16 +63,22 @@
 						</article >
 					</div >
 				</div >
-				</div >
+			</div >
 
-				<div class="row" >
-					<div class="text-right col-lg-12">
-						<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()">
-						</pagination>
-					</div>
-
+			<div class="row" >
+				<div class="text-right col-lg-12">
+					<pagination total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()">
+					</pagination>
 				</div>
 
 			</div>
+
 		</div>
+
+		<div class="col-sm-9 col-md-9 col-lg-9 text-center text-muted" data-ng-if="!products.length"  >
+			<h1>ไม่พบข้อมูล "{{query}}"</h1>
+		</div>
+	</div>
+
+
 </section>

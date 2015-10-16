@@ -8,11 +8,17 @@ angular.module('product-search').controller('ProductSearchController', ['$scope'
 		};
 
 		$scope.searchResult = function(){
+
+			if(!$stateParams.q){
+				$location.url($location.path());
+				$location.path('/');
+			}
+
+			$scope.query = $stateParams.q;
 			$scope.products = [];
 
-			Products.search({q:$stateParams.q},function(result){
+			Products.search({q:$scope.query},function(result){
 				$scope.products = result;
-				console.log($scope.products);
 			},function(err){
 				console.log(err);
 			});

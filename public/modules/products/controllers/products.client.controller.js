@@ -145,6 +145,9 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 		};
 
 		$scope.findOneEdit = function(){
+
+			if(!$stateParams.productId) $location.path('/');
+
 			$scope.product = Products.get({productId:$stateParams.productId},function(){
 				$scope.$broadcast('findEditPhotos');
 				$scope.categories = Categories.query();
@@ -217,23 +220,5 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 			photoIdList.splice(photoIndex,1);			
 		});
 
-
-
-				/*$scope.product = {
-				name:'Speaker',
-				model: 'Speaker',
-				brand: 'Tape',
-				shortDescription: 'Speaker Desc',
-				description: 'Desc',
-				price: 20,
-				quantity:1,
-				sale:{
-					onSale:true,
-					percen:10
-				},
-				color:'red',
-				tags:['speaker','tape'],
-				photos:[]
-			};*/
-		}
-		]);
+	}
+	]);

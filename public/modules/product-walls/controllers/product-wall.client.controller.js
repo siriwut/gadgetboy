@@ -5,7 +5,6 @@ angular.module('product-walls').controller('ProductWallController', ['$scope','$
 		$scope.categories = [];
 		
 		$scope.displayWalls = function(){
-			console.log('DisPlay');
 			$http.get('/api/shop/wall').then(function(res){
 				$scope.categories=res.data;
 			},function(err){

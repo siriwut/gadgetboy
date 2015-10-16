@@ -104,6 +104,8 @@ angular.module('categories').controller('CategoriesController', ['$scope', '$loc
 
 		// Find existing Category
 		$scope.findOne = function() {
+			if(!$stateParams.categoryId) $location.path('/');
+
 			$scope.category = Categories.get({ 
 				categoryId: $stateParams.categoryId
 			});

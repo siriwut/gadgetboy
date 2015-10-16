@@ -8,9 +8,10 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 
 		
 		$scope.checkRole = function(){
-			if(!$scope.authentication.user) return; 
+			if(!$scope.authentication) return;
 
-			return $scope.authentication.user.roles.indexOf('admin')===1;
+			if($scope.authentication.user)
+				return $scope.authentication.user.roles.indexOf('admin')===1;
 		};
 
 		$scope.toggleCollapsibleMenu = function() {
@@ -39,4 +40,4 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 			CartModal.open();
 		};
 	}
-]);
+	]);

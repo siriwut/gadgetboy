@@ -3,6 +3,7 @@
 //Setting up route
 angular.module('shop').config(['$stateProvider',
 	function($stateProvider) {
+		
 		// Shop state routing
 		$stateProvider.
 		state('cart', {

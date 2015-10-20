@@ -20,10 +20,12 @@
  		default:''
  	},
  	parent:{
- 		type:Schema.ObjectId
+ 		type:String,
+ 		ref:'Category'
  	},
  	subs:[{
- 		type:Schema.ObjectId
+ 		type:String,
+ 		ref:'Category'
  	}],
  	slug:{
  		type:String,

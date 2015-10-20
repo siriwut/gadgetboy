@@ -12,11 +12,18 @@
 		<div class="row" >
 			<form name="productForm" data-ng-submit="productForm.$valid && update()" product-form >
 				<div class="col-lg-8">
+					<div class="form-group" >
+						<label>รหัสสินค้า</label>
+						<input  type="text" class="form-control" value="{{product._id}}" readonly="readonly"  >
+						
+					</div>
+
 					<div class="form-group" ng-class="{'has-error':(productForm.$submitted||productForm.$touched) && productForm.name.$invalid}">
 						<label>ชื่อสินค้า</label>
 						<input  type="text" class="form-control" data-ng-model="product.name"  required>
 						<p ng-show="(productForm.$submitted||productForm.$touched) && productForm.name.$invalid" class="text-danger">กรุณากรอกชื่อ สินค้า</p>
 					</div>
+
 					<div class="form-group">
 						<label>หมวดหมู่สินค้า</label>
 						<select class="form-control"  data-ng-options="category.name for category in categories track by category._id"   data-ng-model="product.category"  >
@@ -36,12 +43,9 @@
 					</div>
 					<div class="form-group">
 						<label>คำอธิบายย่อ</label>
-						<textarea class="form-control" data-ng-model="product.shortDescription" ></textarea>
+						<textarea class="form-control" data-ng-model="product.shortDescription" rows="5" ></textarea>
 					</div>
-					<div class="form-group">
-						<label>คำอธิบาย</label>
-						<textarea class="form-control" rows="15" data-ng-model="product.description" ></textarea>
-					</div>
+					
 
 
 				</div>
@@ -63,13 +67,7 @@
 							<input type="number" class="form-control" placeholder="0.00 บาท" min="0"  data-ng-model="product.sale.salePrice">
 						</div>
 					</div>
-					<div class="form-group" data-ng-init="initColors()"  >
-						<label>สี</label>
-						<div class="colorpicker" >
-							<select simplecolorpicker data-ng-controller="EventColorsCtrl"  data-ng-options="key for (key , value) in colors track by value" data-ng-model="product.color" >
-							</select>
-						</div>
-					</div>
+					
 					<div class="form-group">
 						<label>Tags</label>
 						<textarea class="form-control" rows="5" data-ng-model="product.tags" ng-list></textarea>
@@ -80,11 +78,28 @@
 							<span class="soleout-text" >Sole Out</span>
 						</div>	
 					</div>
+					<div class="form-group" data-ng-init="initColors()"  >
+						<label>สี</label>
+						<div class="colorpicker" >
+							<select simplecolorpicker data-ng-controller="EventColorsCtrl"  data-ng-options="value.name for (key , value) in colors track by value" data-ng-model="product.color" >
+							</select>
+						</div>
+					</div>
 				</div>
 				<div  class="col-lg-12"  >
-					<div  class="col-lg-2 desktop-col-nopadding" >
-						<button type="submit" class="btn btn-primary btn-lg"  >บันทึก</button>
+					<div class="form-group">
+						<label>คำอธิบาย</label>
+						<div text-angular data-ng-model="product.description"  ></div>
 					</div>
+					<div class="form-group">
+						<label>สินค้าที่เกี่ยวข้อง</label>
+						<related-product-creator ng-model="product.relatedProduct" ></relate-product-creator>
+					</div>
+					
+
+					
+					<button type="submit" class="btn btn-primary btn-lg"  >บันทึก</button>
+					
 					
 				</div>
 			</form>

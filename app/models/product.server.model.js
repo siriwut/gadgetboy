@@ -76,6 +76,10 @@
  	update:{
  		type:Date
  	},
+ 	relatedProduct:[{
+ 		type:String,
+ 		ref:'Product'
+ 	}],
  	category:{
  		type:Schema.ObjectId,
  		ref:'Category'

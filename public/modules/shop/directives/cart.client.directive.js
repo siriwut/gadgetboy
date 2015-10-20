@@ -69,11 +69,8 @@ angular.module('shop')
 .directive('cart', [
 	function() {
 		return {
-			templateUrl:'../../modules/shop/directives/cart.html',
-			restrict: 'EA',
-			link: function (scope, element, attrs) {
-				//console.log('this is the cart directive');
-			}
+			templateUrl:'../../modules/shop/directives/templates/cart.html',
+			restrict: 'EA'
 		};
 	}
 	]);

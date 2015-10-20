@@ -6,10 +6,11 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 		var photoIdList = [];
 		var productCheckedList = [];
 
-
 		$scope.create = function(){
-			
+
 			var product = new Products(this.product);
+
+			console.log(product);
 			
 			product.photos = photoIdList;
 
@@ -172,8 +173,13 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 		};
 
 		$scope.initColors = function(){
-			$scope.colors = EventColors;
-
+			var colors = [];
+			
+			angular.forEach(EventColors,function(val,key){
+				colors.push(val);
+			});
+		
+			$scope.colors = colors;
 		};
 
 

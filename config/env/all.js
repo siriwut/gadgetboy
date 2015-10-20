@@ -17,7 +17,9 @@ module.exports = {
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker.css',
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-regularfont.css',
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css',
-			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css'
+			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css',
+			'public/lib/textAngular/dist/textAngular.css',
+			'public/lib/font-awesome/css/font-awesome.css'
 			],
 			js: [
 			'public/lib/jquery/dist/jquery.min.js',
@@ -33,8 +35,10 @@ module.exports = {
 			'public/lib/ng-file-upload/ng-file-upload-shim.min.js',
 			'public/lib/ng-file-upload/ng-file-upload.min.js',
 			'public/lib/angular-flash-alert/dist/angular-flash.min.js',
-			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker.js'
-
+			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
+			'public/lib/textAngular/dist/textAngular-rangy.min.js',
+			'public/lib/textAngular/dist/textAngular-sanitize.min.js',
+			'public/lib/textAngular/dist/textAngular.min.js',
 			]
 		},
 		css: [

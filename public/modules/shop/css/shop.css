@@ -56,7 +56,7 @@
 .product-container-inner{
 	background-color: #FFF;
 	padding-top:15px;
-	padding-bottom:15px;
+	padding-bottom:35px;
 }
 
 .shop-breadcrumb{
@@ -97,3 +97,39 @@
 	padding-top:50px;
 	padding-bottom: 40px;
 }
+
+
+.product-profile-image-sm-bound{
+	margin-top: 5px;
+	margin-left: 5px;
+	display: inline-block;
+}
+
+.product-profile-image-sm{
+	height: 100px;
+}
+
+
+
+.category-sidebar-header{
+	background:#2780e3 !important;
+	font-size: 14px;	
+	color:#FFF;
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+
+}
+
+.product-image-modal img{
+	margin: 0 auto;
+}
+
+
+@media (min-width: 768px) {
+	.product-image-modal .img-responsive{
+		height: 507px;
+	}
+}
+
+

@@ -9,7 +9,6 @@ angular.module('shop').factory('CartCalculator', [
 				if(!angular.isArray(cart))
 					throw 'Cart must be Array';
 
-				console.log(cart);
 
 				var total = 0;
 

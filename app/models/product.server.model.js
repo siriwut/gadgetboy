@@ -76,7 +76,7 @@
  	update:{
  		type:Date
  	},
- 	relatedProduct:[{
+ 	relatedProducts:[{
  		type:String,
  		ref:'Product'
  	}],

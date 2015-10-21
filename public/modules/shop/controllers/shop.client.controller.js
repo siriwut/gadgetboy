@@ -29,6 +29,7 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$location','$st
 			$scope.product = Products.getBySlug({
 				slug:$stateParams.productSlug
 			});
+
 		};
 	}
 	]);

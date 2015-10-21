@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('products')
-.controller('RelatedProductCreatorCtrl',['$scope',function($scope){
+.controller('RelatedProductCreatorCtrl',['$scope','$attrs','Products',function($scope,$attrs,Products){
 
 	if(!$scope.ngModel){
 		$scope.ngModel = [];
@@ -9,8 +9,16 @@ angular.module('products')
 
 
 	$scope.addRelatedProduct = function(){
-		$scope.ngModel.push($scope.productId);
-		$scope.productId = null;
+		if(!$scope.productId) return $scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
+
+		$scope.relatedProductError = null;
+
+		Products.get({productId:$scope.productId},function(res){
+			$scope.ngModel.push($scope.productId);
+			$scope.productId = null;
+		},function(err){
+			$scope.relatedProductError = err.data.message;
+		});		
 	};
 
 
@@ -21,7 +29,14 @@ angular.module('products')
 
 
 	this.editRelatedProduct = function(index,value){
-		$scope.ngModel[index] = value;
+		if(!value) return $scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
+	
+		Products.get({productId:value},function(res){
+			$scope.ngModel[index] = value;
+		},function(err){
+
+			$scope.$broadcast('editError',err.data.message);
+		});	
 	};
 
 }])
@@ -35,8 +50,7 @@ angular.module('products')
 			scope:{
 				ngModel:'='
 			},
-			transclude:true,
-			controller:'RelatedProductCreatorCtrl',
+			controller:'RelatedProductCreatorCtrl'
 		};
 	}])
 
@@ -47,6 +61,7 @@ angular.module('products')
 			require:'^relatedProductCreator',
 			link:function(scope,element,attr,ctrl){
 
+
 				var textRelatedProduct = element.siblings('.text-related-product')[0];
 				
 				element.on('click',function(){
@@ -54,11 +69,19 @@ angular.module('products')
 						textRelatedProduct.readOnly = false;
 						this.text = 'บันทึก';
 					}else{
+						element.parent().siblings('.text-edit-error').remove();
 						textRelatedProduct.readOnly = true;
 						this.text = 'แก้ไข';
 						ctrl.editRelatedProduct(attr.index,textRelatedProduct.value);
 					}
 				});
+
+				scope.$on('editError',function(event,message){
+					textRelatedProduct.readOnly = false;
+					element.parent().siblings('.text-edit-error').remove();
+					element.parent().after('<p class="text-danger text-edit-error" >'+message+'</p>');
+				});
+				
 
 			}
 		};

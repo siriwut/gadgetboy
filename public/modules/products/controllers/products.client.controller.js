@@ -10,8 +10,6 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 			var product = new Products(this.product);
 
-			console.log(product);
-			
 			product.photos = photoIdList;
 
 			if(this.product.category){
@@ -26,7 +24,6 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 				$scope.product = null;
 				photoIdList = [];
 				$scope.$broadcast('onClearForm');
-
 
 				$state.go('adminPanel.editProduct',{productId:product._id});
 
@@ -141,7 +138,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 			$http.get('/api/products/quantity').then(function(quantity){
 				$scope.totalQuantity = quantity.data;
 			}, function(errorResponse) {
-				console.log(errorResponse);
+				
 			});
 		};
 

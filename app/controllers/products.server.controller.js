@@ -32,7 +32,6 @@ async = require('async');
 
  	product.save(function(err){	
  		if(err){
- 			console.log(err);
  			return res.status(400).send({
  				message:errorHandler.getErrorMessage(err)
  			});
@@ -50,8 +49,8 @@ async = require('async');
  exports.read = function(req, res) {
 
  	Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
- 		if(err)return res.status(400).send(err);
- 		if(!product)return res.status(400).send(new Error('Failed to load product ' + req.params.productId));
+ 		if(err)return res.status(400).send({message:'รหัสสินค้าไม่ถูกต้อง'});
+ 		if(!product)return res.status(400).send({message:'ไม่พบสินค้าชิ้นนี้'});
 
  		res.jsonp(product);
  	});
@@ -59,11 +58,22 @@ async = require('async');
 
 
  exports.readBySlug = function(req,res){
- 	Product.findOne(req.query).populate('user').populate('category').populate('photos').exec(function(err,product){
- 		if(err)return res.status(400).send(err);
- 		if(!product)return res.status(400).send(new Error('Failed to load product'));
+ 	Product.findOne(req.query).lean().populate('user').populate('category').populate('photos').populate('relatedProducts').exec(function(err,product){
+ 		console.log(err);
 
- 		res.json(product);
+ 		if(err)return res.status(400).send(err);
+
+ 		
+ 		var opts = {
+ 			path:'photos',
+ 		};
+
+ 		Product.populate(product.relatedProducts,opts,function(err,products){
+
+ 			if(err)return res.status(400).send(err);
+ 			product.relatedProducts = products;
+ 			res.jsonp(product);
+ 		});
  		
  	});
  };

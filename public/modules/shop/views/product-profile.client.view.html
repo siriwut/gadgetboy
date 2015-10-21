@@ -14,7 +14,7 @@
 				<div class="col-lg-5 " >
 
 					<a href product-image-preview image="product.photos[0]" >
-						<img src="{{product.photos[0].url}}" width="100%;"  />
+						<img src="{{product.photos[0].url}}" width="100%"  />
 					</a>
 					<a href class="product-profile-image-sm-bound" product-image-preview image="photo" ng-repeat="photo in product.photos"  >
 						<img  class="img-thumbnail product-profile-image-sm" src="{{photo.url}}" width="100" height="100"  />
@@ -38,27 +38,38 @@
 						<p>{{product.shortDescription}}</p>
 					</div>
 					<div class="col-lg-6 product-detail-col " >	
-						<form class="addtocart-box item-box" data-ng-if="product.quantity"  >
-							<div class="form-group">
-								เลือกจำนวน:<select data-ng-model="selectedQuantity"  class="form-control" data-ng-options="value for value in [] | range:product.quantity " >
-							</select>
-							
+					 <div data-ng-if="product.relatedProducts.length" >
+						<label>เลือกสี:</label>
+						<div class="form-group">
+							<a href ui-sref="product({productSlug:relatedProduct.slug})" data-ng-repeat="relatedProduct in product.relatedProducts" >
+								<img class="img-thumbnail " src="{{relatedProduct.photos[0].url}}" width="50" height="10"  >
+							</a>
 						</div>
-						<button class="btn btn-primary form-control" add-to-cart product-id="{{product._id}}" quantity="{{selectedQuantity}}" >หยิบใส่ตระกร้า</button>
-					</form>
-					<div class="col-xs-offset-4 col-sm-offset-5 col-md-offset-2 soldout-box">
-						<span data-ng-if="product.quantity <= 0" class="text-danger text-soldout-profile" >สินค้าหมด</span>
-					</div>		
-				</div>
+					 </div>
+					<form class="addtocart-box item-box" data-ng-if="product.quantity"  >
+						<div class="form-group">
+							เลือกจำนวน:<select data-ng-model="selectedQuantity"  class="form-control" data-ng-options="value for value in [] | range:product.quantity " >
+						</select>
+
+					</div>
+					<button class="btn btn-primary form-control" add-to-cart product-id="{{product._id}}" quantity="{{selectedQuantity}}" >
+						หยิบใส่ตระกร้า
+					</button>
+				</form>
+				<div class="col-xs-offset-4 col-sm-offset-5 col-md-offset-2 soldout-box">
+					<span data-ng-if="product.quantity <= 0" class="text-danger text-soldout-profile" >สินค้าหมด
+					</span>
+				</div>		
 			</div>
-		</article>
-	</div>
-	<div class="col-lg-12 product-container-inner product-description item-box" style="margin-top:10px;" >
-		<article>
-			<h2>รายระเอียดสินค้า</h2>
-			<div ng-bind-html="product.description"></div>
-		</article>
-	</div>
+		</div>
+	</article>
+</div>
+<div class="col-lg-12 product-container-inner product-description item-box" style="margin-top:10px;" >
+	<article>
+		<h2>รายระเอียดสินค้า</h2>
+		<div ng-bind-html="product.description"></div>
+	</article>
+</div>
 
 </div>
 </div>

@@ -10,6 +10,9 @@
  Product = mongoose.model('Product'),
  errorHandler = require('./errors.server.controller');
 
+
+ var addCookieCart;
+
 /**
  * Create a Cart
  */
@@ -17,7 +20,6 @@
  	if(req.user){
  		async.waterfall([function(done){
  			if(req.body.productId){
-
  				Customer.findOne({user:req.user._id},function(err,customer){
  					if(!customer){
  						return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
@@ -28,13 +30,12 @@
  			}else{
  				return res.status(400).send({message:'กรุณาระบุสินค้า'});
  			}
-
  		},function(customer,done){
  			//check product in cart
  			Customer.findOne({_id:customer._id,cart:{$elemMatch:{product:req.body.productId}}},function(err,customerWithCart){
- 					var hasThisProductInCart = customerWithCart? true : false;
- 					done(err,hasThisProductInCart,customer);
- 				});
+ 				var hasThisProductInCart = customerWithCart? true : false;
+ 				done(err,hasThisProductInCart,customer);
+ 			});
 
  		},function(hasThisProductInCart,customer,done){
  			//check product in stock
@@ -103,9 +104,11 @@
  			});
 
  		}],function(err){
- 			if(err) return next(err);
+ 			if(err) return res.status(400).send({message:'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ'});
  		});
 
+}else{
+	addCookieCart(req,res);
 }
 };
 
@@ -179,6 +182,8 @@
  * List of Carts
  */
  exports.list = function(req, res) {
+
+
  	if(req.user){
  		Customer.findOne({user:req.user._id}).lean().populate({path:'cart.product'}).exec(function(err,customer){
  			var options = {
@@ -192,7 +197,45 @@
  			Customer.populate(customer,options,function(err,customer){
  				res.jsonp(customer.cart);
  			});
- 			
  		});
+ 	}else{	
+ 		if(req.cookies.cart){
+ 			var cart = req.cookies.cart;
+ 			console.log(cart);	
+ 			res.jsonp(cart.length);
+ 		}else{
+ 			res.end();
+ 		}	
  	}
  };
+
+
+ addCookieCart = function(req, res){
+ 	var cart = [];
+ 	var index = -1;
+
+ 	Product.findById(req.body.product,function(err,product){
+ 		if(err)
+ 			return res.status(400).send({ message: 'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
+ 		if(!product)
+ 			return res.status(400).send({ message: 'ไม่พบสินค้าที่ระบุค่ะ'});
+ 		if(product.quantity <= 0)
+ 			return res.status(400).send({ message: 'สินค้า' + product.name + 'หมดแล้วค่ะ' });
+
+ 		if (!req.cookies.cart) {
+ 			cart = [{ id:req.body.productId, quantity:req.body.quantity }];	
+ 		} else {
+ 			cart = req.cookies.cart;
+ 			index = _.findIndex(cart, {id:req.body.productId});
+
+ 			if (index <= -1) {
+ 				cart.push({ id: req.body.productId, quantity: req.body.quantity });
+ 			} else {
+ 				cart[index].quantity += req.body.quantity;
+ 			}
+ 		}
+
+ 		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
+ 		res.jsonp(cart);
+ 	});
+};

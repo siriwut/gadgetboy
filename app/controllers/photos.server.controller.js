@@ -114,7 +114,7 @@
  };
 
  exports.photoByID = function(req,res,next,id){
- 	Photo.findById(id).populate('user').exec(function(err,photo){
+ 	Photo.findById(id).populate('user','displayName').exec(function(err,photo){
  		if(err) return next(err);
  		if(!photo) return next(new Error('Failed to load photo' + id));
 

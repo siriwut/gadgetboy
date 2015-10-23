@@ -29,8 +29,8 @@
  	}],
  	slug:{
  		type:String,
- 		required:true,
- 		index:{unique:true}	
+ 		index:{unique:true},
+ 		trim:true
  	},
  	created:{
  		type:Date,

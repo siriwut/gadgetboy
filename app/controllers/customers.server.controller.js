@@ -85,32 +85,7 @@
  	});
  };
 
- exports.guest = function(req,res,next){
-
- 	if(req.isAuthenticated()) return next();
- 	
- 		if(!req.cookies.guest){
- 			crypto.randomBytes(256, function(err, buffer) {
- 				if(err) return next(err);
-
- 				var customer = new Customer({guestToken:buffer.toString('hex')});
-
- 				customer.save(function(err){
- 					if(err) return next(err);
-
- 					res.cookie('guest', buffer.toString('hex'), { path: '/', httpOnly: true, maxAge: 10 * 365 * 24 * 60 * 60});
-
- 					next();
- 				}); 				
- 				
- 			});
- 		}else{		
- 			
- 			
- 			next();
- 		}
-
- };
+ 
 
 /**
  * Customer middleware

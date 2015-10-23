@@ -37,7 +37,7 @@
 		require(path.resolve(modelPath));
 	});
 
-	var customers = require('../app/controllers/customers.server.controller');
+
 
 	// Setting application local variables
 	app.locals.title = config.app.title;
@@ -113,8 +113,7 @@
 	app.use(passport.session());
 	app.use(passport.authenticate('remember-me'));
 
-	//create guest if not authentication
-	app.use(customers.guest);
+	
 
 
 	// connect flash for flash messages

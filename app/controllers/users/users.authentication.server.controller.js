@@ -29,7 +29,7 @@
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
 
-		
+	
 	
 	// Then save the user 
 	user.save(function(err) {
@@ -43,7 +43,7 @@
 			customer.save(function(err){
 				
 				if(err) return res.status(400).send(err);
-	
+				
 				// Remove sensitive data before login
 				user.password = undefined;
 				user.salt = undefined;
@@ -79,33 +79,46 @@
 			user.salt = undefined;
 
 			
-			req.login(user, function(err) {
-				if (err) {
-					res.status(400).send(err);
-				} else {
-					if(req.body.rememberMe){
-						crypto.randomBytes(256, function(err, buffer) {
-							if (err) res.status(400).send(err);
-							
-							var tokenString = buffer.toString('hex'); 
-							var token = new Token({token:tokenString,userId:user._id});
+ 			//create customer if not exist.
+ 			Customer.findOne({user:user._id}).exec(function(err,customer){
+ 				if(err) return res.redirect('/#!/signin');			
 
-							token.save(function(err) {
-								if (err) res.status(400).send(err);
+ 				if(!customer){
+ 					var newCustomer = new Customer({user:user._id});
+ 					newCustomer.save(function(err){
+ 						if(err) res.redirect('/#!/signin');
+ 					});
+ 				}
+ 			});
 
-								res.cookie('remember_me', tokenString, { path: '/', httpOnly: true, maxAge: 604800000 });
-								res.json(user);
-							});
-						});
-						
-					}else{
-						res.json(user);
-					}
-				}
-			});
-		}
-	})(req, res, next);
-};
+ 			
+ 			req.login(user, function(err) {
+ 				if (err) {
+ 					res.status(400).send(err);
+ 				} else {
+ 					if(req.body.rememberMe){
+ 						crypto.randomBytes(256, function(err, buffer) {
+ 							if (err) res.status(400).send(err);
+ 							
+ 							var tokenString = buffer.toString('hex'); 
+ 							var token = new Token({token:tokenString,userId:user._id});
+
+ 							token.save(function(err) {
+ 								if (err) res.status(400).send(err);
+
+ 								res.cookie('remember_me', tokenString, { path: '/', httpOnly: true, maxAge: 604800000 });
+ 								res.json(user);
+ 							});
+ 						});
+ 						
+ 					}else{
+ 						res.json(user);
+ 					}
+ 				}
+ 			});
+ 		}
+ 	})(req, res, next);
+ };
 
 
 /**
@@ -131,14 +144,14 @@
  			}
 
  			//create customer if not exist.
- 			Customer.findOne({_id:user._id}).exec(function(err,customer){
+ 			Customer.findOne({user:user._id}).exec(function(err,customer){
  				if(err) return res.redirect('/#!/signin');			
 
  				if(!customer){
  					var newCustomer = new Customer({user:user._id});
  					newCustomer.save(function(err){
  						if(err) res.redirect('/#!/signin');
- 					});
+ 					} );
  				}
  			});
 

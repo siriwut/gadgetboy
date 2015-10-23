@@ -47,11 +47,13 @@
  	},
  	shortDescription:{
  		type:String,
- 		default:''
+ 		default:'',
+ 		trim:true
  	},
  	description:{
  		type:String,
- 		default:''
+ 		default:'',
+ 		trim:true
  	},
  	photos:[{
  		type:Schema.ObjectId,

@@ -26,7 +26,7 @@
 								<tr data-ng-repeat="cart in productsInCart | reverse  track by $index " >
 									<td><img src="{{cart.product.photos[0].url}}" width="150" height="150" /></td>
 									<td class="col-md-6" >
-										<span><a data-ng-click="dismiss()" href="#" ui-sref="product({productId:cart.product._id})" >{{cart.product.name}}
+										<span><a data-ng-click="dismiss()" href="#" ui-sref="product({productSlug:cart.product.slug})" >{{cart.product.name}}
 										</a>
 									</span>
 

@@ -80,7 +80,7 @@
 								<div class="row row-action " ng-show="isRowActionShow" >
 									<div class="col-lg-12">
 
-										<a href><span >view</span></a> |					  
+										<a href ui-sref="product({productSlug:product.slug})" target="_bank" ><span >view</span></a> |					  
 										<a ui-sref="adminPanel.editProduct({productId:product._id})" href="/#!/products/edit/{{product._id}}"><span>แก้ไข</span></a> |
 										<a href ng-click="remove(product)" ><span>ลบ</span></a>
 

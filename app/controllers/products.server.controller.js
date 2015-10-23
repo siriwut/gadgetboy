@@ -48,7 +48,7 @@ async = require('async');
  */
  exports.read = function(req, res) {
 
- 	Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 	Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  		if(err)return res.status(400).send({message:'รหัสสินค้าไม่ถูกต้อง'});
  		if(!product)return res.status(400).send({message:'ไม่พบสินค้าชิ้นนี้'});
 
@@ -58,10 +58,10 @@ async = require('async');
 
 
  exports.readBySlug = function(req,res){
- 	Product.findOne(req.query).lean().populate('user').populate('category').populate('photos').populate('relatedProducts').exec(function(err,product){
- 		console.log(err);
+ 	Product.findOne(req.query).lean().populate('user','displayName').populate('category').populate('photos').populate('relatedProducts').exec(function(err,product){
 
- 		if(err)return res.status(400).send(err);
+ 		if(err) return res.status(400).send(err);
+ 		if(!product) return res.status(400).send({message:'Failed to load product'});
 
  		
  		var opts = {
@@ -84,11 +84,11 @@ async = require('async');
  exports.update = function(req, res) {
 
  	async.waterfall([function(done){
- 		Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 		Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  			done(err,product);
  		});
  	},function(productReq,done){
- 		if(!productReq)return res.status(400).send(new Error('Failed to load product'));
+ 		if(!productReq)return res.status(400).send({message:'Failed to load product'});
 
  		var product = productReq;
 
@@ -120,9 +120,9 @@ async = require('async');
  */
  exports.delete = function(req, res) {
 
- 	Product.findById(req.params.productId).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 	Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  		if(err)return res.status(400).send(err);
- 		if(!product)return res.status(400).send(new Error('Failed to load product'));
+ 		if(!product)return res.status(400).send({message:'Failed to load product'});
 
  		product.remove(function(err,product){
  			if(err){
@@ -213,7 +213,7 @@ async = require('async');
 
 
  exports.search = function(req,res){
- 	Product.find({$text:{$search:req.query.q},price:{$gt:0},category:{$ne:null}}).populate('user').populate('category').populate('photos').exec(function(err,result){
+ 	Product.find({$text:{$search:req.query.q},price:{$gt:0},category:{$ne:null}}).populate('user','displayName').populate('category').populate('photos').exec(function(err,result){
  		if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  		res.jsonp(result);
  	});
@@ -222,7 +222,7 @@ async = require('async');
 
 
  exports.productByID = function(req,res,next,id){
- 	Product.findById(id).populate('user').populate('category').populate('photos').exec(function(err,product){
+ 	Product.findById(id).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  		if(err)return next(err);
  		if(!product)return next(new Error('Failed to load product ' + id));
 

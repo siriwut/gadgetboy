@@ -9,7 +9,10 @@ angular.module('products')
 
 
 	$scope.addRelatedProduct = function(){
-		if(!$scope.productId) return $scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
+		if(!$scope.productId){
+			$scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
+			return; 
+		}
 
 		$scope.relatedProductError = null;
 
@@ -29,8 +32,11 @@ angular.module('products')
 
 
 	this.editRelatedProduct = function(index,value){
-		if(!value) return $scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
-	
+		if(!value){
+			$scope.relatedProductError = 'กรุณาระบุรหัสสินค้า';
+			return ;
+		}
+		
 		Products.get({productId:value},function(res){
 			$scope.ngModel[index] = value;
 		},function(err){

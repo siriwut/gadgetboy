@@ -11,7 +11,8 @@
  errorHandler = require('./errors.server.controller');
 
 
- var addCookieCart;
+ var addCookieCart,
+ createCartFormCookie;
 
 /**
  * Create a Cart
@@ -182,8 +183,6 @@
  * List of Carts
  */
  exports.list = function(req, res) {
-
-
  	if(req.user){
  		Customer.findOne({user:req.user._id}).lean().populate({path:'cart.product'}).exec(function(err,customer){
  			var options = {
@@ -201,8 +200,13 @@
  	}else{	
  		if(req.cookies.cart){
  			var cart = req.cookies.cart;
- 			console.log(cart);	
- 			res.jsonp(cart.length);
+
+ 			Product.find({'_id':{'$in':_.pluck(cart,'_id')}}).lean().populate('photos').exec(function(err,products){
+ 				var newCart = createCartFormCookie(products, cart);
+
+ 				res.jsonp(newCart);
+
+ 			});
  		}else{
  			res.end();
  		}	
@@ -213,8 +217,9 @@
  addCookieCart = function(req, res){
  	var cart = [];
  	var index = -1;
+ 	var isQuantityOver = false;
 
- 	Product.findById(req.body.product,function(err,product){
+ 	Product.findById(req.body.productId,function(err,product){
  		if(err)
  			return res.status(400).send({ message: 'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
  		if(!product)
@@ -223,19 +228,58 @@
  			return res.status(400).send({ message: 'สินค้า' + product.name + 'หมดแล้วค่ะ' });
 
  		if (!req.cookies.cart) {
- 			cart = [{ id:req.body.productId, quantity:req.body.quantity }];	
+ 			cart = [{ _id:req.body.productId, quantity:req.body.quantity }];	
  		} else {
  			cart = req.cookies.cart;
- 			index = _.findIndex(cart, {id:req.body.productId});
+ 			index = _.findIndex(cart, {_id:req.body.productId});
 
- 			if (index <= -1) {
- 				cart.push({ id: req.body.productId, quantity: req.body.quantity });
+
+ 			if (index === -1) {
+ 				//if no this product exist in cart then push new product to cart
+ 				cart.push({ _id: req.body.productId, quantity: req.body.quantity });
+ 				var newIndex = _.findIndex(cart, {_id:req.body.productId});
+
+ 				//if quantity added more than product quantity then update quantity
+ 				if((cart[newIndex].quantity + req.body.quantity) > product.quantity){
+ 					cart[newIndex].quantity = req.body.quantity;
+ 					isQuantityOver = true;
+ 				}
+
  			} else {
+ 				//if there are this product exist in cart
  				cart[index].quantity += req.body.quantity;
+
+ 				//if quantity added more than product quantity 
+ 				if((cart[index].quantity + req.body.quantity) > product.quantity){
+ 					cart[index].quantity = req.body.quantity;
+ 					isQuantityOver = true;
+ 				}
  			}
  		}
 
  		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
- 		res.jsonp(cart);
+
+ 		Product.find({'_id':{'$in':_.pluck(cart,'_id')}}).lean().populate('photos').exec(function(err,products){
+ 			if(isQuantityOver) {		
+ 				res.status(400).send({message:'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ'});
+ 			} else {
+ 				var newCart = createCartFormCookie(products, cart);
+
+ 				res.jsonp(newCart);
+ 			}
+ 		});		
  	});
+};
+
+
+createCartFormCookie = function(products, cartCookie){
+	var cart = [];
+	
+	for(var i = 0; i < cartCookie.length; i++){
+		var product = _.find(products, { _id: mongoose.Types.ObjectId(cartCookie[i]._id) });
+		
+		cart.push({ product: product, quantity: cartCookie[i].quantity });
+	}
+
+	return cart;
 };

@@ -22,6 +22,7 @@ angular.module('shop')
 	};
 
 	$scope.$watch('productsInCart',function(){
+		$scope.totalQuantity = CartCalculator.totalQuantity($scope.productsInCart);
 		$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart);
 	});
 

@@ -8,17 +8,15 @@ angular.module('shop').controller('CartCtrl', ['$scope','$http','Flash','CartCal
 
 
 		$scope.initCart = function(){
-
 			$http.get('/api/carts/show').then(function(response){
 				$scope.productsInCart = response.data || [];
 			},function(err){
 				$scope.err = err.data.message;
 			});
-
-
 		};
 
 		$scope.$watch('productsInCart',function(){
+			$scope.totalQuantity = CartCalculator.totalQuantity($scope.productsInCart);
 			$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart);
 		});
 
@@ -45,8 +43,6 @@ angular.module('shop').controller('CartCtrl', ['$scope','$http','Flash','CartCal
 			});	
 
 		};
-
-
 
 		$scope.$on('modal.closing',function(){
 			Flash.dismiss();

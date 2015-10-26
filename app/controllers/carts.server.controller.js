@@ -11,8 +11,7 @@
  errorHandler = require('./errors.server.controller');
 
 
- var addCookieCart,
- createCartFormCookie;
+ var addCookieCart, createCartFromCookie, editCookieCart, deleteCookieCart, checkProductExist;
 
 /**
  * Create a Cart
@@ -141,14 +140,15 @@
 
  			customer.save(function(err,customer){
 
- 				if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
+ 				if(err)
+ 					return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
  				if(customer)
  					res.jsonp(customer.cart);
- 			});
-
- 			
+ 			});	
  		});
  		
+ 	} else {
+ 		editCookieCart(req, res);
  	}
  };
 
@@ -156,26 +156,26 @@
  * Delete an Cart
  */
  exports.delete = function(req, res) {
-
  	if(!req.params.productId) return res.status(400).send({message:'กรุณาระบุสินค้าด้วยค่ะ'});
 
  	if(req.user){
- 		
  		Customer.findOne({user:req.user._id}).exec(function(err,customer){
+ 			var checkCart = false;
+
  			if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
 
-
- 			var checkCart = _.findIndex(customer.cart,'product',mongoose.Types.ObjectId(req.params.productId));
+ 			checkCart = _.findIndex(customer.cart, 'product', mongoose.Types.ObjectId(req.params.productId));
  			customer.cart.splice(checkCart,1);
 
  			customer.save(function(err,customer){
-
  				if(err) return res.status(400).send({message:'ลบสินค้าในตะกร้าไม่สำเร็จ กรุณาลองใหม่ค่ะ'});
  				if(customer)
  					res.jsonp(customer.cart);
  			});
  		});
+ 	}else{
+ 		deleteCookieCart(req, res);
  	}
  };
 
@@ -184,7 +184,7 @@
  */
  exports.list = function(req, res) {
  	if(req.user){
- 		Customer.findOne({user:req.user._id}).lean().populate({path:'cart.product'}).exec(function(err,customer){
+ 		Customer.findOne({user:req.user._id}).populate({path:'cart.product'}).exec(function(err,customer){
  			var options = {
  				path:'cart.product.photos',
  				model:'Photo'
@@ -193,6 +193,8 @@
  			if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
 
+ 			checkProductExist(customer);
+
  			Customer.populate(customer,options,function(err,customer){
  				res.jsonp(customer.cart);
  			});
@@ -200,12 +202,13 @@
  	}else{	
  		if(req.cookies.cart){
  			var cart = req.cookies.cart;
-
- 			Product.find({'_id':{'$in':_.pluck(cart,'_id')}}).lean().populate('photos').exec(function(err,products){
- 				var newCart = createCartFormCookie(products, cart);
-
+ 			console.log(cart);
+ 			Product.find({ '_id': {'$in': _.pluck(cart, '_id') } }).lean().populate('photos').exec(function(err, products){
+ 				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
+ 				
+ 				var newCart = createCartFromCookie(products, cart, res);
+ 				
  				res.jsonp(newCart);
-
  			});
  		}else{
  			res.end();
@@ -214,12 +217,38 @@
  };
 
 
+
+ exports.getQuantity = function(req, res){
+ 	var cart = [],
+ 	totalQuantity = 0;
+
+ 	if(req.user){
+ 		Customer.findOne({user: req.user._id}, function(err, customer){
+ 			if(err) return res.status(400).send(err);
+
+ 			cart = customer.cart;
+ 		});
+ 	}else{
+ 		if(req.cookies.cart)
+ 			cart = req.cookies.cart;
+ 	}
+
+ 	for(var i = 0; i < 0; i++){
+ 		totalQuantity += cart.quantity;
+ 	}
+
+ 	res.jsonp(totalQuantity);
+ };
+
+
+
+
  addCookieCart = function(req, res){
  	var cart = [];
  	var index = -1;
  	var isQuantityOver = false;
 
- 	Product.findById(req.body.productId,function(err,product){
+ 	Product.findById(req.body.productId, function(err, product) {
  		if(err)
  			return res.status(400).send({ message: 'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
  		if(!product)
@@ -231,7 +260,7 @@
  			cart = [{ _id:req.body.productId, quantity:req.body.quantity }];	
  		} else {
  			cart = req.cookies.cart;
- 			index = _.findIndex(cart, {_id:req.body.productId});
+ 			index = _.findIndex(cart, { _id: req.body.productId });
 
 
  			if (index === -1) {
@@ -241,7 +270,7 @@
 
  				//if quantity added more than product quantity then update quantity
  				if((cart[newIndex].quantity + req.body.quantity) > product.quantity){
- 					cart[newIndex].quantity = req.body.quantity;
+ 					cart[newIndex].quantity = product.quantity;
  					isQuantityOver = true;
  				}
 
@@ -251,7 +280,7 @@
 
  				//if quantity added more than product quantity 
  				if((cart[index].quantity + req.body.quantity) > product.quantity){
- 					cart[index].quantity = req.body.quantity;
+ 					cart[index].quantity = product.quantity;
  					isQuantityOver = true;
  				}
  			}
@@ -259,11 +288,14 @@
 
  		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
 
- 		Product.find({'_id':{'$in':_.pluck(cart,'_id')}}).lean().populate('photos').exec(function(err,products){
+ 		Product.find({ '_id':{ '$in': _.pluck(cart, '_id') } }).lean().populate('photos').exec(function(err,products) {
+ 			if(err)
+ 				return res.status(400).send({ message: 'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
+
  			if(isQuantityOver) {		
- 				res.status(400).send({message:'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ'});
+ 				res.status(400).send({ message: 'มีสินค้า <strong>'+product.name+'<strong> ในร้านจำนวน '+product.quantity+' ชิ้นค่ะ' });
  			} else {
- 				var newCart = createCartFormCookie(products, cart);
+ 				var newCart = createCartFromCookie(products, cart);
 
  				res.jsonp(newCart);
  			}
@@ -272,14 +304,97 @@
 };
 
 
-createCartFormCookie = function(products, cartCookie){
+editCookieCart = function(req, res){
+	var cart = [],
+	index = -1;
+
+	if(!req.cookies.cart)
+		return res.status(400).send({ message: 'ไม่มีสินค้าในรถเข็น' });
+
+	cart = req.cookies.cart;
+	index = _.findIndex(cart, { _id: req.body.productId });
+
+	if(index === -1)
+		return res.status(400).send({ message: 'ไม่พบสินค้านี้ในรถเข็น' });
+
+	Product.findById(cart[index]._id, function(err, product){
+		if(err)
+			return res.status(400).send({ message: 'การลบสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
+		if(!product)
+			return res.status(400).send({ message: 'ไม่พบสินค้าในตะกร้าค่ะ' });
+
+		if(req.body.quantity > product.quantity)
+			return res.status(400).send({message:'มีสินค้า <strong>'+ product.name +'<strong> ในร้านจำนวน '+ product.quantity +' ชิ้นค่ะ'});
+
+		cart[index].quantity = req.body.quantity;
+		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
+
+		Product.find({ _id: { '$in': _.pluck(cart,'_id') } }).lean().populate('photos').exec(function(err,products) {
+			if(err)
+				return res.status(400).send({ message: 'การแก้ไขสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
+
+			var newCart = createCartFromCookie(products, cart);
+
+			res.jsonp(newCart);
+		});
+	});
+};
+
+deleteCookieCart = function(req,res) {
+	var cart = [],
+	index = -1;
+
+	if(!req.cookies.cart)
+		return res.status(400).send({ message: 'ไม่มีสินค้าในรถเข็น' });
+	
+	cart = req.cookies.cart;
+	index = _.findIndex(cart, { _id: req.params.productId });
+
+	if(index === -1)
+		return res.status(400).send({ message: 'ไม่พบสินค้านี้ในรถเข็น' });
+
+	cart.splice(index, 1);
+	
+
+	Product.find({ _id: { '$in': _.pluck(cart,'_id') } }).lean().populate('photos').exec(function(err,products) {
+		if(err)
+			return res.status(400).send({ message: 'การลบสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
+
+		var newCart = createCartFromCookie(products, cart);
+
+		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
+		res.jsonp(newCart);
+	});
+};
+
+createCartFromCookie = function(products, cartCookie, res) {
 	var cart = [];
 	
 	for(var i = 0; i < cartCookie.length; i++){
 		var product = _.find(products, { _id: mongoose.Types.ObjectId(cartCookie[i]._id) });
 		
-		cart.push({ product: product, quantity: cartCookie[i].quantity });
+		if(product){
+			cart.push({ product: product, quantity: cartCookie[i].quantity });
+		} else { 
+			cartCookie.splice(i, 1);
+			res.cookie('cart', cartCookie, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
+		}
 	}
 
+
 	return cart;
+};
+
+checkProductExist = function(customer){
+	var isNotExisted = false;
+
+	for(var i = 0; i < customer.cart.length; i++) {
+		if(!customer.cart[i].product){
+			customer.cart.splice(i, 1);
+			isNotExisted = true;
+		}
+	}
+
+	if(isNotExisted)
+		customer.save();
 };

@@ -13,7 +13,7 @@ angular.module('shop').directive('updateCart', ['$http','Flash',
 					if(!angular.isString(attrs.updateCart))
 						throw 'productId must be String';
 
-					$http.put('/api/carts/edit',{productId:attrs.updateCart,quantity:this.value})
+					$http.put('/api/carts/edit',{ productId: attrs.updateCart, quantity: parseInt(this.value) })
 					.then(function(res){
 						scope.$emit('cartUpdated',res);
 					},function(err){

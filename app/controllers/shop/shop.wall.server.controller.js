@@ -27,16 +27,15 @@
 
  				categories[index].products = [];
 
- 				Product.findRandom({category:category._id}).where({price:{$gt:0},quantity:{$gt:0}}).limit(4).populate('photos').exec(function(err,products){
+ 				Product.findRandom({ category: category._id }).where({ price: { $gt: 0 },quantity: { $gt:0 } }).limit(4).populate('photos').exec(function(err,products){
  					if(err) return done(err);
  					
  					categories[index].products = products;
 
- 					if(index===categories.length-1){
+ 					if(index === categories.length-1){
  						
  						res.json(categories);
  					}	
- 					
  					
  					cb();
  				});			
@@ -51,4 +50,4 @@
  				return res.status(400).send(err);
  		});
 
-};
+ };

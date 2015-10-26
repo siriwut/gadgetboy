@@ -13,10 +13,7 @@
  errorHandler = require('./errors.server.controller'),
  _ = require('lodash');
 
- exports.add = function(req,res){
-
- 	
- 	
+ exports.add = function(req,res){	
  	var form = new multipart.Form();
 
  	form.parse(req,function(err,fields,files){

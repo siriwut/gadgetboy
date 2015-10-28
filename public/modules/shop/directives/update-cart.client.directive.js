@@ -16,6 +16,7 @@ angular.module('shop').directive('updateCart', ['$http','Flash',
 					$http.put('/api/carts/edit',{ productId: attrs.updateCart, quantity: parseInt(this.value) })
 					.then(function(res){
 						scope.$emit('cartUpdated',res);
+						scope.$emit('cartChange');
 					},function(err){
 						Flash.create('danger',err.data.message);
 					});

@@ -54,6 +54,11 @@
             <div class="col-md-6 pull-right" >
                 <h5 class="summary-header summary-box" >สรุปการสั่งซื้อ</h5>
                 <p class="summary-box" >จำนวน (ชิ้น): {{totalQuantity}}</p>
+                <p class="summary-box" >
+                   ค่าจัดส่ง ค่าจัดส่ง (บาท): 
+                  <span ng-if="shippingCost" >{{shippingCost}}</span>
+                  <span ng-if="!shippingCost" class="text-success" >ฟรี</span>
+                </p>
                 <p class="summary-box" >มูลค่าสินค้า (บาท): {{totalPrice | currency:''}}</p>
                 <p class="summary-box " ><b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{totalPrice | currency:''}} </b></span>บาท</p>
             </div>
@@ -64,6 +69,6 @@
         </div> 
         <div class="modal-footer">
              <button class="btn btn-primary" type="button" data-ng-click="dismiss()" >กลับไปช็อปต่อ</button>
-            <button class="btn btn-success" type="button" >สั่งซื้อ</button>
+            <button class="btn btn-success" type="button" data-ng-click="pay()" >ชำระค่าสินค้า</button>
         </div>
 </script>

@@ -197,7 +197,7 @@ async = require('async');
  };
 
 
- exports.getQuantity = function(req,res){
+ exports.getQuantity = function(req, res){
  	
  	Product.count(function(err,quantity){
  		if (err) {
@@ -207,7 +207,7 @@ async = require('async');
  		} else {
  			res.json(quantity);
  		}
- 	}); 		
+ 	});
 
  };
 

@@ -3,7 +3,7 @@
 angular.module('shop').factory('CartCalculator', [
 	function() {
 		return {
-			totalPrice: function(cart) {
+			totalPrice: function(cart, cost, exceptCostPrice) {
 				if(!cart)
 					throw 'Cart not undefined';
 				if(!angular.isArray(cart))
@@ -13,6 +13,10 @@ angular.module('shop').factory('CartCalculator', [
 				angular.forEach(cart, function(value, key){
 					total+= value.quantity * (value.product.sale.onSale? value.product.sale.salePrice :value.product.price);
 				});
+
+				if(cost){
+					total +=  exceptCostPrice >= total? cost : 0;
+				}
 
 				return total;
 			},

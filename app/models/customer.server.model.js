@@ -10,25 +10,46 @@
  * Customer Schema
  */
  var CustomerSchema = new Schema({
- 	addresses:[{
+ 	addresses: [{
  		name:{
- 			first:{type:String,require:true},
- 			last:{type:String,require:true}
+ 			type: String
  		},
- 		address:{type:String,require:true},
- 		province:{type:String,require:true},
- 		district:{type:String,require:true}
+ 		address:{
+ 			type: String
+ 		},
+ 		province:{
+ 			type: String
+ 		},
+ 		zipcode:{
+ 			type :String
+ 		}
  	}],
  	favourite:[{
- 		type:Schema.ObjectId,
- 		ref:'Product'
+ 		type: Schema.ObjectId,
+ 		ref: 'Product'
  	}],
  	orders:[{
- 		products:[{type:Schema.ObjectId,ref:'User'}],
- 		totalPrice:Number,
- 		status:{
- 			type:String,
- 			enum:['new','confirmed','paid','delivered','completed','overtime','canceled'],
+ 		products: [{ type: Schema.ObjectId, ref:'Product' }],
+ 		totalPrice: Number,
+ 		payment: {
+ 			type: String,
+ 			enum: ['bkt', 'cod', 'cdc', 'other'],
+ 			default:'bkt'
+ 		},
+ 		shipping:{
+ 			type: {
+ 				type: String,
+ 				enum: ['free', 'cost'],
+ 				default: 'free'
+ 			},
+ 			cost:{
+ 				type: Number,
+ 				default: 0
+ 			}
+ 		},
+ 		status: {
+ 			type: String,
+ 			enum: ['new','confirmed','paid','delivered','completed','overtime','canceled'],
  			default:'new'
  		},
  		created: {
@@ -36,8 +57,8 @@
  			default: Date.now
  		}
  	}],
- 	cart:[{
- 		product:{
+ 	cart: [{
+ 		product: {
  			type:Schema.ObjectId,
  			ref:'Product'
  		},
@@ -46,13 +67,9 @@
  			default:1
  		}
  	}],
- 	user:{
+ 	user: {
  		type: Schema.ObjectId,
  		ref:'User'
- 	},
- 	guestToken:{
- 		type:String,
- 		index:true
  	},
  	created: {
  		type: Date,

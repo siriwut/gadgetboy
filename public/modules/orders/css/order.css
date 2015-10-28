@@ -1,0 +1,60 @@
+.order {
+	padding: 20px 40px 20px 40px;
+	margin-top:30px;
+	margin-bottom:10px;
+	margin-left: 10px;
+	background: #FFFFFF;
+}
+
+.orderstep {
+	list-style: none;
+	border-radius: 0;
+}
+
+.orderstep > li {
+	font-size: 11px;
+	display: inline-block;
+}
+
+.orderstep > li {
+	font-size: 11px;
+	padding-left: 30px;
+	padding-right: 30px;
+	display: inline-block;
+}
+
+
+@media (min-width: 767px) {
+	.orderstep > li {
+		font-size: 14px;
+		padding-left: 50px;
+		padding-right: 50px;
+		display: inline-block;
+	}
+}
+
+@media (min-width: 991px) {
+	.orderstep > li {
+		font-size: 16px;
+		padding-left: 70px;
+		padding-right: 70px;
+		display: inline-block;
+	}
+}
+
+@media (min-width: 1199px) {
+	.orderstep > li {
+		font-size: 16px;
+		padding-left: 100px;
+		padding-right: 100px;
+		display: inline-block;
+	}
+}
+
+
+
+
+
+
+
+

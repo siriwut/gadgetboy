@@ -7,8 +7,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 		// If user is signed in then redirect back home
 		if ($scope.authentication.user) $location.path('/');
 
-		
-
 		$scope.signup = function() {
 
 			$http.post('/api/auth/signup', $scope.credentials).success(function(response) {
@@ -44,8 +42,5 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 			$window.location.assign('/api/auth/facebook');
 		};
 
-		$scope.signinWithFacebook = function(){
-			$window.location.assign('/api/auth/facebook');
-		};
 	}
 	]);

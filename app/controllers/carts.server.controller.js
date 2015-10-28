@@ -202,7 +202,7 @@
  	}else{	
  		if(req.cookies.cart){
  			var cart = req.cookies.cart;
- 			console.log(cart);
+
  			Product.find({ '_id': {'$in': _.pluck(cart, '_id') } }).lean().populate('photos').exec(function(err, products){
  				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  				
@@ -227,17 +227,25 @@
  			if(err) return res.status(400).send(err);
 
  			cart = customer.cart;
+
+ 			for(var i = 0; i < cart.length ; i++){
+ 				totalQuantity += cart[i].quantity;
+ 			}
+
+ 			res.jsonp({quantity: totalQuantity});
  		});
  	}else{
- 		if(req.cookies.cart)
+ 		if(req.cookies.cart){
  			cart = req.cookies.cart;
+
+ 			for(var i = 0; i < cart.length ; i++){
+ 				totalQuantity += cart[i].quantity;
+ 			}
+ 		}
+
+ 		res.jsonp({quantity: totalQuantity});
  	}
 
- 	for(var i = 0; i < 0; i++){
- 		totalQuantity += cart.quantity;
- 	}
-
- 	res.jsonp(totalQuantity);
  };
 
 

@@ -26,10 +26,8 @@ module.exports = function(app) {
 	app.route('/api/auth/signout').get(users.signout);
 
 	// Setting the facebook oauth routes
-	app.route('/api/auth/facebook').get(passport.authenticate('facebook', {
-		scope: ['email']
-	}));
-	app.route('/api/auth/facebook/callback').get(users.oauthCallback('facebook'));
+	app.route('/api/auth/facebook/:page').get(users.facebookSignin);
+	app.route('/api/auth/facebook/callback/:page').get(users.oauthCallback('facebook'));
 
 	// Setting the twitter oauth routes
 	app.route('/api/auth/twitter').get(passport.authenticate('twitter'));

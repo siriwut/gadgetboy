@@ -7,11 +7,11 @@ module.exports = function(app) {
 	
 
 	// Customers Routes
-	app.route('/customers')
+	app.route('/api/customers')
 	.get(customers.list)
 	.post(users.requiresLogin, customers.create);
 
-	app.route('/customers/:customerId')
+	app.route('/api/customers/:customerId')
 	.get(customers.read)
 	.put(users.requiresLogin, customers.hasAuthorization, customers.update)
 	.delete(users.requiresLogin, customers.hasAuthorization, customers.delete);

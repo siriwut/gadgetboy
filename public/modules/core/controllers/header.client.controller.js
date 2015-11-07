@@ -33,7 +33,6 @@ angular.module('core').controller('HeaderController', ['$scope', '$http','$locat
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
-			
 		};
 
 		$scope.openCart = function(){

@@ -11,12 +11,12 @@
  errorHandler = require('./errors.server.controller');
 
 
- var addCookieCart, createCartFromCookie, editCookieCart, deleteCookieCart, checkProductExist;
+ var addCookieCart, createCartFromCookie, editCookieCart, deleteCookieCart, checkProductExist, mergeCart;
 
 /**
  * Create a Cart
  */
- exports.add = function(req, res, next) {
+ exports.add = function(req, res) {
  	if(req.user){
  		async.waterfall([function(done){
  			if(req.body.productId){
@@ -96,7 +96,7 @@
  			});
 
 
- 		},function(customer,options,done){
+ 		}, function(customer,options,done){
  			Customer.populate(customer,options,function(err,customer){
  				if(err) done(err);
 
@@ -203,7 +203,7 @@
  		if(req.cookies.cart){
  			var cart = req.cookies.cart;
 
- 			Product.find({ '_id': {'$in': _.pluck(cart, '_id') } }).lean().populate('photos').exec(function(err, products){
+ 			Product.find({ '_id': {'$in': _.pluck(cart, 'product') } }).lean().populate('photos').exec(function(err, products){
  				if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  				
  				var newCart = createCartFromCookie(products, cart, res);
@@ -225,6 +225,7 @@
  	if(req.user){
  		Customer.findOne({user: req.user._id}, function(err, customer){
  			if(err) return res.status(400).send(err);
+ 			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
 
  			cart = customer.cart;
 
@@ -249,6 +250,48 @@
  };
 
 
+ exports.cartSignin = function(req, res, merge, cb) {
+
+ 	if('function' === typeof merge){
+ 		cb = merge;
+ 		merge = false;
+ 	}
+
+ 	var cart = [];
+
+ 	if(req.cookies.cart && req.user){
+ 		cart = req.cookies.cart;
+
+ 		Customer.findOne({user: req.user._id}, function(err, customer){
+ 			if(err) return res.status(400).send(err);
+ 			if(!customer) return res.status(400).send({message:'ไม่พบลูกค้าท่านนี้ในระบบ'});
+ 			
+ 			customer.cart = merge? mergeCart(customer.cart, cart): cart;
+ 			customer.save(function(err){
+ 				cb(err);
+ 			});
+ 		});
+ 	}else{
+ 		cb(null);
+ 	}
+ };
+
+
+ mergeCart = function(cart1, cart2) {
+ 	var index = -1;
+
+ 	for(var i = 0; i < cart2.length; i++){
+ 		index = _.findIndex(cart1, {product: mongoose.Types.ObjectId(cart2[i].product)});
+
+ 		if(index > -1) {
+ 			cart1[index] = _.extend(cart2[i], cart1[index]);
+ 		} else {
+ 			cart1.push(cart2[i]);
+ 		}
+ 	}
+
+ 	return cart1;
+ };
 
 
  addCookieCart = function(req, res){
@@ -265,16 +308,16 @@
  			return res.status(400).send({ message: 'สินค้า' + product.name + 'หมดแล้วค่ะ' });
 
  		if (!req.cookies.cart) {
- 			cart = [{ _id:req.body.productId, quantity:req.body.quantity }];	
+ 			cart = [{ product:req.body.productId, quantity:req.body.quantity }];	
  		} else {
  			cart = req.cookies.cart;
- 			index = _.findIndex(cart, { _id: req.body.productId });
+ 			index = _.findIndex(cart, { product: req.body.productId });
 
 
  			if (index === -1) {
  				//if no this product exist in cart then push new product to cart
- 				cart.push({ _id: req.body.productId, quantity: req.body.quantity });
- 				var newIndex = _.findIndex(cart, {_id:req.body.productId});
+ 				cart.push({ product: req.body.productId, quantity: req.body.quantity });
+ 				var newIndex = _.findIndex(cart, { product:req.body.productId });
 
  				//if quantity added more than product quantity then update quantity
  				if((cart[newIndex].quantity + req.body.quantity) > product.quantity){
@@ -296,7 +339,7 @@
 
  		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
 
- 		Product.find({ '_id':{ '$in': _.pluck(cart, '_id') } }).lean().populate('photos').exec(function(err,products) {
+ 		Product.find({ '_id':{ '$in': _.pluck(cart, 'product') } }).lean().populate('photos').exec(function(err,products) {
  			if(err)
  				return res.status(400).send({ message: 'การเพิ่มสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
 
@@ -320,12 +363,12 @@ editCookieCart = function(req, res){
 		return res.status(400).send({ message: 'ไม่มีสินค้าในรถเข็น' });
 
 	cart = req.cookies.cart;
-	index = _.findIndex(cart, { _id: req.body.productId });
+	index = _.findIndex(cart, { product: req.body.productId });
 
 	if(index === -1)
 		return res.status(400).send({ message: 'ไม่พบสินค้านี้ในรถเข็น' });
 
-	Product.findById(cart[index]._id, function(err, product){
+	Product.findById(cart[index].product, function(err, product){
 		if(err)
 			return res.status(400).send({ message: 'การลบสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
 		if(!product)
@@ -337,7 +380,7 @@ editCookieCart = function(req, res){
 		cart[index].quantity = req.body.quantity;
 		res.cookie('cart', cart, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });
 
-		Product.find({ _id: { '$in': _.pluck(cart,'_id') } }).lean().populate('photos').exec(function(err,products) {
+		Product.find({ _id: { '$in': _.pluck(cart,'product') } }).lean().populate('photos').exec(function(err,products) {
 			if(err)
 				return res.status(400).send({ message: 'การแก้ไขสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
 
@@ -356,7 +399,7 @@ deleteCookieCart = function(req,res) {
 		return res.status(400).send({ message: 'ไม่มีสินค้าในรถเข็น' });
 	
 	cart = req.cookies.cart;
-	index = _.findIndex(cart, { _id: req.params.productId });
+	index = _.findIndex(cart, { product: req.params.productId });
 
 	if(index === -1)
 		return res.status(400).send({ message: 'ไม่พบสินค้านี้ในรถเข็น' });
@@ -364,7 +407,7 @@ deleteCookieCart = function(req,res) {
 	cart.splice(index, 1);
 	
 
-	Product.find({ _id: { '$in': _.pluck(cart,'_id') } }).lean().populate('photos').exec(function(err,products) {
+	Product.find({ _id: { '$in': _.pluck(cart,'product') } }).lean().populate('photos').exec(function(err,products) {
 		if(err)
 			return res.status(400).send({ message: 'การลบสินค้าผิดพลาด กรุณาลองใหม่ค่ะ' });
 
@@ -379,7 +422,7 @@ createCartFromCookie = function(products, cartCookie, res) {
 	var cart = [];
 	
 	for(var i = 0; i < cartCookie.length; i++){
-		var product = _.find(products, { _id: mongoose.Types.ObjectId(cartCookie[i]._id) });
+		var product = _.find(products, { _id: mongoose.Types.ObjectId(cartCookie[i].product) });
 		
 		if(product){
 			cart.push({ product: product, quantity: cartCookie[i].quantity });

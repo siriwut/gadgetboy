@@ -19,7 +19,6 @@
 		profileFields : ['id', 'displayName', 'emails','name']
 	},
 	function(req, accessToken, refreshToken, profile, done) {
-			
 			// Set the provider data and include tokens
 			var providerData = profile._json;
 			providerData.accessToken = accessToken;

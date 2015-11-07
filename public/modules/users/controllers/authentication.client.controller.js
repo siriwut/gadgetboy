@@ -1,20 +1,26 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location','$window', 'Authentication','Flash',
-	function($scope, $http, $location,$window, Authentication,Flash) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', '$window', '$state', 'Authentication','Flash',
+	function($scope, $http, $location, $window, $state, Authentication, Flash) {
 		$scope.authentication = Authentication;
 
 		// If user is signed in then redirect back home
 		if ($scope.authentication.user) $location.path('/');
-
+		
 		$scope.signup = function() {
+			var pageQuery = $state.current.name === 'checkout.signin'? '?page=checkout': '';
 
-			$http.post('/api/auth/signup', $scope.credentials).success(function(response) {
+			$http.post('/api/auth/signup' + pageQuery, $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
 				// And redirect to the index page
-				$location.path('/');
+				if($location.search().page === 'checkout'){
+					return $window.location.assign('/checkout/step/shippingandpayment');	
+				}
+
+				$window.location.assign('/');
+
 			}).error(function(response) {
 				$scope.error = response.message;
 
@@ -24,13 +30,19 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 		};
 
 		$scope.signin = function() {
-			$http.post('/api/auth/signin', $scope.credentials).success(function(response) {
+			var pageQuery = $state.current.name === 'checkout.signin'? '?page=checkout': '';
+
+			$http.post('/api/auth/signin' + pageQuery, $scope.credentials).success(function(response) {
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
 				// And redirect to the index page
-				$location.path('/');
+				if($state.current.name === 'checkout.signin'){
+					return $state.go('checkout.shippingandpayment');
+				}
 				
+				$window.location.assign('/');
+
 			}).error(function(response) {
 				$scope.error = response.message;
 				Flash.dismiss();
@@ -39,8 +51,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 		};
 
 		$scope.signupWithFacebook = function(){
-			$window.location.assign('/api/auth/facebook');
+			$window.location.assign('/api/auth/facebook/' + (($state.current.name === 'checkout.signin') || ($location.search().page === 'checkout')? 'checkout': 'index'));
 		};
-
 	}
 	]);

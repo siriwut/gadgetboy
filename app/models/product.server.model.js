@@ -92,7 +92,7 @@
  	}	
  });
 
- ProductSchema.index({name:'text',tags:'text',slug:{unique:true}});
+ ProductSchema.index({name:'text', tags:'text', slug:{unique:true}});
 
  ProductSchema.pre('save',function(next){
  	var self = this;

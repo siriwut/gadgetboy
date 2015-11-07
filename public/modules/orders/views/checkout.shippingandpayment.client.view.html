@@ -1,0 +1,74 @@
+<form name="shippingAndPaymentForm" class="row" data-ng-init="authenticate()" data-ng-submit="shippingAndPaymentForm.$valid && order()" novalidate>
+	<div class="col-lg-4" style="margin-top:50px;" data-ng-init="initAddress()" >
+		<address-form address="address" provinces="provinces" ></address-form>
+	</div>
+	<div class="col-lg-4" style="margin-top:50px;" >
+		<payment-form payment="payment" ></payment-form>
+	</div>
+	<div class="col-lg-4" data-ng-controller="CartCtrl" ng-init="initCart()" style="margin-top:50px;" >
+		<div class="table-responsive"  data-ng-if="productsInCart.length && productsInCart" >
+			<table class="table table-bordered"  >
+
+				<thead>
+					<tr>
+						<th colspan="3" >สรุปการสั่งซื้อสินค้า <span>({{totalQuantity}} ชิ้น)</span></th>
+					</tr>
+					<tr>
+						<th >สินค้า</th>
+						<th >จำนวน</th>
+						<th >ราคา</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th colspan="3" >
+							<p class="summary-box" >จำนวน (ชิ้น): {{totalQuantity}}</p>
+							<p class="summary-box" >มูลค่าสินค้า (บาท): {{totalPrice | currency:''}}</p>
+							<p class="summary-box" >
+								ค่าจัดส่ง (บาท): 
+								<span ng-if="shippingCost" >{{shippingCost}}</span>
+								<span ng-if="!shippingCost" class="text-success" >ฟรี</span>
+							</p>
+							<p class="summary-box" >ยอดเพิ่มเติม (บาท): {{$parent.paymentExtraCost | currency:''}}</p>
+							<p class="summary-box " ><b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{$parent.netTotalPrice | currency:''}} </b></span>บาท</p>
+						</th>
+					</tr>
+					<tr>
+						<th colspan="3" >
+							<button type="submit" class="btn btn-success form-control"  >ยืนยันการสั่งซื้อ</button>
+						</th>
+					</tr>
+				</tfoot>
+				<tbody>
+					<tr data-ng-repeat="cart in productsInCart | reverse track by $index" >
+						<td class="col-md-6"  width="80%">
+							<span>{{cart.product.name}}</span>
+						</td>
+						<td  >
+							{{cart.quantity}}
+						</td>
+						<td>{{(cart.product.sale.onSale?cart.product.sale.salePrice:cart.product.price) * cart.quantity | currency:'' }}</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<table class="table table-bordered" data-ng-if="!(productsInCart.length && productsInCart)" >
+			<thead >
+				<tr>
+					<th colspan="3" >สรุปการสั่งซื้อสินค้า</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th colspan="3" ></th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td colspan="3">ไม่สินค้าในตะกร้า</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>

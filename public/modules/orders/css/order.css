@@ -51,6 +51,24 @@
 	}
 }
 
+.form-box {
+	border: 1px solid #DDD;
+}
+
+.form-header {
+	font-weight: bold;
+	border-bottom: 1px solid #DDD;
+	padding: 8px 15px 8px 15px;
+	margin-bottom: 15px;
+}
+
+.form-text {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+
+
 
 
 

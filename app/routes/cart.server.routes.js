@@ -1,6 +1,6 @@
 'use strict';
 var carts = require('../../app/controllers/carts.server.controller'),
- users = require('../../app/controllers/users.server.controller');
+users = require('../../app/controllers/users.server.controller');
 
 
 module.exports = function(app) {
@@ -9,5 +9,4 @@ module.exports = function(app) {
 	app.route('/api/carts/edit').put(carts.edit);
 	app.route('/api/carts/delete/:productId').delete(carts.delete);
 	app.route('/api/carts/quantity').get(carts.getQuantity);
-
 };

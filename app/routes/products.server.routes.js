@@ -8,7 +8,7 @@ module.exports = function(app) {
 	
 	app.route('/api/products').
 	get(products.list).
-	post(users.requiresLogin,users.hasAuthorization(['admin']),products.create);
+	post(users.requiresLogin, users.hasAuthorization(['admin']),products.create);
 
 	app.route('/api/products/read-slug')
 	.get(products.readBySlug);

@@ -12,16 +12,28 @@
  var CustomerSchema = new Schema({
  	addresses: [{
  		name:{
- 			type: String
+ 			type: String,
+ 			trim: true
  		},
  		address:{
- 			type: String
+ 			type: String,
+ 			trim: true
+ 		},
+ 		district:{
+ 			type: String,
+ 			trim: true
  		},
  		province:{
- 			type: String
+ 			type: String,
+ 			trim: true
  		},
  		zipcode:{
- 			type :String
+ 			type :String,
+ 			trim: true
+ 		},
+ 		tel: {
+ 			type :String,
+ 			trim: true
  		}
  	}],
  	favourite:[{
@@ -29,20 +41,39 @@
  		ref: 'Product'
  	}],
  	orders:[{
- 		products: [{ type: Schema.ObjectId, ref:'Product' }],
+ 		code: {
+ 			type: String,
+ 			default: ''
+ 		},
+ 		products: [{
+ 			product: {
+ 				type:Schema.ObjectId,
+ 				ref:'Product'
+ 			},
+ 			quantity:{
+ 				type:Number,
+ 				default: 1
+ 			}
+ 		}],
  		totalPrice: Number,
  		payment: {
- 			type: String,
- 			enum: ['bkt', 'cod', 'cdc', 'other'],
- 			default:'bkt'
+ 			type: { 
+ 				type: String,
+ 				enum: ['bkt', 'cod', 'cdc', 'other'],
+ 				default:'bkt'
+ 			},
+ 			cost: {
+ 				type: Number,
+ 				default: 0
+ 			}
  		},
- 		shipping:{
+ 		shipping: {
  			type: {
  				type: String,
  				enum: ['free', 'cost'],
  				default: 'free'
  			},
- 			cost:{
+ 			cost: {
  				type: Number,
  				default: 0
  			}
@@ -78,6 +109,6 @@
  });
 
 
- 
+CustomerSchema.index({'orders.code': 'text'});
 
- mongoose.model('Customer', CustomerSchema);
+mongoose.model('Customer', CustomerSchema);

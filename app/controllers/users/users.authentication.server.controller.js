@@ -5,6 +5,7 @@
  */
  var _ = require('lodash'),
  errorHandler = require('../errors.server.controller'),
+ cart = require('../carts.server.controller'),
  mongoose = require('mongoose'),
  passport = require('passport'),
  User = mongoose.model('User'),
@@ -28,8 +29,6 @@
 	user.username = user.email;
 	user.provider = 'local';
 	user.displayName = user.firstName + ' ' + user.lastName;
-
-	
 	
 	// Then save the user 
 	user.save(function(err) {
@@ -50,15 +49,18 @@
 
 				req.login(user, function(err) {
 					if (err) {
-						res.status(400).send(err);
+						return res.status(400).send(err);
 					} else {
-						res.json(user);
+						cart.cartSignin(req, res, function(err){
+							if (err) return res.status(400).send(err);
+
+							res.clearCookie('cart', { path: '/' });
+							res.json(user);		
+						});
 					}
 				});
+
 			});
-
-
-			
 		}
 	});
 };
@@ -71,7 +73,7 @@
  exports.signin = function(req, res, next) {
  	passport.authenticate('local', function(err, user, info) {
  		if (err || !user) {
- 			res.status(400).send(info);
+ 			return res.status(400).send(info);
  		} else {
 
 			// Remove sensitive data before login
@@ -86,39 +88,53 @@
  				if(!customer){
  					var newCustomer = new Customer({user:user._id});
  					newCustomer.save(function(err){
- 						if(err) res.redirect('/#!/signin');
+ 						if(err) return res.redirect('/#!/signin');
  					});
  				}
  			});
 
- 			
+
  			req.login(user, function(err) {
  				if (err) {
- 					res.status(400).send(err);
+ 					return res.status(400).send(err);
  				} else {
+
  					if(req.body.rememberMe){
  						crypto.randomBytes(256, function(err, buffer) {
- 							if (err) res.status(400).send(err);
+ 							if (err) return res.status(400).send(err);
  							
  							var tokenString = buffer.toString('hex'); 
  							var token = new Token({token:tokenString,userId:user._id});
 
  							token.save(function(err) {
- 								if (err) res.status(400).send(err);
+ 								if (err) return res.status(400).send(err);
+ 								
+ 								cart.cartSignin(req, res, req.query.page === 'checkout'? false: true, function(err){
+ 									if (err) return res.status(400).send(err);
 
- 								res.cookie('remember_me', tokenString, { path: '/', httpOnly: true, maxAge: 604800000 });
- 								res.json(user);
+ 									res.cookie('remember_me', tokenString, { path: '/', httpOnly: true, maxAge: 604800000 });
+ 									res.clearCookie('cart', { path: '/' });
+ 									res.json(user);		
+ 								});
  							});
  						});
  						
- 					}else{
- 						res.json(user);
- 					}
+ 					} else {
+
+ 						cart.cartSignin(req, res, req.query.page === 'checkout'? false: true, function(err){
+ 							if (err) return res.status(400).send(err);
+
+ 							res.clearCookie('cart', { path: '/' });
+ 							res.json(user);		
+ 						});
+ 					}	
  				}
  			});
- 		}
- 	})(req, res, next);
- };
+
+}
+
+})(req, res, next);
+};
 
 
 /**
@@ -126,19 +142,28 @@
  */
  exports.signout = function(req, res) {
  	Token.remove({token:req.cookies.remember_me},function(err,token){
- 		if (err) res.status(400).send(err);
+ 		if (err) return res.status(400).send(err);
  	});
  	res.clearCookie('remember_me');
  	req.logout(); 	
  	res.redirect('/');
  };
 
+
+ exports.facebookSignin = function(req, res, next){
+ 	passport.authenticate('facebook', {
+ 		scope: ['email'],
+ 		callbackURL:'/api/auth/facebook/callback/'+ req.params.page
+ 	})(req, res, next);
+ };
+
+
 /**
  * OAuth callback
  */
  exports.oauthCallback = function(strategy) {
  	return function(req, res, next) {
- 		passport.authenticate(strategy, function(err, user, redirectURL) {
+ 		passport.authenticate(strategy, {callbackURL:'/api/auth/facebook/callback/'+ req.params.page}, function(err, user, redirectURL) {
  			if (err || !user) {
  				return res.redirect('/#!/signin');
  			}
@@ -150,7 +175,7 @@
  				if(!customer){
  					var newCustomer = new Customer({user:user._id});
  					newCustomer.save(function(err){
- 						if(err) res.redirect('/#!/signin');
+ 						if(err) return res.redirect('/#!/signin');
  					} );
  				}
  			});
@@ -160,7 +185,12 @@
  					return res.redirect('/#!/signin');
  				}
 
- 				return res.redirect(redirectURL || '/');
+ 				cart.cartSignin(req, res, req.params.page === 'checkout'? false: true, function(err){
+ 					if (err) return res.status(400).send(err);
+ 					
+ 					res.clearCookie('cart', { path: '/' });
+ 					return res.redirect(redirectURL || req.params.page === 'checkout'? '/#!/checkout/step/shippingandpayment': '/' );
+ 				});
  			});
  		})(req, res, next);
  	};

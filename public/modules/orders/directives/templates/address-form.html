@@ -1,0 +1,48 @@
+<div class="form-box" data-ng-form="addressForm" >
+	<div class="form-header" >
+		ที่อยู่ในการจัดส่งสินค้า
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.name.$invalid}" >
+		<label>ชื่อ และ นามสกุล</label> 
+		<input name="name" data-ng-model="address.name" type="text" class="form-control" placeholder="ชื่อและนามสกุล" required>
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.name.$invalid" class="text-danger">กรุณากรอก <strong>ชื่อ และ นามสกุล</strong> ด้วยค่ะ</p>
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.address.$invalid}" >
+		<label>ที่อยู่</label>
+		<textarea name="address" data-ng-model="address.address" class="form-control" placeholder="ที่อยู่" rows="3" required>
+		</textarea >
+
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.address.$invalid" class="text-danger">กรุณากรอก <strong>ที่อยู่</strong> ด้วยค่ะ
+		</p>
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.district.$invalid}" >
+		<label>อำเภอ/เขต</label>
+		<input name="district" data-ng-model="address.district" type="text" class="form-control" placeholder="อำเภอ/เขต" required>
+
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.district.$invalid" class="text-danger">กรุณากรอก <strong>อำเภอ/เขต</strong> ด้วยค่ะ
+		</p>
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.province.$invalid}">
+		<label>จังหวัด</label>
+		<select name="province" data-ng-model="address.province" class="form-control" data-ng-options="value for value in provinces" required>
+			
+		</select>
+
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.province.$invalid" class="text-danger">กรุณาเลือก <strong>จังหวัด</strong> ด้วยค่ะ
+		</p>
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.zipcode.$invalid}" >
+		<label>รหัสไปรษณีย์</label>
+		<input name="zipcode" data-ng-model="address.zipcode" type="text" class="form-control" placeholder="รหัสไปรษณีย์" required>
+
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.zipcode.$invalid" class="text-danger">กรุณากรอก <strong>รหัสไปษณีย์</strong> ด้วยค่ะ
+		</p>
+	</div>
+	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.zipcode.$invalid}">
+		<label>เบอร์โทรศัพท์</label>
+		<input name="tel" data-ng-model="address.tel" type="text" class="form-control" placeholder="เบอร์โทรศัพท์" required>
+
+			<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.tel.$invalid" class="text-danger">กรุณากรอก <strong>เบอร์โทรศัพท์</strong> ด้วยค่ะ
+		</p>
+	</div>
+</div>

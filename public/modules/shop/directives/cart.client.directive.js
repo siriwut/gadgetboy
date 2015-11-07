@@ -7,6 +7,7 @@ angular.module('shop')
 	$scope.productsInCart = [];
 	$scope.totalPrice = 0;
 	$scope.shippingCost = 0;
+	$scope.netTotalPrice = 0;
 
 	$scope.initCart = function(){
 		if(cartWithProducts){
@@ -29,6 +30,9 @@ angular.module('shop')
 			
 			return $state.go('checkout.signin');
 		}
+
+		$modalInstance.dismiss('cancel');
+		$state.go('checkout.shippingandpayment');
 	};
 
 	$scope.dismiss = function(){
@@ -54,15 +58,16 @@ angular.module('shop')
 
 
 	$scope.$watch('productsInCart',function(){
-
 		$scope.totalQuantity = CartCalculator.totalQuantity($scope.productsInCart);
-		$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart, $scope.shippingCost, exceptShippingCost);
+		$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart);
+		$scope.netTotalPrice = CartCalculator.netTotalPrice($scope.totalPrice, $scope.shippingCost, exceptShippingCost);
+		
 		$scope.$emit('cartChange');
 	});
 
 	$scope.$watch('totalPrice', function(){
 		$scope.shippingCost = $scope.totalPrice <= exceptShippingCost? 50: 0;
-		$scope.totalPrice = CartCalculator.totalPrice($scope.productsInCart, $scope.shippingCost, exceptShippingCost);
+		$scope.netTotalPrice = CartCalculator.netTotalPrice($scope.totalPrice, $scope.shippingCost, exceptShippingCost);
 	});
 
 	$scope.$on('cartUpdated',function(){

@@ -3,105 +3,42 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-	errorHandler = require('./errors.server.controller'),
-	Order = mongoose.model('Order'),
-	_ = require('lodash');
+ var mongoose = require('mongoose');
+ var errorHandler = require('./errors.server.controller');
+ var Customer = mongoose.model('Customer');
+ var async = require('async');
+ var _ = require('lodash');
 
-/**
- * Create a Order
- */
-exports.create = function(req, res) {
-	var order = new Order(req.body);
-	order.user = req.user;
 
-	order.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(order);
-		}
-	});
-};
+ exports.add = function(req, res) {
+ 	async.waterfall([
+ 		function(done){
+ 			Customer.findOne({user: req.user._id}, function(err, customer){
+ 				done(err, customer);
+ 			});
+ 		},
+ 		function(customer, done){
+ 			req.body.order.products = customer.cart;
+ 			customer.addresses.set(0, req.body.address);
+ 			customer.orders.unshift(req.body.order);
+ 			
+ 			customer.save(function(err) {
+ 				if(!err){
+ 					res.jsonp(customer.orders[0]);
+ 				}
 
-/**
- * Show the current Order
- */
-exports.read = function(req, res) {
-	res.jsonp(req.order);
-};
+ 				done(err);
+ 			});
+ 		}], 
+ 		function(err){
+ 			if(err){
+ 				return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
+ 			}
+ 		});
+ };
 
-/**
- * Update a Order
- */
-exports.update = function(req, res) {
-	var order = req.order ;
-
-	order = _.extend(order , req.body);
-
-	order.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(order);
-		}
-	});
-};
-
-/**
- * Delete an Order
- */
-exports.delete = function(req, res) {
-	var order = req.order ;
-
-	order.remove(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(order);
-		}
-	});
-};
-
-/**
- * List of Orders
- */
-exports.list = function(req, res) { 
-	Order.find().sort('-created').populate('user', 'displayName').exec(function(err, orders) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(orders);
-		}
-	});
-};
-
-/**
- * Order middleware
- */
-exports.orderByID = function(req, res, next, id) { 
-	Order.findById(id).populate('user', 'displayName').exec(function(err, order) {
-		if (err) return next(err);
-		if (! order) return next(new Error('Failed to load Order ' + id));
-		req.order = order ;
-		next();
-	});
-};
-
-/**
- * Order authorization middleware
- */
-exports.hasAuthorization = function(req, res, next) {
-	if (req.order.user.id !== req.user.id) {
-		return res.status(403).send('User is not authorized');
-	}
-	next();
-};
+ exports.read = function(req, res) {
+ 	Customer.findOne({user: req.user._id}).populate('user', 'username displayName email').populate('orders.products').exec(function(err, customer){
+ 		console.log(customer);
+ 	});
+ };

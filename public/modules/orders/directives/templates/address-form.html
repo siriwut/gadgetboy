@@ -1,6 +1,10 @@
 <div class="form-box" data-ng-form="addressForm" >
 	<div class="form-header" >
 		ที่อยู่ในการจัดส่งสินค้า
+		<label style="float:right;" data-ng-if="hasAddressAlready" >
+			<input type="checkbox" data-ng-model="isOtherAddress" data-ng-change="useOtherAddress()" >
+			ใช้ที่อยู่อื่น
+		</label>
 	</div>
 	<div class="form-group form-text" ng-class="{'has-error':(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.name.$invalid}" >
 		<label>ชื่อ และ นามสกุล</label> 
@@ -42,7 +46,7 @@
 		<label>เบอร์โทรศัพท์</label>
 		<input name="tel" data-ng-model="address.tel" type="text" class="form-control" placeholder="เบอร์โทรศัพท์" required>
 
-			<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.tel.$invalid" class="text-danger">กรุณากรอก <strong>เบอร์โทรศัพท์</strong> ด้วยค่ะ
+		<p ng-show="(addressForm.$$parentForm.$submitted||addressForm.$$parentForm.$touched) && addressForm.tel.$invalid" class="text-danger">กรุณากรอก <strong>เบอร์โทรศัพท์</strong> ด้วยค่ะ
 		</p>
 	</div>
 </div>

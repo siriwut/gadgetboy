@@ -15,9 +15,9 @@ angular.module('products').factory('Products', ['$resource',
 				}
 			},
 			search: {
-				url:'/api/products/search',
+				url: '/api/products/search',
 				method:'GET',
-				isArray:true
+				isArray: true
 			}
 		});
 	}

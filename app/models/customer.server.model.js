@@ -42,8 +42,7 @@
  	}],
  	orders:[{
  		code: {
- 			type: String,
- 			default: ''
+ 			type: Number,
  		},
  		products: [{
  			product: {
@@ -56,6 +55,7 @@
  			}
  		}],
  		totalPrice: Number,
+ 		netTotalPrice: Number,
  		payment: {
  			type: { 
  				type: String,
@@ -83,6 +83,32 @@
  			enum: ['new','confirmed','paid','delivered','completed','overtime','canceled'],
  			default:'new'
  		},
+ 		address: {
+ 			name:{
+ 				type: String,
+ 				trim: true
+ 			},
+ 			address:{
+ 				type: String,
+ 				trim: true
+ 			},
+ 			district:{
+ 				type: String,
+ 				trim: true
+ 			},
+ 			province:{
+ 				type: String,
+ 				trim: true
+ 			},
+ 			zipcode:{
+ 				type :String,
+ 				trim: true
+ 			},
+ 			tel: {
+ 				type :String,
+ 				trim: true
+ 			}
+ 		},
  		created: {
  			type: Date,
  			default: Date.now
@@ -109,6 +135,24 @@
  });
 
 
-CustomerSchema.index({'orders.code': 'text'});
+CustomerSchema.index({'orders.code': true});
+
+
+CustomerSchema.methods.generateOrderCode = function(cb) {
+	this.model('Customer')
+	.aggregate({$project:{'orders.code': 1}})
+	.unwind('orders')
+	.sort('-orders.code')
+	.limit(1)
+	.exec(function(err, result) {
+		if(err) {
+			return cb(err);
+		}
+		
+		var newCode =  result.length ? result[0].orders.code + 1: 1;
+		
+		return cb(null, newCode);
+	});
+};
 
 mongoose.model('Customer', CustomerSchema);

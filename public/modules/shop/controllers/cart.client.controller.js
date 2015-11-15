@@ -68,5 +68,10 @@ angular.module('shop').controller('CartCtrl', ['$scope', '$http','$state', 'Auth
 			$scope.netTotalPrice += $scope.paymentExtraCost;
 			
 		});
+
+		$scope.$watch('netTotalPrice', function(newValue, oldValue){
+			$scope.$emit('netTotalPriceChange', newValue);
+		});
+		
 	}
 	]);

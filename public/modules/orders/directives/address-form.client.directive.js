@@ -7,8 +7,24 @@ angular.module('orders').directive('addressForm', [
 			restrict: 'E',
 			scope: {
 				address:'=',
-				provinces:'='
+				provinces:'=',
+				hasAddressAlready: '='
+			},
+			controller: function($scope){
+
+				$scope.isOtherAddress = false;
+
+				var addressTemp = {};
+
+				$scope.useOtherAddress = function(event){		
+					if(this.isOtherAddress){
+						addressTemp = $scope.address;
+						$scope.address = {province: $scope.provinces[1]};
+					} else {
+						$scope.address = addressTemp;
+					}
+				};
 			}
 		};
 	}
-]);
+	]);

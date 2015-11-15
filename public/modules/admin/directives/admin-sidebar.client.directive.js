@@ -23,6 +23,8 @@ angular.module('admin')
 		break;
 		case 'adminPanel.editCategory':$scope.check(3);
 		break;
+		case 'adminPanel.listCustomers':$scope.check(4);
+		break;
 		case 'adminPanel.banners':$scope.check(5);
 		break;
 	}

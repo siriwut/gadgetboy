@@ -3,11 +3,15 @@
 /**
  * Module dependencies.
  */
- var mongoose = require('mongoose'),
- errorHandler = require('./errors.server.controller'),
- Customer = mongoose.model('Customer'),
- crypto = require('crypto'),
- _ = require('lodash');
+ var mongoose = require('mongoose');
+ var crypto = require('crypto');
+ var async = require('async');
+ var _ = require('lodash');
+
+ var errorHandler = require('./errors.server.controller');
+ var Customer = mongoose.model('Customer');
+ var User = mongoose.model('User');
+
 
 /**
  * Create a Customer
@@ -57,24 +61,70 @@
  * Delete an Customer
  */
  exports.delete = function(req, res) {
- 	var customer = req.customer ;
+ 	var customer = req.customer;
 
- 	customer.remove(function(err) {
+ 	async.waterfall([function(done) {
+ 		customer.remove(function(err) {
+ 			done(err, customer);
+ 		});	
+ 	}, function(customer, done){
+ 		customer.user.remove(function(err) {
+ 			if(err){
+ 				return done(err);
+ 			}
+
+ 			res.jsonp(customer);
+ 		});
+ 	}], function(err) {
  		if (err) {
  			return res.status(400).send({
  				message: errorHandler.getErrorMessage(err)
  			});
- 		} else {
- 			res.jsonp(customer);
- 		}
+ 		} 
  	});
  };
 
 /**
  * List of Customers
  */
- exports.list = function(req, res) { 
- 	Customer.find().sort('-created').populate('user', 'displayName').exec(function(err, customers) {
+ exports.list = function(req, res) {
+ 	async.waterfall([function(done){
+ 		User.find({ $and: [{ roles: { $eq: 'user' }  }, { roles: { $ne: 'admin' } }] }, function(err, users) {
+ 			done(err, users);
+ 		});
+ 	}, function(users, done) {
+ 		var ids = _.map(users, function(obj){ return obj._id; });
+ 		
+ 		Customer
+ 		.find({ user: { $in: ids } })
+ 		.sort('-created')
+ 		.populate('user', 'displayName username email roles')
+ 		.exec(function(err, customers) {
+ 			if (err) {
+ 				return done(err);
+ 			} 
+
+ 			res.jsonp(customers);
+ 			
+ 		});
+ 	}], function(err) {
+ 		if(err) {
+ 			return res.status(400).send({
+ 				message: errorHandler.getErrorMessage(err)
+ 			});
+ 		}
+ 	});
+ 	
+
+ 	/*Customer
+ 	.find()
+ 	.sort('-created')
+ 	.populate({
+ 		path: 'user',
+ 		match: { roles: { $elemMatch: { $ne: 'admin' } } },
+ 		select:'displayName username email roles'
+ 	})
+ 	.exec(function(err, customers) {
  		if (err) {
  			return res.status(400).send({
  				message: errorHandler.getErrorMessage(err)
@@ -82,18 +132,19 @@
  		} else {
  			res.jsonp(customers);
  		}
- 	});
- };
+ 	});*/
+};
 
- 
+
 
 /**
  * Customer middleware
  */
  exports.customerByID = function(req, res, next, id) { 
- 	Customer.findOne({user: id}).populate('user', 'displayName').exec(function(err, customer) {
+ 	Customer.findById(id).populate('user', 'displayName').exec(function(err, customer) {
+ 		console.log(customer);
  		if (err) return next(err);
- 		if (! customer) return next(new Error('Failed to load Customer ' + id));
+ 		if (!customer) return next(new Error('Failed to load Customer ' + id));
  		req.customer = customer ;
  		next();
  	});

@@ -1,8 +1,8 @@
 'use strict';
 
 // Orders controller
-angular.module('orders').controller('OrdersCtrl', ['$scope', '$state', '$http', '$stateParams', '$location', '$timeout', 'Authentication', 'ProvinceList',
-	function($scope, $state, $http, $stateParams, $location, $timeout, Authentication, ProvinceList) {
+angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state', '$http', '$stateParams', '$location', '$timeout', 'Authentication', 'ProvinceList', 'CartCalculator',
+	function($scope, $window, $state, $http, $stateParams, $location, $timeout, Authentication, ProvinceList, CartCalculator) {
 		
 		$scope.authentication = Authentication;
 		$scope.stateName = $state.current.name;
@@ -12,18 +12,19 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$state', '$http', 
 		$scope.shippingCost = 0;
 		$scope.provinces = ProvinceList;
 		$scope.address = {};
-		$scope.address.province = ProvinceList[0];
+		$scope.address.province = ProvinceList[1];
 		$scope.payment = 'bkt';
 		$scope.paymentExtraCost = 0;
+		$scope.hasAddressAlready = false;
 		
 
 		$scope.order = function() {	
 			if(!$scope.products.length) return;
 
 			var data = {
-				address: this.address,
 				order: {
 					totalPrice: $scope.totalPrice,
+					netTotalPrice: $scope.netTotalPrice,
 					payment: {
 						type: this.payment,
 						cost : $scope.paymentExtraCost
@@ -32,20 +33,37 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$state', '$http', 
 						type: $scope.shippingCost > 0? 'cost': 'free',
 						cost: $scope.shippingCost
 					},
-					status: 'new'
+					status: 'new',
+					address: this.address
 				}
 			};
 
-			/*$http.post('/api/orders', data).then(function(res){
-				$state.go('checkout.complete', null, {reload:true});
+			$http.post('/api/orders', data).then(function(res){
+				//$state.go('checkout.complete', null, {reload:true});
+				$window.location.assign('/checkout/step/complete/' + res.data._id);
+				
 			}, function(err){
 
-			});*/
+			});
+		};
+
+
+		$scope.complete = function() {
+			$http.get('/api/orders/' + $state.params.orderId)
+			.then(function(res){
+				$scope.order = res.data;
+				$scope.totalQuantity = CartCalculator.totalQuantity($scope.order.products);
+			}, function(err){
+				console.log(err);
+			});
 		};
 
 		$scope.initAddress = function(){
 			$http.get('/api/customers/'+ $scope.authentication.user._id).then(function(res){
-				$scope.address = res.data.addresses[0];
+				if(res.data.addresses[0]){
+					$scope.address = res.data.addresses[0];
+					$scope.hasAddressAlready = true;
+				}
 			}, function (err){
 
 			});
@@ -69,8 +87,7 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$state', '$http', 
 
 		$scope.$on('paymentChange', function(e, value){
 			$scope.paymentExtraCost = value === 'cod'? 100: 0;
-			$scope.$broadcast('hasExtraCost', $scope.paymentExtraCost);
-			
+			$scope.$broadcast('hasExtraCost', $scope.paymentExtraCost);			
 		});
 
 		$scope.$on('cartChange', function(e){
@@ -82,6 +99,8 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$state', '$http', 
 			}, 1000);
 		});
 
-
+		$scope.$on('netTotalPriceChange', function(e, value){
+			$scope.netTotalPrice = value;
+		});
 	}
 	]);

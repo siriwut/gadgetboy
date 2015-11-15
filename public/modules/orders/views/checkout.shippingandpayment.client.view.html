@@ -1,6 +1,6 @@
-<form name="shippingAndPaymentForm" class="row" data-ng-init="authenticate()" data-ng-submit="shippingAndPaymentForm.$valid && order()" novalidate>
+<form name="shippingAndPaymentForm" class="row" data-ng-init="authenticate(); hasCartItems(); "   data-ng-submit="shippingAndPaymentForm.$valid && order()" novalidate>
 	<div class="col-lg-4" style="margin-top:50px;" data-ng-init="initAddress()" >
-		<address-form address="address" provinces="provinces" ></address-form>
+		<address-form address="address" provinces="provinces" has-address-already="hasAddressAlready" ></address-form>
 	</div>
 	<div class="col-lg-4" style="margin-top:50px;" >
 		<payment-form payment="payment" ></payment-form>
@@ -29,7 +29,7 @@
 								<span ng-if="shippingCost" >{{shippingCost}}</span>
 								<span ng-if="!shippingCost" class="text-success" >ฟรี</span>
 							</p>
-							<p class="summary-box" >ยอดเพิ่มเติม (บาท): {{$parent.paymentExtraCost | currency:''}}</p>
+							<p class="summary-box" data-ng-if="$parent.paymentExtraCost" ><span class="text-warning" >ยอดเพิ่มเติม (บาท)</span>: {{$parent.paymentExtraCost | currency:''}}</p>
 							<p class="summary-box " ><b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{$parent.netTotalPrice | currency:''}} </b></span>บาท</p>
 						</th>
 					</tr>

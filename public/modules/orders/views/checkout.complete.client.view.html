@@ -1,1 +1,80 @@
-This is the Checkoutcomplete
+<div class="row" data-ng-init="complete()" >	
+	<div class="col-lg-8" style="margin-top:20px;" >
+		
+		<ul class="order-complete-header" >
+			<h3 class="text-warning" >ได้รับคำสั่งซื้อเรียบร้อยแล้วค่ะ</h3>
+			<li>
+				เลขคำสั่งซื้อ: <br>
+				<strong>
+					{{order.code}}
+				</strong>
+			</li>
+			<li>
+				วันที่: <br>
+				<strong>
+					{{order.created | date:'dd-MMMM-yyyy'}}
+				</strong>
+			</li>
+			<li>
+				ยอดรวม: <br>
+				<strong>
+					{{order.netTotalPrice | currency: '' }} บาท
+				</strong>
+			</li>
+			<li>
+				ช่องทางการจ่ายเงิน: <br>
+				<strong>
+					{{order.payment.type }}
+				</strong>
+			</li>
+		</ul>	
+	</div>
+	<div class="col-lg-4" style="margin-top:20px;" >
+		<div class="table-responsive" >
+			<table class="table table-bordered"  >
+				<thead>
+					<tr>
+						<th colspan="3" >สรุปการสั่งซื้อสินค้า <span>(ชิ้น)</span></th>
+					</tr>
+					<tr>
+						<th >สินค้า</th>
+						<th >จำนวน</th>
+						<th >ราคา</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th colspan="3" >
+							<p class="summary-box" >จำนวน (ชิ้น): {{totalQuantity}}</p>
+							<p class="summary-box" >มูลค่าสินค้า (บาท): {{order.totalPrice | currency: ''}}</p>
+							<p class="summary-box" >
+								ค่าจัดส่ง (บาท): 
+								<span ng-if="order.shipping.cost" >{{order.shipping.cost}}</span>
+								<span ng-if="!order.shipping.cost" class="text-success" >ฟรี</span>
+							</p>
+							<p class="summary-box" data-ng-if="order.payment.cost" >
+								<span class="text-warning"  >ยอดเพิ่มเติม (บาท)</span>: {{order.payment.cost | currency: ''}}
+							</p>
+							<p class="summary-box " >
+								<b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{order.netTotalPrice | currency: ''}}</b></span> บาท
+							</p>
+						</th>
+					</tr>
+
+				</tfoot>
+				<tbody>
+					<tr data-ng-repeat="product in order.products" >
+						<td class="col-md-6"  width="80%">
+							{{product.product.name}}
+						</td>
+						<td >
+							{{product.quantity}}
+						</td>
+						<td>{{product.product.sale.onSale? product.product.sale.salePrice: product.product.price * product.quantity | currency:''}}</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

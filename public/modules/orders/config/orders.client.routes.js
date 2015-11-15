@@ -6,7 +6,7 @@ angular.module('orders').config(['$stateProvider',
 		// Orders state routing
 		$stateProvider.
 		state('checkout.complete', {
-			url: '/step/complete',
+			url: '/step/complete/:orderId',
 			templateUrl: 'modules/orders/views/checkout.complete.client.view.html'
 		}).
 		state('checkout.shippingandpayment', {

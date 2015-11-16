@@ -9,7 +9,7 @@ angular
 	vm.customers = [];
 	vm.list = list;
 	vm.remove = remove;
-
+	console.log(_);
 	function list() {
 		return Customers.query().$promise.then(function(customers) {
 			vm.customers = customers;
@@ -20,8 +20,9 @@ angular
 	}
 
 	function remove(customer) {
-		return customer.$remove(function(){
-
+		return customer.$remove(function(){	
+			var index = _.findIndex(vm.customers, '_id', customer._id);
+			return vm.customers.splice(index, 1);
 		});
 	}
 }]);

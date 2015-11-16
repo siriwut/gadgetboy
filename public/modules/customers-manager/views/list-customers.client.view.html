@@ -32,7 +32,7 @@
 							{{customer.user.username}}
 							<div class="row row-action " ng-show="isRowActionShow"  >
 								<div class="col-lg-12" >
-									<a href data-ng-click="cm.remove(customer)">ลบ</a>
+									<a href data-ng-click="cm.remove(customer)" confirm="คุณต้องการลบลูกค้า {{customer.user.displayName}} แน่นอนหรือไม่?" confirm-title="ยืนยันการลบลูกค้า" confirm-ok="ยืนยัน" confirm-cancel="ยกเลิก" >ลบ</a>
 								</div>
 							</div>
 						</td>

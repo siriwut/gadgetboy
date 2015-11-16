@@ -106,3 +106,13 @@
  		});
  	});
  };
+
+
+ exports.list = function(req, res) {
+ 	Customer.aggregate()
+ 	.unwind('orders')
+ 	.match({ 'orders.status': 'new' })
+ 	.exec(function(err, orders) {
+ 		res.jsonp(orders);
+ 	});
+ };

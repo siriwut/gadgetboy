@@ -114,25 +114,6 @@
  			});
  		}
  	});
- 	
-
- 	/*Customer
- 	.find()
- 	.sort('-created')
- 	.populate({
- 		path: 'user',
- 		match: { roles: { $elemMatch: { $ne: 'admin' } } },
- 		select:'displayName username email roles'
- 	})
- 	.exec(function(err, customers) {
- 		if (err) {
- 			return res.status(400).send({
- 				message: errorHandler.getErrorMessage(err)
- 			});
- 		} else {
- 			res.jsonp(customers);
- 		}
- 	});*/
 };
 
 
@@ -142,7 +123,6 @@
  */
  exports.customerByID = function(req, res, next, id) { 
  	Customer.findById(id).populate('user', 'displayName').exec(function(err, customer) {
- 		console.log(customer);
  		if (err) return next(err);
  		if (!customer) return next(new Error('Failed to load Customer ' + id));
  		req.customer = customer ;

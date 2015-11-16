@@ -11,6 +11,8 @@ angular.module('admin')
 	
 
 	switch($state.current.name){
+		case 'adminPanel.listOrders':$scope.check(1);
+		break;
 		case 'adminPanel.createProduct':$scope.check(2);
 		break;
 		case 'adminPanel.editProduct':$scope.check(2);

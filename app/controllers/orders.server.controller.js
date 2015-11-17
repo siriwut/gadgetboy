@@ -17,6 +17,7 @@
  	async.waterfall([
  		function(done){
  			Customer.findOne({user: req.user._id}, function(err, customer){
+
  				if(!customer) {
  					return res.status(400).send({ message: 'ไม่พบลูกค้าท่านนี้ในระบบค่ะ' });
  				}
@@ -43,11 +44,11 @@
  			customer.cart = [];
 
  			customer.save(function(err) {
- 				if(!err){
- 					res.jsonp(customer.orders[0]);
+ 				if(err){
+ 					return done(err);	
  				}
 
- 				done(err);
+ 				return res.jsonp(customer.orders[0]);
  			});
  		}], 
  		function(err){
@@ -102,7 +103,7 @@
  				return obj;
  			});
 
- 			res.jsonp(order);
+ 			return res.jsonp(order);
  		});
  	});
  };
@@ -110,9 +111,26 @@
 
  exports.list = function(req, res) {
  	Customer.aggregate()
+ 	.project({ orders: 1, user: 1 })
  	.unwind('orders')
- 	.match({ 'orders.status': 'new' })
- 	.exec(function(err, orders) {
- 		res.jsonp(orders);
+ 	.match({ 'orders.status': req.query.status? req.query.status: { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
+ 	.sort('-orders.created')
+ 	.exec(function(err, customers) {
+ 		if(err) {
+ 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+ 		}
+
+ 		var opts = [
+ 		{ path: 'orders.products.product', model: 'Product' },
+ 		{ path: 'user', select: 'username email firstName lastName', model: 'User' }
+ 		];
+
+ 		Customer.populate(customers, opts, function(err, _customers) {
+ 			if(err) {
+ 				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+ 			}
+
+ 			return res.jsonp(_customers);
+ 		});
  	});
  };

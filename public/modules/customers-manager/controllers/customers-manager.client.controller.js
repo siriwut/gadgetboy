@@ -9,7 +9,7 @@ angular
 	vm.customers = [];
 	vm.list = list;
 	vm.remove = remove;
-	console.log(_);
+	
 	function list() {
 		return Customers.query().$promise.then(function(customers) {
 			vm.customers = customers;

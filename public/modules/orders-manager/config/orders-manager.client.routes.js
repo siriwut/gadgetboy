@@ -6,7 +6,7 @@ angular.module('orders-manager').config(['$stateProvider',
 		// Orders manager state routing
 		$stateProvider.
 		state('adminPanel.listOrders', {
-			url: '/list-orders',
+			url: '/list-orders/:status',
 			templateUrl: 'modules/orders-manager/views/list-orders.client.view.html'
 		});
 	}

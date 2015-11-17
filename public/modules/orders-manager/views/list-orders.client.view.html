@@ -3,30 +3,63 @@
 		<div class="col-lg-12">
 			<h3 class="admin-panel-header" >
 				<span class="glyphicon glyphicon-user" ></span>
-				รายการคำสั่งซื้อ <span class="label label-primary" >ใหม่</span>
-			</h3>
-		</div>
+				รายการคำสั่งซื้อ 
+				<span class="label" 
+				ng-class="{'label-primary': om.status === 'new',
+				'label-warning': om.status === 'confirmed',
+				'label-success': om.status === 'paid',
+				'bg-skyblue': om.status === 'delivered',
+				'label-danger': om.status === 'overtime',
+				'bg-grey': om.status === 'canceled'}" data-ng-if="om.statusTitle" >
+				{{om.statusTitle}}
+			</span>
+		</h3>
+	</div>
+</div>
+
+<div class="row" data-ng-init="om.list()" >
+	<div class="col-lg-12 table-responsive" data-ng-if="om.orders.length" >
+		<table class="table table-striped table-bordered table-list-product"  >
+			<thead>
+				<tr>
+					<th>รหัสสั่งซื้อ</th>
+					<th>วันที่</th>
+					<th>เวลา</th>
+					<th>การจ่ายเงิน</th>
+					<th>ยอด(บาท)</th>
+					<th>สถานะ</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>		
+					<th>รหัสสั่งซื้อ</th>	
+					<th>วันที่</th>
+					<th>เวลา</th>
+					<th>การจ่ายเงิน</th>
+					<th>ยอด(บาท)</th>
+					<th>สถานะ</th>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr data-ng-repeat="order in om.orders" >
+					<td>{{order.orders.code}}</td>
+					<td>{{order.orders.created | date:'dd-MMMM-yyyy'}}</td>
+					<td>{{order.orders.created | date:'HH:mm'}}</td>
+					<td>{{order.orders.payment.type}}</td>
+					<td>{{order.orders.netTotalPrice | currency: ''}}</td>
+					<td ng-class="{'text-primary': om.status === 'new',
+					'text-warning': om.status === 'confirmed',
+					'text-success': om.status === 'paid',
+					'text-info': om.status === 'delivered',
+					'text-danger': om.status === 'overtime',
+					'text-muted': om.status === 'canceled'}" >{{order.orders.status}}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 
-	<div class="row" >
-		<div class="col-lg-12">
-			<table class="table table-striped table-responsive table-list-product" data-ng-init="" >
-				<thead>
-					<tr>
-						
-					</tr>
-				</thead>
-				<tfoot>
-					<tr>		
-							
-					</tr>
-				</tfoot>
-				<tbody>
-					<tr  >
-						
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	<div class="col-lg-12" data-ng-if="!om.orders.length" >
+		<h2 class="text-center text-muted">ไม่มีรายการคำสั่งซื้อ</h2>
 	</div>
+</div>
 </section>

@@ -12,7 +12,7 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$location','$st
 			.then(function(response) {
 				$scope.products = response.data;
 			}, function(errorResponse) {
-				console.log('Error');
+				$location.path('/');
 			});
 
 			//$scope.products = Products.query({categoryId:$stateParams.categoryId});	
@@ -24,10 +24,14 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$location','$st
 		};
 
 		$scope.findProduct = function(){
-			if(!$stateParams.productSlug) $location.path('/');
-
-			$scope.product = Products.getBySlug({
+			Products.getBySlug({
 				slug:$stateParams.productSlug
+			}).$promise.then(function(res) {
+				$scope.product = res;
+			}, function(err){
+				if(err) {
+					$location.path('/');
+				}
 			});
 
 		};

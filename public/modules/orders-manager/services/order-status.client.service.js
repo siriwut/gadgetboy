@@ -5,7 +5,17 @@ angular
 .factory('orderStatus', [
 	function() {
 
-		var title = { 
+		var statuses = {
+			new: 'new', 
+			confirmed: 'confirmed', 
+			paid: 'paid', 
+			delivered: 'delivered', 
+			completed: 'completed', 
+			overtime: 'overtime', 
+			canceled: 'canceled' 
+		};
+
+		var titles = { 
 			new: 'ใหม่', 
 			confirmed: 'ยื่นหลักฐานชำระแล้ว', 
 			paid: 'ชำระแล้ว', 
@@ -15,19 +25,20 @@ angular
 			canceled: 'ยกเลิกแล้ว' 
 		};
 
-		var service = {
+		var orderStatus = {
+			statuses: statuses,
 			getTitle: getTitle,
 			setTitle: setTitle
 		};
 
-		return service;
+		return orderStatus;
 
 		function getTitle(key) {
-			return title[key] || '';
+			return titles[key] || '';
 		}
 
 		function setTitle(key, value) {
-			title[key] = value;
+			titles[key] = value;
 		}
 	}
 	]);

@@ -6,25 +6,25 @@
 			<li>
 				เลขคำสั่งซื้อ: <br>
 				<strong>
-					{{order.code}}
+					{{order.orders.code}}
 				</strong>
 			</li>
 			<li>
 				วันที่: <br>
 				<strong>
-					{{order.created | date:'dd-MMMM-yyyy'}}
+					{{order.orders.created | date:'dd-MMMM-yyyy'}}
 				</strong>
 			</li>
 			<li>
 				ยอดรวม: <br>
 				<strong>
-					{{order.netTotalPrice | currency: '' }} บาท
+					{{order.orders.netTotalPrice | currency: '' }} บาท
 				</strong>
 			</li>
 			<li>
 				ช่องทางการจ่ายเงิน: <br>
 				<strong>
-					{{order.payment.type }}
+					{{order.orders.payment.type }}
 				</strong>
 			</li>
 		</ul>	
@@ -46,24 +46,24 @@
 					<tr>
 						<th colspan="3" >
 							<p class="summary-box" >จำนวน (ชิ้น): {{totalQuantity}}</p>
-							<p class="summary-box" >มูลค่าสินค้า (บาท): {{order.totalPrice | currency: ''}}</p>
+							<p class="summary-box" >มูลค่าสินค้า (บาท): {{order.orders.totalPrice | currency: ''}}</p>
 							<p class="summary-box" >
 								ค่าจัดส่ง (บาท): 
-								<span ng-if="order.shipping.cost" >{{order.shipping.cost}}</span>
-								<span ng-if="!order.shipping.cost" class="text-success" >ฟรี</span>
+								<span ng-if="order.orders.shipping.cost" >{{order.orders.shipping.cost}}</span>
+								<span ng-if="!order.orders.shipping.cost" class="text-success" >ฟรี</span>
 							</p>
 							<p class="summary-box" data-ng-if="order.payment.cost" >
-								<span class="text-warning"  >ยอดเพิ่มเติม (บาท)</span>: {{order.payment.cost | currency: ''}}
+								<span class="text-warning"  >ยอดเพิ่มเติม (บาท)</span>: {{order.orders.payment.cost | currency: ''}}
 							</p>
 							<p class="summary-box " >
-								<b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{order.netTotalPrice | currency: ''}}</b></span> บาท
+								<b>ยอดสุทธิ</b> (รวมภาษีมูลค่าเพิ่ม): <span class="net-sum-box" ><b>{{order.orders.netTotalPrice | currency: ''}}</b></span> บาท
 							</p>
 						</th>
 					</tr>
 
 				</tfoot>
 				<tbody>
-					<tr data-ng-repeat="product in order.products" >
+					<tr data-ng-repeat="product in order.orders.products" >
 						<td class="col-md-6"  width="80%">
 							{{product.product.name}}
 						</td>

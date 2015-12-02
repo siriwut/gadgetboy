@@ -19,7 +19,7 @@ angular.module('shop').factory('CartCalculator', [
 				var total = 0;
 
 				angular.forEach(cart, function(value, key){
-					total+= value.quantity * (value.product.sale.onSale? value.product.sale.salePrice :value.product.price);
+					total += value.quantity * (value.product.sale.onSale? value.product.sale.salePrice :value.product.price);
 				});
 
 				return total;

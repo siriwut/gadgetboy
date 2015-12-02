@@ -33,16 +33,16 @@ body{
 	border: 1px solid #D8D8D8;
 }
 
-.app-navbar{
+.app-navbar {
 	background: #000;
 }
 
-.app-logo{
+.app-logo {
 	width: 130px;
 	height: 50px;
 	background: url("../img/brand/logo-header.png") #000;
 }
-.app-header{
+.app-header {
 	background: #000;
 	color:#FFF;
 	min-height: 60px;
@@ -54,33 +54,52 @@ body{
 	z-index: 1030;
 }
 
-.app-search-form{
+.app-search-form {
 	padding-top:5px;
 	padding-bottom:5px;
 	margin-bottom: 0;
 }
 
-.bg-grey{
+.bg-grey {
 	background: #777;
 }
 
-.bg-red{
-	background: #D9534F;
+.bg-red {
+	background: #FF0039;
 }
 
-.bg-green{
-	background: #5EB85C;
+.bg-lightgreen {
+	background: #60F43F;
 }
 
-.bg-orange{
-	background: #F0AD4E;
+.bg-green {
+	background: #28DB00;
+}
+
+.bg-lightyellow {
+	background: #FFCF02;
+}
+
+.bg-yellow {
+	background: #FFFF00;
+}
+
+.bg-orange {
+	background: #FF7518;
 }
 
 
-.bg-skyblue{
+.bg-skyblue {
 	background: #5bc0de;
 }
 
+.text-skyblue {
+	color: #5bc0de;
+}
+
+.text-lightyellow {
+	color: #FFCF02;
+}
 
 .thumbnail-frame {
 	padding: 4px !important;

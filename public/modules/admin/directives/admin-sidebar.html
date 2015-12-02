@@ -17,10 +17,11 @@
 			</a> 
 
 			<ul class="admin-sidebar-list" collapse="collapseVar!=1" >
-				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'new' })" ui-sref-active="active" >ใหม่<span class="badge pull-right">20</span></a></li>
-				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'confirmed' })" ui-sref-active="active" >ยื่นหลักฐานชำระแล้ว<span class="badge bg-orange pull-right">1</span></a></li>
-				<li   ><a href ui-sref="adminPanel.listOrders({ status: 'paid' })" ui-sref-active="active">ชำระแล้ว<span class="badge bg-green pull-right">14</span></a></li>
+				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'new' })" ui-sref-active="active" >ใหม่<span class="badge pull-right">{{ordersQty.new}}</span></a></li>
+				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'confirmed' })" ui-sref-active="active" >ยื่นหลักฐานชำระแล้ว<span class="badge bg-lightyellow pull-right">{{ordersQty.confirmed}}</span></a></li>
+				<li   ><a href ui-sref="adminPanel.listOrders({ status: 'paid' })" ui-sref-active="active">ชำระแล้ว<span class="badge bg-orange pull-right">14</span></a></li>
 				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'delivered' })" ui-sref-active="active">จัดส่งแล้ว<span class="badge bg-skyblue pull-right">5</span></a></li>
+				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'completed' })" ui-sref-active="active">เสร็จสมบูรณ์<span class="badge bg-green pull-right">5</span></a></li>
 				<li  ><a href ui-sref="adminPanel.listOrders({ status: 'overtime' })" ui-sref-active="active" >เกินกำหนดชำระ<span class="badge bg-red pull-right">0</span></a></li>
 				<li ><a href ui-sref="adminPanel.listOrders({ status: 'canceled' })" ui-sref-active="active">ยกเลิกคำสั่งซื้อแล้ว<span class="badge bg-grey pull-right">0</span></a></li>
 

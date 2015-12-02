@@ -64,73 +64,139 @@
 
  	try {
  		orderId = mongoose.Types.ObjectId(req.params.orderId);
- 	} catch(err) {
+ 	} catch(ex) {
  		return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  	}
 
  	Customer.aggregate()
- 	.project({orders: 1, _id: 0})
- 	.unwind('orders')
- 	.match({ 'orders._id': orderId })
- 	.exec(function(err, orders) {
- 		if(err) {
- 			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 		}
-
- 		if(!(orders || orders.length)) {
- 			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 		}
-
- 		var order = orders[0].orders;
-
- 		Product.find( { 
- 			_id: { $in: _.map(order.products, function(obj){ return obj.product; }) } 
- 		} )
- 		.populate('photos')
- 		.exec(function(err, products){
- 			if(err) {
- 				return res.status(400).send({ message: 'ไม่พบสินค้าในคำสั่งซื้อนี้ค่ะ' });
- 			}
-
- 			if(!(products || products.length)) {
- 				return res.status(400).send({ message: 'ไม่พบสินค้าในคำสั่งซื้อนี้ค่ะ' });
- 			}
-
- 			order.products = _.map(order.products, function(obj) {
- 				var elem = _.find(products, { '_id': obj.product });
- 				obj.product = elem;
-
- 				return obj;
- 			});
-
- 			return res.jsonp(order);
- 		});
- 	});
- };
-
-
- exports.list = function(req, res) {
- 	Customer.aggregate()
  	.project({ orders: 1, user: 1 })
  	.unwind('orders')
- 	.match({ 'orders.status': req.query.status? req.query.status: { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
- 	.sort('-orders.created')
+ 	.match({ 'orders._id': orderId })
  	.exec(function(err, customers) {
  		if(err) {
  			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  		}
 
+ 		if(!customers.length) {
+ 			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+ 		}
+
+ 		var customer = customers[0];
+
  		var opts = [
  		{ path: 'orders.products.product', model: 'Product' },
- 		{ path: 'user', select: 'username email firstName lastName', model: 'User' }
+ 		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
  		];
 
- 		Customer.populate(customers, opts, function(err, _customers) {
+ 		Customer.populate(customer, opts, function(err, customers) {
  			if(err) {
+ 				console.log(err);
  				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  			}
 
- 			return res.jsonp(_customers);
+ 			if(!customers) {
+ 				return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+ 			}
+
+ 			var opts = [{ path: 'orders.products.product.photos', model: 'Photo' }];
+
+ 			Customer.populate(customers, opts, function(err, customers) {
+ 				if(err) {
+ 					console.log(err);
+ 					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+ 				}
+
+ 				if(!customers) {
+ 					return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+ 				}
+
+ 				res.jsonp(customers);
+ 			});
  		});
  	});
- };
+};
+
+
+exports.list = function(req, res) {
+	var itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+	var currentPage = ((parseInt(req.query.currentPage) || 1) - 1) * itemsPerPage;
+
+	Customer.aggregate()
+	.project({ orders: 1, user: 1 })
+	.unwind('orders')
+	.match({ 'orders.status': req.query.status || { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
+	.sort('-orders.created')
+	.skip(currentPage)	
+	.limit(itemsPerPage)	
+	.exec(function(err, customers) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+
+		var opts = [
+		{ path: 'orders.products.product', model: 'Product' },
+		{ path: 'user', select: 'username email firstName lastName', model: 'User' }
+		];
+
+		Customer.populate(customers, opts, function(err, customers) {
+			if(err) {
+				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+			}
+
+			return res.jsonp(customers);
+		});
+	});
+};
+
+exports.update = function(req, res) {
+
+	var customer = req.body;
+	
+	Customer.update({ 
+		_id: customer._id, 
+		'orders._id': req.params.orderId 
+	}, { 
+		$set: {
+			'orders.$.address': customer.orders.address,
+			'orders.$.status': customer.orders.status
+		} 
+	}).exec(function(err) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+
+		res.jsonp(customer);
+	});
+
+};
+
+exports.remove = function(req, res) {
+	var customerId;
+	var orderId;
+
+	try {
+		customerId = mongoose.Types.ObjectId(req.params.custId);
+		orderId = mongoose.Types.ObjectId(req.params.orderId);
+	} catch (ex) {
+		return res.status(400).send({ message: errorHandler.getErrorMessage(ex) });
+	}
+
+	Customer
+	.update({ _id: customerId }, { $pull: { orders: { _id: orderId } } })
+	.exec(function(err, result) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+
+		res.jsonp(result);
+	});
+};
+
+exports.count = function(req, res) {
+	Customer.countOrdersByStatus(req.query.status || null, function(err, count) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+		return res.jsonp({ count: count });
+	});
+};

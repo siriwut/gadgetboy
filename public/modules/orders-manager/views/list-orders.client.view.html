@@ -1,4 +1,4 @@
-<section class="admin-content item-box" data-ng-controller="OrdersManagerCtrl as om">
+<section class="admin-content item-box" data-ng-controller="OrdersManagerCtrl as om" data-ng-init="om.initListPage();" >
 	<div class="row" >
 		<div class="col-lg-12">
 			<h3 class="admin-panel-header" >
@@ -6,9 +6,10 @@
 				รายการคำสั่งซื้อ 
 				<span class="label" 
 				ng-class="{'label-primary': om.status === 'new',
-				'label-warning': om.status === 'confirmed',
-				'label-success': om.status === 'paid',
+				'bg-lightyellow': om.status === 'confirmed',
+				'bg-orange': om.status === 'paid',
 				'bg-skyblue': om.status === 'delivered',
+				'label-success': om.status === 'completed',
 				'label-danger': om.status === 'overtime',
 				'bg-grey': om.status === 'canceled'}" data-ng-if="om.statusTitle" >
 				{{om.statusTitle}}
@@ -16,8 +17,19 @@
 		</h3>
 	</div>
 </div>
-
-<div class="row" data-ng-init="om.list()" >
+<div class="row" >
+	<div class="col-lg-8">
+		<span flash-message="5000"></span>
+	</div>
+</div>
+<div class="row" >
+	<div class="col-lg-8">
+	</div>
+	<div class="col-lg-4" >
+		<pagination  boundary-links="true" total-items="om.pagination.totalItems"  ng-model="om.pagination.currentPage" ng-change="om.listPageChanged()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+	</div>
+</div>
+<div class="row" >
 	<div class="col-lg-12 table-responsive" data-ng-if="om.orders.length" >
 		<table class="table table-striped table-bordered table-list-product"  >
 			<thead>
@@ -28,6 +40,7 @@
 					<th>การจ่ายเงิน</th>
 					<th>ยอด(บาท)</th>
 					<th>สถานะ</th>
+					<th>ชื่อผู้ใช้</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -38,21 +51,32 @@
 					<th>การจ่ายเงิน</th>
 					<th>ยอด(บาท)</th>
 					<th>สถานะ</th>
+					<th>ชื่อผู้ใช้</th>
 				</tr>
 			</tfoot>
 			<tbody>
-				<tr data-ng-repeat="order in om.orders" >
-					<td>{{order.orders.code}}</td>
+				<tr data-ng-repeat="order in om.orders" ng-mouseover="isRowActionShow=true" ng-mouseleave="isRowActionShow=false" >
+					<td>
+						{{order.orders.code}}
+						<div class="row row-action " ng-show="isRowActionShow" >
+							<div class="col-lg-12">
+								<a href ui-sref="adminPanel.viewOrder({ status: om.status, orderId: order.orders._id })" ><span >view</span></a> |
+								<a href data-ng-click="om.remove(order)" confirm="คุณต้องการลบคำสั่งซื้อ {{order.orders.code}} แน่นอนหรือไม่?" confirm-title="ยืนยันการลบคำสั่งซื้อ" confirm-ok="ยืนยัน" confirm-cancel="ยกเลิก"  ><span>ลบ</span></a>
+							</div>
+						</div>
+					</td>
 					<td>{{order.orders.created | date:'dd-MMMM-yyyy'}}</td>
 					<td>{{order.orders.created | date:'HH:mm'}}</td>
 					<td>{{order.orders.payment.type}}</td>
 					<td>{{order.orders.netTotalPrice | currency: ''}}</td>
 					<td ng-class="{'text-primary': om.status === 'new',
-					'text-warning': om.status === 'confirmed',
-					'text-success': om.status === 'paid',
-					'text-info': om.status === 'delivered',
+					'text-lightyellow': om.status === 'confirmed',
+					'text-warning': om.status === 'paid',
+					'text-skyblue': om.status === 'delivered',
+					'text-success': om.status === 'completed',
 					'text-danger': om.status === 'overtime',
 					'text-muted': om.status === 'canceled'}" >{{order.orders.status}}</td>
+					<td>{{order.user.username}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -60,6 +84,14 @@
 
 	<div class="col-lg-12" data-ng-if="!om.orders.length" >
 		<h2 class="text-center text-muted">ไม่มีรายการคำสั่งซื้อ</h2>
+	</div>
+</div>
+
+<div class="row" >
+	<div class="col-lg-8">
+	</div>
+	<div class="col-lg-4" >
+		<pagination  boundary-links="true" total-items="om.pagination.totalItems"  ng-model="om.pagination.currentPage" ng-change="om.listPageChanged()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 	</div>
 </div>
 </section>

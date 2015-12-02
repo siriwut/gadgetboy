@@ -140,7 +140,7 @@ CustomerSchema.index({'orders.code': true});
 
 CustomerSchema.methods.generateOrderCode = function(cb) {
 	this.model('Customer')
-	.aggregate({$project:{'orders.code': 1}})
+	.aggregate({ $project: { 'orders.code': 1 } })
 	.unwind('orders')
 	.sort('-orders.code')
 	.limit(1)
@@ -152,6 +152,18 @@ CustomerSchema.methods.generateOrderCode = function(cb) {
 		var newCode =  result.length ? result[0].orders.code + 1: 1;
 		
 		return cb(null, newCode);
+	});
+};
+
+
+CustomerSchema.statics.countOrdersByStatus = function(status, cb) {
+	this.model('Customer')
+	.aggregate()
+	.unwind('orders')
+	.match({ 'orders.status': {$eq: status} || { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
+	.group({ _id: null, count: { $sum: 1 } })
+	.exec(function(err, result) {
+		return cb(err, result.length? result[0].count: 0);
 	});
 };
 

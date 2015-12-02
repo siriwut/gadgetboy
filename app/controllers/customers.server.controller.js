@@ -98,7 +98,7 @@
  		Customer
  		.find({ user: { $in: ids } })
  		.sort('-created')
- 		.populate('user', 'displayName username email roles')
+ 		.populate('user', 'displayName username email roles provider')
  		.exec(function(err, customers) {
  			if (err) {
  				return done(err);

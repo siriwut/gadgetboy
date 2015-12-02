@@ -9,5 +9,13 @@ module.exports = function(app) {
 	.post(users.hasAuthorization(['user', 'admin']), users.requiresLogin, orders.add)
 	.get(users.hasAuthorization(['admin']), users.requiresLogin, orders.list);
 
-	app.route('/api/orders/:orderId').get(orders.read);
+	app.route('/api/orders/count')
+	.get(users.hasAuthorization(['admin']), users.requiresLogin, orders.count);
+
+	app.route('/api/orders/:orderId')
+	.get(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.read)
+	.put(users.hasAuthorization(['admin']), users.requiresLogin, orders.update);
+
+	app.route('/api/orders/:custId/:orderId')
+	.delete(users.hasAuthorization(['admin']), users.requiresLogin, orders.remove);
 };

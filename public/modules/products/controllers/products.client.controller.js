@@ -166,7 +166,6 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
-
 		};
 
 		$scope.initColors = function(){

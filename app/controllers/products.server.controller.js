@@ -108,9 +108,11 @@ async = require('async');
  		product.category = category;
  		res.json(product);
  	}],function(err){
- 		if(err)return res.status(400).send({
- 			message: errorHandler.getErrorMessage(err)
- 		});
+ 		if(err) { 
+ 			return res.status(400).send({
+ 				message: errorHandler.getErrorMessage(err)
+ 			});
+ 		}	
  	});
 
  };

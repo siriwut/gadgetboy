@@ -52,9 +52,11 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state'
 			$http.get('/api/orders/' + $state.params.orderId)
 			.then(function(res){
 				$scope.order = res.data;
-				$scope.totalQuantity = CartCalculator.totalQuantity($scope.order.products);
+				$scope.totalQuantity = CartCalculator.totalQuantity($scope.order.orders.products);
 			}, function(err){
-				console.log(err);
+				if(err) {
+					$location.path('/');
+				}
 			});
 		};
 

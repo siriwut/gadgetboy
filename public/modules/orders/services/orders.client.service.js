@@ -5,11 +5,19 @@ angular.module('orders').factory('Orders', ['$resource',
 	function($resource) {
 		return $resource('/api/orders/:orderId', 
 		{ 
-			orderId: '@_id'
+			orderId: '@orders._id'
 		}, 
 		{
 			update: {
 				method: 'PUT'
+			},
+			count: {
+				url: '/api/orders/count',
+				method: 'GET'
+			},
+			remove: {
+				url: '/api/orders/:customerId/:orderId',
+				method: 'DELETE'
 			}
 		});
 	}

@@ -15,7 +15,8 @@
 						<th>Username</th>
 						<th>Email</th>
 						<th>Display Name</th>
-						<th>ประเภท</th>	
+						<th>ประเภท</th>
+						<th>Provider</th>	
 					</tr>
 				</thead>
 				<tfoot>
@@ -23,7 +24,8 @@
 						<th>Username</th>
 						<th>Email</th>
 						<th>Display Name</th>
-						<th>ประเภท</th>	
+						<th>ประเภท</th>
+						<th>Provider</th>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -39,6 +41,7 @@
 						<td>{{customer.user.email}}</td>
 						<td>{{customer.user.displayName}}</td>
 						<td>{{customer.user.roles[0]}} {{customer.user.roles[1]}}</td>
+						<td>{{customer.user.provider}}</td>
 					</tr>
 				</tbody>
 			</table>

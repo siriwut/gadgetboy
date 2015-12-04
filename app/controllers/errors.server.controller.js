@@ -8,10 +8,10 @@ var getUniqueErrorMessage = function(err) {
 
 	try {
 		var fieldName = err.err.substring(err.err.lastIndexOf('.$') + 2, err.err.lastIndexOf('_1'));
-		output = 'มี '+ fieldName.charAt(0).toUpperCase() + fieldName.slice(1) + ' นี้อยู่แล้วในระบบ';
+		output = 'มีผู้ใช้ '+ fieldName.charAt(0).toUpperCase() + fieldName.slice(1) + ' นี้อยู่แล้วในระบบค่ะ';
 
 	} catch (ex) {
-		output = 'Unique field already exists';
+		output = 'มีผู้ใช้นี้อยู่แล้วในระบบค่ะ';
 	}
 
 	return output;
@@ -30,7 +30,7 @@ exports.getErrorMessage = function(err) {
 				message = getUniqueErrorMessage(err);
 				break;
 			default:
-				message = 'Something went wrong';
+				message = 'มีบางอย่างผิดพลาดกรุณาลองใหม่ค่ะ';
 		}
 	} else {
 		for (var errName in err.errors) {

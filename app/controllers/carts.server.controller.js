@@ -47,7 +47,7 @@
  				return res.status(400).send({message:'สิน้คา '+product.name+' หมดแล้วค่ะ'});
 
  			if(!hasThisProductInCart){
- 				customer.cart.push({product:req.body.productId,quantity:req.body.quantity});
+ 				customer.cart.unshift({product:req.body.productId,quantity:req.body.quantity});
  				customer.save(function(err,customer){
 
  					done(err,customer);
@@ -316,7 +316,7 @@
 
  			if (index === -1) {
  				//if no this product exist in cart then push new product to cart
- 				cart.push({ product: req.body.productId, quantity: req.body.quantity });
+ 				cart.unshift({ product: req.body.productId, quantity: req.body.quantity });
  				var newIndex = _.findIndex(cart, { product:req.body.productId });
 
  				//if quantity added more than product quantity then update quantity
@@ -425,7 +425,7 @@ createCartFromCookie = function(products, cartCookie, res) {
 		var product = _.find(products, { _id: mongoose.Types.ObjectId(cartCookie[i].product) });
 		
 		if(product){
-			cart.push({ product: product, quantity: cartCookie[i].quantity });
+			cart.unshift({ product: product, quantity: cartCookie[i].quantity });
 		} else { 
 			cartCookie.splice(i, 1);
 			res.cookie('cart', cartCookie, { maxAge: 1000 * 60 * 60 * 24 * 30 , httpOnly: true });

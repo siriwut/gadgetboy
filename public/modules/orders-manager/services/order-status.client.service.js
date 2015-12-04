@@ -5,15 +5,15 @@ angular
 .factory('orderStatus', [
 	function() {
 
-		var statuses = {
-			new: 'new', 
-			confirmed: 'confirmed', 
-			paid: 'paid', 
-			delivered: 'delivered', 
-			completed: 'completed', 
-			overtime: 'overtime', 
-			canceled: 'canceled' 
-		};
+		var statuses = [
+		'new', 
+		'confirmed', 
+		'paid', 
+		'delivered', 
+		'completed', 
+		'overtime', 
+		'canceled' 
+		];
 
 		var titles = { 
 			new: 'ใหม่', 

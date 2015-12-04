@@ -52,8 +52,9 @@ angular
 
 			Orders.get({ orderId: $state.params.orderId }).$promise.then(function(res) {
 				om.order = res;
-				orderManager.init(om.order.orders);
-				om.order.orders.totalProductsQuantity = orderManager.getTotalProductsQty() || 0;
+				console.log(res);
+				orderManager.init(om.order);
+				om.order.totalProductsQuantity = orderManager.getTotalProductsQty() || 0;
 
 			}, function(err) {
 				if(err) {

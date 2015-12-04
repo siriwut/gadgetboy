@@ -1,21 +1,35 @@
 'use strict';
 
-angular.module('orders-manager').factory('ordersCounter', ['Orders',
-	function(Orders) {
+angular.module('orders-manager').factory('ordersCounter', ['$q', 'Orders','orderStatus',
+	function($q, Orders, orderStatus) {
 
-		
-		
+		var ordersQty = {};
+
+		var statuses = orderStatus.statuses;
+
 		return {
-			count: count
+			countAll: countAll
 		};
 
-		function count(status , cb) {
-			Orders
-			.count({ status: status || '' })
-			.$promise
-			.then(function(res) {
-				cb(res.count);
-			});		 
+		function countAll() {
+			statuses.forEach(function(status) {
+				var defer = $q.defer();
+				
+				Orders.count({status: status}, function(result){
+					defer.resolve(result);
+				}, function(err) {
+					defer.reject(err);
+				});
+
+				ordersQty[status] = defer.promise;
+			});
+
+			return $q.all(ordersQty);		
 		}
+
+		function count(status) {
+			return Orders.count({ status: status || '' }).$promise;	
+		}
+
 	}
 	]);

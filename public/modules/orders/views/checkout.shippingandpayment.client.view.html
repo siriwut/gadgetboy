@@ -1,4 +1,7 @@
-<form name="shippingAndPaymentForm" class="row" data-ng-init="authenticate(); hasCartItems(); "   data-ng-submit="shippingAndPaymentForm.$valid && order()" novalidate>
+<div class="row" >
+	<div flash-message="5000" class="col-lg-5" ></div>
+</div>
+<form name="shippingAndPaymentForm" class="row" data-ng-init="authenticate(); hasCartItems(); "   data-ng-submit="shippingAndPaymentForm.$valid && addOrder()" novalidate>
 	<div class="col-lg-4" style="margin-top:50px;" data-ng-init="initAddress()" >
 		<address-form address="address" provinces="provinces" has-address-already="hasAddressAlready" ></address-form>
 	</div>
@@ -40,7 +43,7 @@
 					</tr>
 				</tfoot>
 				<tbody>
-					<tr data-ng-repeat="cart in productsInCart | reverse track by $index" >
+					<tr data-ng-repeat="cart in productsInCart track by $index" >
 						<td class="col-md-6"  width="80%">
 							<span>{{cart.product.name}}</span>
 						</td>

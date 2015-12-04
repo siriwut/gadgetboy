@@ -23,7 +23,7 @@ async = require('async');
  * Create a Product
  */
  exports.create = function(req, res) {
-
+ 	
  	var product = new Product(req.body);
  	
 
@@ -70,7 +70,10 @@ async = require('async');
 
  		Product.populate(product.relatedProducts,opts,function(err,products){
 
- 			if(err)return res.status(400).send(err);
+ 			if(err) {
+ 				return res.status(400).send(err);
+ 			}
+
  			product.relatedProducts = products;
  			res.jsonp(product);
  		});
@@ -88,7 +91,9 @@ async = require('async');
  			done(err,product);
  		});
  	},function(productReq,done){
- 		if(!productReq)return res.status(400).send({message:'Failed to load product'});
+ 		if(!productReq) {
+ 			return res.status(400).send({message:'Failed to load product'});
+ 		}
 
  		var product = productReq;
 
@@ -121,7 +126,7 @@ async = require('async');
  * Delete an Product
  */
  exports.delete = function(req, res) {
-
+ 	
  	Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  		if(err)return res.status(400).send(err);
  		if(!product)return res.status(400).send({message:'Failed to load product'});

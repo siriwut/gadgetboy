@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('admin')
-.controller('adminSidebarController',['$scope','$state', 'Orders', 'ordersCounter',function($scope, $state, Orders, ordersCounter){
+.controller('adminSidebarController',['$scope','$state', '$timeout', 'Orders', 'ordersCounter',function($scope, $state, $timeout, Orders, ordersCounter){
 	$scope.collapseVar = 0;
 	$scope.ordersQty = {};
+	$scope.countOrders = countOrders;
 
 	$scope.check = function(itemNum){
 		$scope.collapseVar = (itemNum!==$scope.collapseVar)? itemNum : 0;
@@ -36,12 +37,8 @@ angular.module('admin')
 	}
 
 	function countOrders() {
-		ordersCounter.count('new', function(n) {
-			$scope.ordersQty.new = n;
-		});
-
-		ordersCounter.count('confirmed', function(n) {
-			$scope.ordersQty.confirmed = n;
+		ordersCounter.countAll().then(function(res) {
+			$scope.ordersQty = res;
 		});
 	}
 

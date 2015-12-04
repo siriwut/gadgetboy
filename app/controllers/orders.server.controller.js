@@ -14,6 +14,11 @@
 
 
  exports.add = function(req, res) {
+
+ 	if(!req.body.order) {
+ 		return res.status(400).send({ message: 'กรุณระบุข้อมูลรายการคำสั่งซื้อค่ะ' });
+ 	}
+
  	async.waterfall([
  		function(done){
  			Customer.findOne({user: req.user._id}, function(err, customer){
@@ -31,7 +36,7 @@
  				done(err, customer, code);
  			});
 
- 		}, function(customer, code, done){
+ 		}, function(customer, code, done) {
 
  			req.body.order.code = code;
  			req.body.order.products = customer.cart;
@@ -69,48 +74,62 @@
  	}
 
  	Customer.aggregate()
- 	.project({ orders: 1, user: 1 })
  	.unwind('orders')
  	.match({ 'orders._id': orderId })
- 	.exec(function(err, customers) {
+ 	.project({
+		_id: '$orders._id' ,
+		code: '$orders.code',
+		products: '$orders.products',
+		totalPrice: '$orders.totalPrice',
+		netTotalPrice: '$orders.netTotalPrice',
+		payment: '$orders.payment',
+		shipping: '$orders.shipping',
+		status: '$orders.status',
+		address: '$orders.address',
+		user: 1, 
+		cust_id: '$_id',
+		created: '$orders.created',
+	})
+	.limit(1)
+ 	.exec(function(err, orders) {
  		if(err) {
+ 			console.log(err);
  			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  		}
 
- 		if(!customers.length) {
+ 		if(!orders.length) {
  			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  		}
+ 		
+ 		var order = orders[0];
 
- 		var customer = customers[0];
-
+ 	
  		var opts = [
- 		{ path: 'orders.products.product', model: 'Product' },
+ 		{ path: 'products.product', model: 'Product' },
  		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
  		];
 
- 		Customer.populate(customer, opts, function(err, customers) {
+ 		Customer.populate(order, opts, function(err, order) {
  			if(err) {
- 				console.log(err);
  				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  			}
-
- 			if(!customers) {
+ 		
+ 			if(!order) {
  				return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  			}
 
- 			var opts = [{ path: 'orders.products.product.photos', model: 'Photo' }];
+ 			var opts = [{ path: 'products.product.photos', model: 'Photo' }];
 
- 			Customer.populate(customers, opts, function(err, customers) {
+ 			Customer.populate(order, opts, function(err, order) {
  				if(err) {
- 					console.log(err);
  					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  				}
 
- 				if(!customers) {
+ 				if(!order) {
  					return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  				}
 
- 				res.jsonp(customers);
+ 				res.jsonp(order);
  			});
  		});
  	});
@@ -122,33 +141,51 @@ exports.list = function(req, res) {
 	var currentPage = ((parseInt(req.query.currentPage) || 1) - 1) * itemsPerPage;
 
 	Customer.aggregate()
-	.project({ orders: 1, user: 1 })
 	.unwind('orders')
 	.match({ 'orders.status': req.query.status || { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
 	.sort('-orders.created')
-	.skip(currentPage)	
-	.limit(itemsPerPage)	
-	.exec(function(err, customers) {
+	.project({
+		_id: '$orders._id' ,
+		code: '$orders.code',
+		products: '$orders.products',
+		totalPrice: '$orders.totalPrice',
+		netTotalPrice: '$orders.netTotalPrice',
+		payment: '$orders.payment',
+		shipping: '$orders.shipping',
+		status: '$orders.status',
+		address: '$orders.address',
+		user: 1, 
+		cust_id: '$_id',
+		created: '$orders.created'
+	})
+	.skip(currentPage)
+	.limit(itemsPerPage)
+	.exec(function(err, orders) {
 		if(err) {
 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 		}
-
+		
 		var opts = [
-		{ path: 'orders.products.product', model: 'Product' },
-		{ path: 'user', select: 'username email firstName lastName', model: 'User' }
+		{ path: 'products.product', model: 'Product' },
+		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
 		];
 
-		Customer.populate(customers, opts, function(err, customers) {
+		Customer.populate(orders, opts, function(err, orders) {
 			if(err) {
 				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 			}
-
-			return res.jsonp(customers);
+		
+			return res.jsonp(orders);
 		});
+		
 	});
 };
 
 exports.update = function(req, res) {
+
+	if(!req.body) {
+		return res.status(400).send({ message: 'กรุณาระบุรายการสินค้าด้วยค่ะ' });
+	}
 
 	var customer = req.body;
 	

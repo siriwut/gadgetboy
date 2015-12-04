@@ -57,25 +57,25 @@
 			<tbody>
 				<tr data-ng-repeat="order in om.orders" ng-mouseover="isRowActionShow=true" ng-mouseleave="isRowActionShow=false" >
 					<td>
-						{{order.orders.code}}
+						{{order.code}}
 						<div class="row row-action " ng-show="isRowActionShow" >
 							<div class="col-lg-12">
-								<a href ui-sref="adminPanel.viewOrder({ status: om.status, orderId: order.orders._id })" ><span >view</span></a> |
-								<a href data-ng-click="om.remove(order)" confirm="คุณต้องการลบคำสั่งซื้อ {{order.orders.code}} แน่นอนหรือไม่?" confirm-title="ยืนยันการลบคำสั่งซื้อ" confirm-ok="ยืนยัน" confirm-cancel="ยกเลิก"  ><span>ลบ</span></a>
+								<a href ui-sref="adminPanel.viewOrder({ status: om.status, orderId: order._id })" ><span >view</span></a> |
+								<a href data-ng-click="om.remove(order)" confirm="คุณต้องการลบคำสั่งซื้อ {{order.code}} แน่นอนหรือไม่?" confirm-title="ยืนยันการลบคำสั่งซื้อ" confirm-ok="ยืนยัน" confirm-cancel="ยกเลิก"  ><span>ลบ</span></a>
 							</div>
 						</div>
 					</td>
-					<td>{{order.orders.created | date:'dd-MMMM-yyyy'}}</td>
-					<td>{{order.orders.created | date:'HH:mm'}}</td>
-					<td>{{order.orders.payment.type}}</td>
-					<td>{{order.orders.netTotalPrice | currency: ''}}</td>
+					<td>{{order.created | date:'dd-MMMM-yyyy'}}</td>
+					<td>{{order.created | date:'HH:mm'}}</td>
+					<td>{{order.payment.type}}</td>
+					<td>{{order.netTotalPrice | currency: ''}}</td>
 					<td ng-class="{'text-primary': om.status === 'new',
 					'text-lightyellow': om.status === 'confirmed',
 					'text-warning': om.status === 'paid',
 					'text-skyblue': om.status === 'delivered',
 					'text-success': om.status === 'completed',
 					'text-danger': om.status === 'overtime',
-					'text-muted': om.status === 'canceled'}" >{{order.orders.status}}</td>
+					'text-muted': om.status === 'canceled'}" >{{order.status}}</td>
 					<td>{{order.user.username}}</td>
 				</tr>
 			</tbody>

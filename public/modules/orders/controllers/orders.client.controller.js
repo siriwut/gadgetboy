@@ -1,8 +1,11 @@
 'use strict';
 
 // Orders controller
-angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state', '$http', '$stateParams', '$location', '$timeout', 'Authentication', 'ProvinceList', 'CartCalculator',
-	function($scope, $window, $state, $http, $stateParams, $location, $timeout, Authentication, ProvinceList, CartCalculator) {
+angular
+	.module('orders')
+	.controller('OrdersCtrl', 
+	['$scope', '$window', '$state', '$http', '$stateParams', '$location', '$timeout', 'Authentication', 'ProvinceList', 'CartCalculator', 'Flash', 'orderService',
+	function($scope, $window, $state, $http, $stateParams, $location, $timeout, Authentication, ProvinceList, CartCalculator, Flash, orderService) {
 		
 		$scope.authentication = Authentication;
 		$scope.stateName = $state.current.name;
@@ -17,8 +20,7 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state'
 		$scope.paymentExtraCost = 0;
 		$scope.hasAddressAlready = false;
 		
-
-		$scope.order = function() {	
+		$scope.addOrder = function() {	
 			if(!$scope.products.length) return;
 
 			var data = {
@@ -38,12 +40,11 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state'
 				}
 			};
 
-			$http.post('/api/orders', data).then(function(res){
-				//$state.go('checkout.complete', null, {reload:true});
-				$window.location.assign('/checkout/step/complete/' + res.data._id);
-				
-			}, function(err){
 
+			$http.post('/api/orders', data).then(function(res) {
+				$window.location.assign('/checkout/step/complete/' + res.data._id);
+			}, function(err){
+				Flash.create('danger', 'การสั่งซื้อผิดพลาดกรุณาลองใหม่ค่ะ');
 			});
 		};
 
@@ -54,9 +55,7 @@ angular.module('orders').controller('OrdersCtrl', ['$scope', '$window', '$state'
 				$scope.order = res.data;
 				$scope.totalQuantity = CartCalculator.totalQuantity($scope.order.orders.products);
 			}, function(err){
-				if(err) {
 					$location.path('/');
-				}
 			});
 		};
 

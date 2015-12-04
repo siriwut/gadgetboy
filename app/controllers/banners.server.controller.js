@@ -18,7 +18,9 @@
 
  	form.parse(req,function(err,fields,files){
  		
- 		if(err) return res.status(400).send(err);
+ 		if(err) {
+ 			return res.status(400).send(err);
+ 		}
  		
  		var bannerFields = JSON.parse(fields.data[0]);
 
@@ -98,9 +100,9 @@ exports.remove = function(req,res){
 			var bannerRemove = './public'.concat(banner.image.url);
 
 			fs.remove(bannerRemove, function (err) {
- 				if (err) throw err;
- 				res.end();
- 			});
+				if (err) throw err;
+				res.end();
+			});
 		}
 	});
 

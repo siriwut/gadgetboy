@@ -79,7 +79,7 @@
 					</tr>
 				</tfoot>
 				<tbody>
-					<tr data-ng-repeat="cart in productsInCart | reverse track by $index" >
+					<tr data-ng-repeat="cart in productsInCart track by $index" >
 						<td class="col-md-6" >
 							<span>{{cart.product.name}}</span>
 						</td>

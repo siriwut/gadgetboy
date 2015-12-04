@@ -23,25 +23,25 @@
 	<div class="col-lg-5">
 		<div class="row ">
 			<div class="col-lg-12">
-				<h3>รหัสสั่งซื้อ: {{om.order.orders.code}}</h3>
+				<h3>รหัสสั่งซื้อ: {{om.order.code}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>ประเภทการชำระเงิน: {{om.order.orders.payment.type}}</h3>
+				<h3>ประเภทการชำระเงิน: {{om.order.payment.type}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>จำนวน: {{om.order.orders.totalProductsQuantity}}</h3>
+				<h3>จำนวน: {{om.order.totalProductsQuantity}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>มูลค่าสินค้าทั้งสิ้น: {{om.order.orders.totalPrice | currency: ''}}</h3>
+				<h3>มูลค่าสินค้าทั้งสิ้น: {{om.order.totalPrice | currency: ''}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>ค่าจัดส่ง: {{(om.order.orders.shipping.cost | currency: '')}}</h3>
+				<h3>ค่าจัดส่ง: {{(om.order.shipping.cost | currency: '')}}</h3>
 			</div>
 			<div class="col-lg-12" data-ng-if="om.order.orders.payment.cost" >
-				<h3>ค่าใช้จ่ายเพิ่มเติม: {{om.order.orders.payment.cost | currency: ''}}</h3>
+				<h3>ค่าใช้จ่ายเพิ่มเติม: {{om.order.payment.cost | currency: ''}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>ยอดชำระทั้งสิ้น: {{om.order.orders.netTotalPrice | currency: ''}}</h3>
+				<h3>ยอดชำระทั้งสิ้น: {{om.order.netTotalPrice | currency: ''}}</h3>
 			</div>
 		</div>
 	</div>
@@ -50,7 +50,7 @@
 			<div class="col-lg-12">
 				<form class="form-inline">
 					<div class="form-group">
-						<select class="form-control" data-ng-model="om.order.orders.status" data-ng-options="value for (key, value) in om.statuses" data-ng-change="editedStatus = true" ></select>
+						<select class="form-control" data-ng-model="om.order.status" data-ng-options="value for (key, value) in om.statuses" data-ng-change="editedStatus = true" ></select>
 					</div>
 					<button class="btn btn-default" data-ng-if="editedStatus" data-ng-click="om.update()" >แก้ไข</button>
 				</form>
@@ -60,10 +60,10 @@
 			<div class="col-lg-12">
 				<h3>ที่อยู่สำหรับจัดส่ง</h3>
 				<p style="font-size:20px;" >
-					{{om.order.orders.address.name}}<br>
-					{{om.order.orders.address.address}}<br>
-					{{om.order.orders.address.district}} {{om.order.orders.address.province}} {{om.order.orders.address.zipcode}}<br>
-					{{om.order.orders.orders.address.tel}}
+					{{om.order.address.name}}<br>
+					{{om.order.address.address}}<br>
+					{{om.order.address.district}} {{om.order.address.province}} {{om.order.address.zipcode}}<br>
+					{{om.order.address.tel}}
 				</p>
 			</div>
 
@@ -105,8 +105,10 @@
 				</tr>
 			</tfoot>
 			<tbody>
-				<tr data-ng-repeat="product in om.order.orders.products" >
-					<td width="100" ><img src="{{product.product.photos[0].url}}" width="100" height="100" ></td>
+				<tr data-ng-repeat="product in om.order.products" >
+
+					<td width="100" ><img src="{{product.product.photos[0].url}}" width="100" height="100" >
+					</td>
 					<td>{{product.product.name}}</td>
 					<td>{{product.product.models}}</td>
 					<td>{{product.product.sale.onSale? product.product.sale.salePrice: product.product.price | currency: '' }}

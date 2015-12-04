@@ -92,13 +92,14 @@
 	// CookieParser should be above session
 	app.use(cookieParser());
 
+
 	// Express MongoDB session storage
 	app.use(session({
 		saveUninitialized: true,
 		resave: true,
 		secret: config.sessionSecret,
 		store: new mongoStore({
-			db: db.connection.db,
+			mongooseConnection: db.connection,
 			collection: config.sessionCollection
 		})
 	}));

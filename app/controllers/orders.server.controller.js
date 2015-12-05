@@ -76,34 +76,33 @@
  	Customer.aggregate()
  	.unwind('orders')
  	.match({ 'orders._id': orderId })
- 	.project({
-		_id: '$orders._id' ,
-		code: '$orders.code',
-		products: '$orders.products',
-		totalPrice: '$orders.totalPrice',
-		netTotalPrice: '$orders.netTotalPrice',
-		payment: '$orders.payment',
-		shipping: '$orders.shipping',
-		status: '$orders.status',
-		address: '$orders.address',
-		user: 1, 
-		cust_id: '$_id',
-		created: '$orders.created',
-	})
-	.limit(1)
+ 	.unwind('orders.products')
+ 	.group({
+ 		_id: '$orders._id',
+ 		code: { $first: '$orders.code' },
+ 		totalPrice: { $first: '$orders.totalPrice' },
+ 		netTotalPrice: { $first: '$orders.netTotalPrice' },
+ 		status: { $first: '$orders.status' },
+ 		products: { $push: '$orders.products' },
+ 		totalProductQty: { $sum: '$orders.products.quantity'},
+ 		address: { $first: '$orders.address'},
+ 		payment: { $first: '$orders.payment'},
+ 		shipping: { $first: '$orders.shipping'},
+ 		user: { $first: '$user' },
+ 		cust_id: { $first: '$_id' },
+ 		created: { $first: '$orders.created' }
+ 	})
  	.exec(function(err, orders) {
  		if(err) {
- 			console.log(err);
  			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  		}
 
  		if(!orders.length) {
  			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  		}
- 		
- 		var order = orders[0];
 
- 	
+ 		var order = orders[0];
+ 		
  		var opts = [
  		{ path: 'products.product', model: 'Product' },
  		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
@@ -113,7 +112,7 @@
  			if(err) {
  				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
  			}
- 		
+
  			if(!order) {
  				return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
  			}
@@ -143,21 +142,23 @@ exports.list = function(req, res) {
 	Customer.aggregate()
 	.unwind('orders')
 	.match({ 'orders.status': req.query.status || { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
-	.sort('-orders.created')
-	.project({
-		_id: '$orders._id' ,
-		code: '$orders.code',
-		products: '$orders.products',
-		totalPrice: '$orders.totalPrice',
-		netTotalPrice: '$orders.netTotalPrice',
-		payment: '$orders.payment',
-		shipping: '$orders.shipping',
-		status: '$orders.status',
-		address: '$orders.address',
-		user: 1, 
-		cust_id: '$_id',
-		created: '$orders.created'
+	.unwind('orders.products')
+	.group({
+		_id: '$orders._id',
+		code: { $first: '$orders.code' },
+		totalPrice: { $first: '$orders.totalPrice' },
+		netTotalPrice: { $first: '$orders.netTotalPrice' },
+		status: { $first: '$orders.status' },
+		products: { $push: '$orders.products' },
+		totalProductQty: { $sum: '$orders.products.quantity'},
+		address: { $first: '$orders.address'},
+		payment: { $first: '$orders.payment'},
+		shipping: { $first: '$orders.shipping'},
+		user: { $first: '$user' },
+		cust_id: { $first: '$_id' },
+		created: { $first: '$orders.created' }
 	})
+	.sort('-created')
 	.skip(currentPage)
 	.limit(itemsPerPage)
 	.exec(function(err, orders) {
@@ -174,7 +175,7 @@ exports.list = function(req, res) {
 			if(err) {
 				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 			}
-		
+
 			return res.jsonp(orders);
 		});
 		
@@ -187,22 +188,22 @@ exports.update = function(req, res) {
 		return res.status(400).send({ message: 'กรุณาระบุรายการสินค้าด้วยค่ะ' });
 	}
 
-	var customer = req.body;
+	var order = req.body;
 	
 	Customer.update({ 
-		_id: customer._id, 
+		_id: order.cust_id, 
 		'orders._id': req.params.orderId 
 	}, { 
 		$set: {
-			'orders.$.address': customer.orders.address,
-			'orders.$.status': customer.orders.status
+			'orders.$.address': order.address,
+			'orders.$.status': order.status
 		} 
 	}).exec(function(err) {
 		if(err) {
 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 		}
 
-		res.jsonp(customer);
+		res.jsonp(order);
 	});
 
 };

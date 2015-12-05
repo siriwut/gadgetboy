@@ -109,6 +109,21 @@
  				trim: true
  			}
  		},
+ 		receipt: {
+ 			cost: {
+ 				type: Number
+ 			},
+ 			channel: {
+ 				type: String
+ 			},
+ 			photo: {
+ 				type: Schema.ObjectId,
+ 				ref: 'Photo'
+ 			},
+ 			paidAt: {
+ 				type: Date
+ 			}
+ 		},
  		created: {
  			type: Date,
  			default: Date.now

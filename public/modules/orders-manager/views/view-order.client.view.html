@@ -23,13 +23,16 @@
 	<div class="col-lg-5">
 		<div class="row ">
 			<div class="col-lg-12">
+				<h4><b>{{om.order.created | date:'dd-MMMM-yyyy HH:mm:ss'}}</b></h4>
+			</div>
+			<div class="col-lg-12">
 				<h3>รหัสสั่งซื้อ: {{om.order.code}}</h3>
 			</div>
 			<div class="col-lg-12">
 				<h3>ประเภทการชำระเงิน: {{om.order.payment.type}}</h3>
 			</div>
 			<div class="col-lg-12">
-				<h3>จำนวน: {{om.order.totalProductsQuantity}}</h3>
+				<h3>จำนวน: {{om.order.totalProductQty}}</h3>
 			</div>
 			<div class="col-lg-12">
 				<h3>มูลค่าสินค้าทั้งสิ้น: {{om.order.totalPrice | currency: ''}}</h3>

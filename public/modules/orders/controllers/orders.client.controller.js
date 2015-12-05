@@ -53,7 +53,6 @@ angular
 			$http.get('/api/orders/' + $state.params.orderId)
 			.then(function(res){
 				$scope.order = res.data;
-				$scope.totalQuantity = CartCalculator.totalQuantity($scope.order.orders.products);
 			}, function(err){
 					$location.path('/');
 			});

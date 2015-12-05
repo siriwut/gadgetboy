@@ -38,6 +38,7 @@
 					<th>วันที่</th>
 					<th>เวลา</th>
 					<th>การจ่ายเงิน</th>
+					<th>จำนวน(ชิ้น)</th>
 					<th>ยอด(บาท)</th>
 					<th>สถานะ</th>
 					<th>ชื่อผู้ใช้</th>
@@ -49,6 +50,7 @@
 					<th>วันที่</th>
 					<th>เวลา</th>
 					<th>การจ่ายเงิน</th>
+					<th>จำนวน(ชิ้น)</th>
 					<th>ยอด(บาท)</th>
 					<th>สถานะ</th>
 					<th>ชื่อผู้ใช้</th>
@@ -68,6 +70,7 @@
 					<td>{{order.created | date:'dd-MMMM-yyyy'}}</td>
 					<td>{{order.created | date:'HH:mm'}}</td>
 					<td>{{order.payment.type}}</td>
+					<td>{{order.totalProductQty}}</td>
 					<td>{{order.netTotalPrice | currency: ''}}</td>
 					<td ng-class="{'text-primary': om.status === 'new',
 					'text-lightyellow': om.status === 'confirmed',

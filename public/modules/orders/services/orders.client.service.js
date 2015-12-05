@@ -5,7 +5,7 @@ angular.module('orders').factory('Orders', ['$resource',
 	function($resource) {
 		return $resource('/api/orders/:orderId', 
 		{ 
-			orderId: '@orders._id'
+			orderId: '@_id'
 		}, 
 		{
 			update: {

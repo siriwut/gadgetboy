@@ -40,6 +40,7 @@ angular
 				currentPage: om.pagination.currentPage
 			}).$promise.then(function(res){
 				om.orders = res;
+				console.log(om.orders);
 			}, function(err) {
 
 			});
@@ -52,14 +53,8 @@ angular
 
 			Orders.get({ orderId: $state.params.orderId }).$promise.then(function(res) {
 				om.order = res;
-				console.log(res);
-				orderManager.init(om.order);
-				om.order.totalProductsQuantity = orderManager.getTotalProductsQty() || 0;
-
 			}, function(err) {
-				if(err) {
 					$state.go('adminPanel');
-				}
 			});
 		}
 
@@ -80,9 +75,9 @@ angular
 			var order = om.order;
 
 			order.$update().then(function(res) {
-				$state.go('adminPanel.viewOrder', {status: res.orders.status, orderId: res.orders._id });
+				$state.go('adminPanel.viewOrder', {status: res.status, orderId: res._id });
 			}, function(err) {
-
+				Flash.create('danger', 'แก้ไขไม่สำเร็จกรุณาลองใหม่ค่ะ');
 			});		
 		}
 

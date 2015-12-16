@@ -2,8 +2,8 @@
 
 // Orders controller
 angular
-	.module('orders')
-	.controller('OrdersCtrl', 
+.module('orders')
+.controller('OrdersCtrl', 
 	['$scope', '$window', '$state', '$http', '$stateParams', '$location', '$timeout', 'Authentication', 'ProvinceList', 'CartCalculator', 'Flash', 'orderService',
 	function($scope, $window, $state, $http, $stateParams, $location, $timeout, Authentication, ProvinceList, CartCalculator, Flash, orderService) {
 		
@@ -42,9 +42,14 @@ angular
 
 
 			$http.post('/api/orders', data).then(function(res) {
+				var order = res.data;
+				
+				orderService.create(order);
+				orderService.minusProductsQtyByOrder();
+				
 				$window.location.assign('/checkout/step/complete/' + res.data._id);
 			}, function(err){
-				Flash.create('danger', 'การสั่งซื้อผิดพลาดกรุณาลองใหม่ค่ะ');
+				Flash.create('danger', err.data.message);
 			});
 		};
 
@@ -54,12 +59,12 @@ angular
 			.then(function(res){
 				$scope.order = res.data;
 			}, function(err){
-					$location.path('/');
+				$location.path('/');
 			});
 		};
 
 		$scope.initAddress = function(){
-			$http.get('/api/customers/'+ $scope.authentication.user._id).then(function(res){
+			$http.get('/api/customers/users').then(function(res){
 				if(res.data.addresses[0]){
 					$scope.address = res.data.addresses[0];
 					$scope.hasAddressAlready = true;

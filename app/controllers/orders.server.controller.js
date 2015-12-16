@@ -6,10 +6,17 @@
  var mongoose = require('mongoose');
  var async = require('async');
  var _ = require('lodash');
+ var multipart = require('multiparty');
+ var fs = require('fs-extra');
+ var uuid = require('uuid');
+ var path = require('path');
+ var url = require('url');
 
  var errorHandler = require('./errors.server.controller');
  var Customer = mongoose.model('Customer');
  var Product = mongoose.model('Product');
+
+
 
 
 
@@ -18,6 +25,8 @@
  	if(!req.body.order) {
  		return res.status(400).send({ message: 'กรุณระบุข้อมูลรายการคำสั่งซื้อค่ะ' });
  	}
+
+ 	var order = req.body.order;
 
  	async.waterfall([
  		function(done){
@@ -38,14 +47,50 @@
 
  		}, function(customer, code, done) {
 
- 			req.body.order.code = code;
- 			req.body.order.products = customer.cart;
+ 			order.code = code;
+ 			order.products = customer.cart;
 
  			if(!customer.addresses[0]){
- 				customer.addresses.set(0, req.body.order.address);
+ 				customer.addresses.set(0, order.address);
  			}
  			
- 			customer.orders.unshift(req.body.order);
+ 			// Check product quantity in stock
+ 			Product
+ 			.find({ _id: { $in: _.map(order.products, function(obj){ return obj.product; }) } })
+ 			.exec(function(err, products) {
+ 				
+ 				if(err) {
+ 					return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
+ 				}
+
+ 				if(!products.length) {
+ 					return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
+ 				}
+
+ 				
+ 				products.forEach(function(val, key) {
+ 					var index = _.findIndex(order.products, 'product', val._id );
+
+ 					if(index < 0) {
+ 						return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
+ 					}
+
+ 					if(val.quantity < order.products[index].quantity) {
+ 						return res.status(400).send({message:'สินค้า'+ val.name + 'มีเพียงจำนวน' + val.quantity + 'ชิ้น กรุณาแก้ไขจำนวนสินค้าด้วยค่ะ'});
+ 					}
+
+ 					
+ 					if(key === products.length - 1) {
+ 						return done(err, customer);
+ 					}
+ 					
+ 				});
+
+ 				
+ 			});
+ 			
+ 		}, function(customer, done) {
+ 			customer.orders.unshift(order);
  			customer.cart = [];
 
  			customer.save(function(err) {
@@ -53,7 +98,30 @@
  					return done(err);	
  				}
 
- 				return res.jsonp(customer.orders[0]);
+ 				var opt = { path: 'products.product', model: 'Product' };
+
+ 				Customer.populate(customer.orders[0], opt, function(err, order) {
+ 					if(err) {
+ 						return done(err);
+ 					}
+
+ 					var opt = { path: 'products.product.photos', model: 'Photo' };
+
+ 					Customer.populate(order, opt, function(err, order) {
+ 						if(err) {
+ 							return done(err);
+ 						}
+
+ 						if(!order) {
+ 							return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
+ 						}
+
+ 						order.cust_id = customer._id;
+ 						
+ 						return res.jsonp(order);
+
+ 					});
+ 				});
  			});
  		}], 
  		function(err){
@@ -61,77 +129,77 @@
  				return res.status(400).send({message:'การสั่งซื้อผิดพลาด กรุณาลองใหม่ค่ะ'});
  			}
  		});
- };
+};
 
- exports.read = function(req, res) {
+exports.read = function(req, res) {
 
- 	var orderId;
+	var orderId;
 
- 	try {
- 		orderId = mongoose.Types.ObjectId(req.params.orderId);
- 	} catch(ex) {
- 		return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 	}
+	try {
+		orderId = mongoose.Types.ObjectId(req.params.orderId);
+	} catch(ex) {
+		return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+	}
 
- 	Customer.aggregate()
- 	.unwind('orders')
- 	.match({ 'orders._id': orderId })
- 	.unwind('orders.products')
- 	.group({
- 		_id: '$orders._id',
- 		code: { $first: '$orders.code' },
- 		totalPrice: { $first: '$orders.totalPrice' },
- 		netTotalPrice: { $first: '$orders.netTotalPrice' },
- 		status: { $first: '$orders.status' },
- 		products: { $push: '$orders.products' },
- 		totalProductQty: { $sum: '$orders.products.quantity'},
- 		address: { $first: '$orders.address'},
- 		payment: { $first: '$orders.payment'},
- 		shipping: { $first: '$orders.shipping'},
- 		user: { $first: '$user' },
- 		cust_id: { $first: '$_id' },
- 		created: { $first: '$orders.created' }
- 	})
- 	.exec(function(err, orders) {
- 		if(err) {
- 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
- 		}
+	Customer.aggregate()
+	.unwind('orders')
+	.match({ 'orders._id': orderId })
+	.unwind('orders.products')
+	.group({
+		_id: '$orders._id',
+		code: { $first: '$orders.code' },
+		totalPrice: { $first: '$orders.totalPrice' },
+		netTotalPrice: { $first: '$orders.netTotalPrice' },
+		status: { $first: '$orders.status' },
+		products: { $push: '$orders.products' },
+		totalProductQty: { $sum: '$orders.products.quantity'},
+		address: { $first: '$orders.address'},
+		payment: { $first: '$orders.payment'},
+		shipping: { $first: '$orders.shipping'},
+		user: { $first: '$user' },
+		cust_id: { $first: '$_id' },
+		created: { $first: '$orders.created' }
+	})
+	.exec(function(err, orders) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
 
- 		if(!orders.length) {
- 			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 		}
+		if(!orders.length) {
+			return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+		}
 
- 		var order = orders[0];
- 		
- 		var opts = [
- 		{ path: 'products.product', model: 'Product' },
- 		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
- 		];
+		var order = orders[0];
 
- 		Customer.populate(order, opts, function(err, order) {
- 			if(err) {
- 				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
- 			}
+		var opts = [
+		{ path: 'products.product', model: 'Product' },
+		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
+		];
 
- 			if(!order) {
- 				return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 			}
+		Customer.populate(order, opts, function(err, order) {
+			if(err) {
+				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+			}
 
- 			var opts = [{ path: 'products.product.photos', model: 'Photo' }];
+			if(!order) {
+				return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+			}
 
- 			Customer.populate(order, opts, function(err, order) {
- 				if(err) {
- 					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
- 				}
+			var opts = [{ path: 'products.product.photos', model: 'Photo' }];
 
- 				if(!order) {
- 					return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
- 				}
+			Customer.populate(order, opts, function(err, order) {
+				if(err) {
+					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+				}
 
- 				res.jsonp(order);
- 			});
- 		});
- 	});
+				if(!order) {
+					return res.status(400).send({ message: 'ไม่พบคำสั่งซื้อค่ะ' });
+				}
+
+				res.jsonp(order);
+			});
+		});
+	});
 };
 
 
@@ -176,9 +244,72 @@ exports.list = function(req, res) {
 				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 			}
 
-			return res.jsonp(orders);
+			var opts = { path: 'products.product.photos', model: 'Photo' };
+
+			Customer.populate(orders, opts, function(err, orders){
+				if(err) {
+					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+				}
+
+				return res.jsonp(orders);
+			});
 		});
 		
+	});
+};
+
+exports.listByUser = function(req, res) {
+	var itemsPerPage = parseInt(req.query.itemsPerPage) || 10;
+	var currentPage = ((parseInt(req.query.currentPage) || 1) - 1) * itemsPerPage;
+
+	//.match({ 'orders.status': req.query.status || { $in: ['new','confirmed','paid','delivered','completed','overtime','canceled'] } })
+	Customer.aggregate()
+	.match({ user: req.user._id })
+	.unwind('orders')
+	.unwind('orders.products')
+	.group({
+		_id: '$orders._id',
+		code: { $first: '$orders.code' },
+		totalPrice: { $first: '$orders.totalPrice' },
+		netTotalPrice: { $first: '$orders.netTotalPrice' },
+		status: { $first: '$orders.status' },
+		products: { $push: '$orders.products' },
+		totalProductQty: { $sum: '$orders.products.quantity'},
+		address: { $first: '$orders.address'},
+		payment: { $first: '$orders.payment'},
+		shipping: { $first: '$orders.shipping'},
+		user: { $first: '$user' },
+		cust_id: { $first: '$_id' },
+		created: { $first: '$orders.created' }
+	})
+	.sort('-created')
+	.skip(currentPage)
+	.limit(itemsPerPage)
+	.exec(function(err, orders) {
+		if(err) {
+			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+		}
+		
+		var opts = [
+		{ path: 'products.product', model: 'Product' },
+		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
+		];
+
+		Customer.populate(orders, opts, function(err, orders) {
+			if(err) {
+				return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+			}
+
+			var opts = { path: 'products.product.photos', model: 'Photo' };
+
+			Customer.populate(orders, opts, function(err, orders){
+				if(err) {
+					return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
+				}
+
+				return res.jsonp(orders);
+			});
+		});	
 	});
 };
 
@@ -191,7 +322,7 @@ exports.update = function(req, res) {
 	var order = req.body;
 	
 	Customer.update({ 
-		_id: order.cust_id, 
+		user: order.cust_id, 
 		'orders._id': req.params.orderId 
 	}, { 
 		$set: {
@@ -235,6 +366,51 @@ exports.count = function(req, res) {
 		if(err) {
 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 		}
-		return res.jsonp({ count: count });
+
+		res.jsonp({ count: count });
 	});
+};
+
+
+exports.confirmPaid = function(req, res) {
+	
+	var form = new multipart.Form({
+		autoFiles: true,
+	});
+
+	form.parse(req, function(err, fields, files) {
+		if(err) {
+			return res.status(400).send({ message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' });
+		}
+
+		if(!files.file || !files.file.length) {
+			return res.status(400).send({ message: 'กรุณาแนบรูป slip ชำระเงินด้วยค่ะ' });
+		}
+
+		if(!fields.cost) {
+			return res.status(400).send({ message: 'กรุณาระบุจำนวนเงินที่ชำระด้วยค่ะ' });
+		}
+
+		if(!fields.paidTime) {
+			return res.status(400).send({ message: 'กรุณาระบุวัน-เวลาที่ชำระด้วยค่ะ' });
+		}
+
+		var photo = files.file[0];
+		var extension = path.extname(photo.originalFilename);
+		var newFilename = uuid.v4().concat(extension);
+		var oldPath = photo.path;
+		var newPath = './public/photos_upload/'+ newFilename;
+		var newPhotoUrl = '/photos_upload/' + newFilename;
+	
+		fs.rename(oldPath, newPath, function(err){
+			if(err) {
+
+			}
+		});
+
+		//console.log(files.file[0]);
+
+		res.end();
+	});
+
 };

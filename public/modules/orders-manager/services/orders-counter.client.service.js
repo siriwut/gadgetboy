@@ -15,7 +15,7 @@ angular.module('orders-manager').factory('ordersCounter', ['$q', 'Orders','order
 			statuses.forEach(function(status) {
 				var defer = $q.defer();
 				
-				Orders.count({status: status}, function(result){
+				Orders.count({ status: status }, function(result){
 					defer.resolve(result);
 				}, function(err) {
 					defer.reject(err);

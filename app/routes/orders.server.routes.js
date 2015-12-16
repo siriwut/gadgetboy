@@ -12,10 +12,16 @@ module.exports = function(app) {
 	app.route('/api/orders/count')
 	.get(users.hasAuthorization(['admin']), users.requiresLogin, orders.count);
 
+	app.route('/api/orders/users')
+	.get(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.listByUser);
+
+	app.route('/api/orders/confirm')
+	.post(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.confirmPaid);
+
 	app.route('/api/orders/:orderId')
 	.get(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.read)
 	.put(users.hasAuthorization(['admin']), users.requiresLogin, orders.update);
 
-	app.route('/api/orders/:custId/:orderId')
+	app.route('/api/orders/:orderId/customers/:custId')
 	.delete(users.hasAuthorization(['admin']), users.requiresLogin, orders.remove);
 };

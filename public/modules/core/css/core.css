@@ -2,6 +2,11 @@
 	margin-top: 50px;
 }
 
+.content-box {
+	padding: 10px 50px 50px 50px;
+	background: #FFFFFF;
+}
+
 body{
 	background: #F5F5F5;
 	font-family: Helvetica,Arial,sans-serif;

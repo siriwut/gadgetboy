@@ -33,7 +33,7 @@ module.exports = {
 			'public/lib/angular-ui-utils/ui-utils.js',
 			'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 			'public/lib/ng-file-upload/ng-file-upload-shim.min.js',
-			'public/lib/ng-file-upload/ng-file-upload.min.js',
+			'public/lib/ng-file-upload/ng-file-upload.js',
 			'public/lib/angular-flash-alert/dist/angular-flash.min.js',
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker.js',
 			'public/lib/textAngular/dist/textAngular-rangy.min.js',

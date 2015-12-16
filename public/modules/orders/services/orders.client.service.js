@@ -16,8 +16,13 @@ angular.module('orders').factory('Orders', ['$resource',
 				method: 'GET'
 			},
 			remove: {
-				url: '/api/orders/:customerId/:orderId',
+				url: '/api/orders/:orderId/customers/:custId',
 				method: 'DELETE'
+			},
+			listByUser: {
+				url: '/api/orders/users',
+				method: 'GET',
+				isArray: true
 			}
 		});
 	}

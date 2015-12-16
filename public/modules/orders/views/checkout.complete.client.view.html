@@ -49,8 +49,8 @@
 							<p class="summary-box" >มูลค่าสินค้า (บาท): {{order.totalPrice | currency: ''}}</p>
 							<p class="summary-box" >
 								ค่าจัดส่ง (บาท): 
-								<span ng-if="order.orders.shipping.cost" >{{order.shipping.cost}}</span>
-								<span ng-if="!order.orders.shipping.cost" class="text-success" >ฟรี</span>
+								<span ng-if="order.shipping.cost" >{{order.shipping.cost}}</span>
+								<span ng-if="!order.shipping.cost" class="text-success" >ฟรี</span>
 							</p>
 							<p class="summary-box" data-ng-if="order.payment.cost" >
 								<span class="text-warning"  >ยอดเพิ่มเติม (บาท)</span>: {{order.payment.cost | currency: ''}}

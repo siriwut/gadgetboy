@@ -14,8 +14,6 @@ angular.module('shop').controller('ShopCtrl', ['$scope','$http','$location','$st
 			}, function(errorResponse) {
 				$location.path('/');
 			});
-
-			//$scope.products = Products.query({categoryId:$stateParams.categoryId});	
 		};
 
 		

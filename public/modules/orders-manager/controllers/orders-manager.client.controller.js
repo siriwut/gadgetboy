@@ -27,7 +27,9 @@ angular
 				totalItems: 0,
 				currentPage: 1
 			};
-			paginationConfig.itemsPerPage = 10;
+			paginationConfig.boundaryLink = true;
+			paginationConfig.itemsPerPage = 30;
+			paginationConfig.maxSize = 5;
 
 			list();
 			getQuantity();
@@ -40,7 +42,6 @@ angular
 				currentPage: om.pagination.currentPage
 			}).$promise.then(function(res){
 				om.orders = res;
-				console.log(om.orders);
 			}, function(err) {
 
 			});
@@ -83,16 +84,16 @@ angular
 
 		function remove(order) {
 			Orders
-			.remove({ customerId: order._id, orderId: order.orders._id  })
+			.remove({ orderId: order._id, custId: order.cust_id  })
 			.$promise.then(function(res) {
 				var index = _.findIndex(om.orders, '_id', order._id);
-				var message = 'ลบรายการคำสั่งซื้อ '+ order.orders.code + ' เรียบร้อยแล้วค่ะ';
+				var message = 'ลบรายการคำสั่งซื้อ '+ order.code + ' เรียบร้อยแล้วค่ะ';
 
 				om.orders.splice(index, 1);
 				Flash.create('success', message);
 
 			}, function(err) {
-				var message = 'ไม่สามารถลบรายการคำสั่งซื้อ '+ order.orders.code + ' กรุณาลองใหม่ค่ะ';
+				var message = 'ไม่สามารถลบรายการคำสั่งซื้อ '+ order.code + ' กรุณาลองใหม่ค่ะ';
 
 				if(err) {
 					Flash.create('danger', message);

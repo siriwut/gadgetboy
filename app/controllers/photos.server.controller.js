@@ -33,7 +33,7 @@
 
  			var src = n[0].path;
  			var extension = path.extname(n[0].originalFilename);
- 			var newFilename = uuid.v1().concat(extension);
+ 			var newFilename = uuid.v4().concat(extension);
  			var dest = './public/photos_upload/'.concat(newFilename);
  			var size = n.size;
  			var photoUrl = '/photos_upload/'+newFilename;

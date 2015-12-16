@@ -36,10 +36,6 @@
  			trim: true
  		}
  	}],
- 	favourite:[{
- 		type: Schema.ObjectId,
- 		ref: 'Product'
- 	}],
  	orders:[{
  		code: {
  			type: Number,
@@ -109,19 +105,23 @@
  				trim: true
  			}
  		},
- 		receipt: {
+ 		paidEvidence: {
  			cost: {
  				type: Number
  			},
- 			channel: {
+ 			message: {
  				type: String
  			},
  			photo: {
  				type: Schema.ObjectId,
  				ref: 'Photo'
  			},
- 			paidAt: {
+ 			paidTime: {
  				type: Date
+ 			},
+ 			created: {
+ 				type: Date,
+ 				default: Date.now
  			}
  		},
  		created: {

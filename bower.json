@@ -18,7 +18,7 @@
     "bootstrap": "~3",
     "jquery-simplecolorpicker": "~0.3.0",
     "lodash": "~3.10.1",
-    "ng-file-upload": "~6.0.4",
+    "ng-file-upload": "~10.1.9",
     "textAngular": "~1.4.6"
   }
 }

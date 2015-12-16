@@ -38,6 +38,43 @@
  	res.jsonp(req.customer);
  };
 
+ 
+ exports.readByUser = function(req, res) {
+ 	Customer
+ 	.findOne({ user: req.user.id })
+ 	.populate('orders.products.product')
+ 	.populate('cart.product')
+ 	.populate('user')
+ 	.exec(function(err, customer) {
+ 		if(err) {
+ 			return res.status(400).send({ 
+ 				messege: errorHandler.getErrorMessage(err) 
+ 			});
+ 		}
+
+ 		if(!customer) {
+ 			return res.status(400).send({
+ 				message: 'Failed to load customer'
+ 			});
+ 		}
+
+ 		var opts = [
+ 		{ path: 'orders.products.product.photos', model: 'Photo' },
+ 		{ path: 'cart.product.photos', model: 'Photo' }
+ 		];
+
+ 		Customer.populate(customer, opts, function(err, customer) {
+ 			if(err) {
+ 				return res.status(400).send({ 
+ 					messege: errorHandler.getErrorMessage(err) 
+ 				});
+ 			}
+
+ 			res.jsonp(customer);
+ 		});
+ 	});
+ };
+
 /**
  * Update a Customer
  */
@@ -114,7 +151,7 @@
  			});
  		}
  	});
-};
+ };
 
 
 
@@ -122,7 +159,7 @@
  * Customer middleware
  */
  exports.customerByID = function(req, res, next, id) { 
- 	Customer.findOne({user: id}).populate('user', 'displayName').exec(function(err, customer) {
+ 	Customer.findOne({_id: id}).populate('user', 'displayName').exec(function(err, customer) {
  		if (err) return next(err);
  		if (!customer) return next(new Error('Failed to load Customer ' + id));
  		req.customer = customer ;

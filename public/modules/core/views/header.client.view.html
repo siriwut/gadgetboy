@@ -27,10 +27,6 @@
 
 				<section data-ng-include="'modules/product-search/views/product-search.client.view.html'" ></section>
 
-
-
-
-
 				<ul class="nav navbar-nav navbar-right" >
 					
 						<li ui-route="/signin" ng-class="{active: $uiRoute}" title="ลงชื่อเข้าใช้" data-ng-hide="authentication.user" >
@@ -57,7 +53,7 @@
 							</li>
 
 							<li>
-								<a href="/#!/customer-panel"><span class="glyphicon glyphicon-user" ></span>มุมลูกค้า</a>
+								<a ui-sref="customerPanel.listOrders" ><span class="glyphicon glyphicon-user" ></span>มุมลูกค้า</a>
 							</li>
 							<li class="divider"></li>
 							<li>

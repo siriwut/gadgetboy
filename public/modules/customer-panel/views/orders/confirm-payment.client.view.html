@@ -1,0 +1,58 @@
+<section class="content-box item-box" data-ng-init="co.findOne()" >
+	<div class="row">
+		<div class="col-lg-12">
+			<h3><span class="glyphicon glyphicon-check" ></span>แจ้งการชำระเงิน</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<h3> รายการคำสั่งซื้อ <a>{{co.order.code}}</a> </h3>
+		</div>
+	</div>
+	<div class="row" style="margin-top:20px;" >
+		<form data-ng-submit="co.confirmPayment()" >
+			<div class="col-sm-6 col-md-6 col-lg-6">
+				<div class="form-group">
+					<label>รูป slip ชำระเงิน <span class="text-danger" >*</span> <span class="text-muted" >(ขนาดไม่เกิน 2MB)</span></label>
+
+					<div class="photos-uploader" >
+						<div class="edge">
+							<div class="btn btn-primary btn-file" ngf-select data-ng-model="co.paidEvidence.photo" ngf-accept="'.jpg,.png,.gif'" ngf-capture="'camera'" ngf-max-size="'2MB'" >
+								<span class="glyphicon glyphicon-picture" ></span> เลือกรูปภาพ 
+							</div>
+
+							<img ngf-src="co.paidEvidence.photo" class="thumb" ng-show="co.paidEvidence.photo"  >
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<label>จำนวนเงิน <span class="text-danger" >*</span></label>
+					<input type="number" data-ng-model="co.paidEvidence.cost" class="form-control" placeholder="0.00" >
+				</div>
+				<div class="form-group">
+					<label>ข้อมูลเพิ่มเติม</label>
+					<textarea data-ng-model="co.paidEvidence.message" class="form-control" rows="4" placeholder="เช่น ชื่อธนาคาร ช่องทางการโอน" ></textarea>
+				</div>
+
+				<button type="submit" class="btn btn-success form-control hidden-xs" >ยืนยัน</button>
+			</div>
+			<div  class="col-sm-4 col-md-4 col-lg-4">
+				<div class="form-group">
+					<label>วันที่ชำระ <span class="text-danger" >*</span></label>
+					<p class="input-group">
+						<input type="text" data-ng-model="co.paidEvidence.paidTime" class="form-control" datepicker-popup="{{co.dateTimePicker.format}}" is-open="co.dateTimePicker.status.opened" show-button-bar="false" >
+						<span class="input-group-btn">
+							<button type="button" class="btn" data-ng-click="co.dateTimePicker.open($event)" ><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</p>
+				</div>
+				<div class="form-group">
+					<label>เวลาที่ชำระ <span class="text-danger" >*</span></label>
+					<timepicker class="custom-timepicker" data-ng-model="co.paidEvidence.paidTime" show-meridian="false" ></timepicker>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-success form-control hidden-sm hidden-md hidden-lg" >ยืนยัน</button>
+		</form>
+	</div>
+</section>

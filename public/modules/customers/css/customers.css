@@ -31,6 +31,10 @@
 	
 }
 
+.customer-sidebar .active{
+	background-color: #EEE !important;
+}
+
 .customer-sidebar-list{
 	padding-left: 0;
 }

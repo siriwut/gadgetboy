@@ -1,0 +1,9 @@
+<div class="photos-uploader" >
+	<div class="edge">
+		<div class="btn btn-primary btn-file" ngf-select data-ng-model="photosUploader.photo" accept=".jpg,.png,.gif" ngf-capture="'camera'"  >
+			<span class="glyphicon glyphicon-picture" ></span> เลือกรูปภาพ 
+		</div>
+
+		<img ngf-src="photosUploader.photo" class="thumb" ng-show="photosUploader.photo"  >
+	</div>
+</div>

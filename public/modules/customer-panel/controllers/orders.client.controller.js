@@ -48,7 +48,8 @@ angular
 		} 
 
 		function confirmPayment() {
-			co.upload(co.paidEvidence.photo, { 
+			co.upload(co.paidEvidence.photo, {
+				orderId: $stateParams.orderId,
 				cost:co.paidEvidence.cost,
 				message: co.paidEvidence.message,
 				paidTime: co.paidEvidence.paidTime
@@ -58,6 +59,7 @@ angular
 		function upload(file, data) {
 			Upload.upload({
 				url: '/api/orders/confirm',
+				method: 'put',
 				file: file,
 				data: data 
 			}).then(function(res) {

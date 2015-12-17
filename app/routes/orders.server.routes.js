@@ -16,7 +16,7 @@ module.exports = function(app) {
 	.get(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.listByUser);
 
 	app.route('/api/orders/confirm')
-	.post(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.confirmPaid);
+	.put(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.confirmPaid);
 
 	app.route('/api/orders/:orderId')
 	.get(users.hasAuthorization(['user','admin']), users.requiresLogin, orders.read)

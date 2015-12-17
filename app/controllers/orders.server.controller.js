@@ -15,6 +15,7 @@
  var errorHandler = require('./errors.server.controller');
  var Customer = mongoose.model('Customer');
  var Product = mongoose.model('Product');
+ var Photo = mongoose.model('Photo');
 
 
 
@@ -380,37 +381,99 @@ exports.confirmPaid = function(req, res) {
 
 	form.parse(req, function(err, fields, files) {
 		if(err) {
-			return res.status(400).send({ message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' });
+			return res.status(400).send({ 
+				message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+			});
 		}
 
 		if(!files.file || !files.file.length) {
-			return res.status(400).send({ message: 'กรุณาแนบรูป slip ชำระเงินด้วยค่ะ' });
+			return res.status(400).send({ 
+				message: 'กรุณาแนบรูป slip ชำระเงินด้วยค่ะ' 
+			});
+		}
+
+
+		if(!fields.orderId) {
+			return res.status(400).send({ 
+				message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+			});
 		}
 
 		if(!fields.cost) {
-			return res.status(400).send({ message: 'กรุณาระบุจำนวนเงินที่ชำระด้วยค่ะ' });
+			return res.status(400).send({ 
+				message: 'กรุณาระบุจำนวนเงินที่ชำระด้วยค่ะ' 
+			});
 		}
 
 		if(!fields.paidTime) {
-			return res.status(400).send({ message: 'กรุณาระบุวัน-เวลาที่ชำระด้วยค่ะ' });
+			return res.status(400).send({ 
+				message: 'กรุณาระบุวัน-เวลาที่ชำระด้วยค่ะ' 
+			});
 		}
 
+		var paidEvidence = {
+			cost: parseInt(fields.cost),
+			paidTime: new Date(String(fields.paidTime)),
+			message: String(fields.message) || ''
+		};
+		var orderId = mongoose.Types.ObjectId(String(fields.orderId));
 		var photo = files.file[0];
 		var extension = path.extname(photo.originalFilename);
 		var newFilename = uuid.v4().concat(extension);
 		var oldPath = photo.path;
 		var newPath = './public/photos_upload/'+ newFilename;
 		var newPhotoUrl = '/photos_upload/' + newFilename;
-	
+
 		fs.rename(oldPath, newPath, function(err){
 			if(err) {
-
+				return res.status(400).send({ 
+					message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+				});
 			}
+
+			var newPhoto = new Photo({ 
+				name: newFilename, 
+				extension: extension, 
+				size: photo.size,
+				url: newPhotoUrl,
+				user: req.user
+			});
+
+			newPhoto.save(function(err) {
+				if(err){
+					return res.status(400).send({ 
+						message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+					});
+				}
+
+				paidEvidence.photo = newPhoto;
+				
+				Customer
+				.update({
+					user: req.user._id,
+					'orders._id': orderId
+				},{
+					$set: { 'orders.$.paidEvidence': paidEvidence }
+				})
+				.exec(function(err, result) {
+					if(err){
+						return res.status(400).send({ 
+							message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+						});
+					}
+
+					Customer.findOrderById(orderId, function(err, order) {
+						if(err) {
+							return res.status(400).send({ 
+								message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+							});
+						}
+						console.log(order);
+						res.jsonp(order);
+					});
+				});		
+
+			});
 		});
-
-		//console.log(files.file[0]);
-
-		res.end();
-	});
-
+});
 };

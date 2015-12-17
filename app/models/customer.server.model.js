@@ -182,4 +182,38 @@ CustomerSchema.statics.countOrdersByStatus = function(status, cb) {
 	});
 };
 
+
+CustomerSchema.statics.findOrderById = function(id, cb) {
+	this.aggregate()
+	.unwind('orders')
+	.match({ 'orders._id': id })
+	.unwind('orders.products')
+	.group({
+		_id: '$orders._id',
+		code: { $first: '$orders.code' },
+		totalPrice: { $first: '$orders.totalPrice' },
+		netTotalPrice: { $first: '$orders.netTotalPrice' },
+		status: { $first: '$orders.status' },
+		products: { $push: '$orders.products' },
+		totalProductQty: { $sum: '$orders.products.quantity'},
+		address: { $first: '$orders.address'},
+		payment: { $first: '$orders.payment'},
+		shipping: { $first: '$orders.shipping'},
+		user: { $first: '$user' },
+		cust_id: { $first: '$_id' },
+		created: { $first: '$orders.created' }
+	})
+	.exec(function(err, orders) {
+		if(err) {
+			return cb(err);
+		}
+
+		if(!orders || !orders.length) {
+			return cb(err);
+		}
+
+		cb(null, orders[0]);
+	});
+};
+
 mongoose.model('Customer', CustomerSchema);

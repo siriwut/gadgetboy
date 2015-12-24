@@ -43,13 +43,13 @@
 				</li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a ui-sref="adminPanel.listProducts"  ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></li>
+				<li><a ui-sref="adminPanel.listProducts({ productBy: 'all' })"  ui-sref-active="active" >ทั้งหมด<span class="badge pull-right">20</span></a></li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a href ui-sref-active="active" >ลดราคา<span class="badge bg-red pull-right">20</span></a></li>
+				<li><a href ui-sref="adminPanel.listProducts({ productBy: 'sale' })" ui-sref-active="active" >ลดราคา<span class="badge bg-red pull-right">20</span></a></li>
 			</ul>
 			<ul class="admin-sidebar-list" collapse="collapseVar!=2"  >
-				<li><a href ui-sref-active="active" >หมดสต็อก<span class="badge bg-grey pull-right">20</span></a></li>
+				<li><a href ui-sref="adminPanel.listProducts({ productBy: 'soleOut' })" ui-sref-active="active" >หมดสต็อก<span class="badge bg-grey pull-right">20</span></a></li>
 			</ul>
 
 		</li>

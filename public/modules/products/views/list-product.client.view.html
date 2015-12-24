@@ -16,7 +16,7 @@
 				</h3>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" data-ng-if="products && products.length" >
 			<div class="col-lg-8 col-xs-12">
 				<form class="form-inline" >
 					<div class="form-group" >
@@ -38,12 +38,12 @@
 			</div>
 
 			<div class="col-lg-4 col-xs-12">
-				<pagination  boundary-links="true" total-items="totalQuantity" items-per-page="20"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				<pagination  boundary-links="true" total-items="totalQuantity"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"  ></pagination>
 			</div>
 		</div>
 		<div class="row"   >
-			<div class="col-lg-12 col-xs-12">
-				<table class="table table-striped table-responsive table-list-product" >
+			<div class="col-lg-12 col-xs-12"  >
+				<table class="table table-striped table-responsive table-list-product" data-ng-if="products && products.length" >
 					<thead>
 						<tr>
 							<th><input type="checkbox" data-ng-click="action.selectAll($event)" data-ng-checked="productChecked"  data-ng-model="productChecked"  ></th>
@@ -111,10 +111,12 @@
 						</tr>
 					</tbody>	
 				</table>
+
+				<h1 class="text-muted text-center" data-ng-if="!products || !products.length" >ไม่มีสินค้า</h1>
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" data-ng-if="products && products.length" >
 			<div class="col-lg-8 col-xs-12">
 				<form class="form-inline" >
 					<div class="form-group" >
@@ -134,7 +136,7 @@
 				</form>	
 			</div>
 			<div class="col-lg-4 col-xs-12">
-				<pagination  boundary-links="true" total-items="totalQuantity" items-per-page="20"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				<pagination  boundary-links="true" total-items="totalQuantity"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ></pagination>
 			</div>
 		</div>
 

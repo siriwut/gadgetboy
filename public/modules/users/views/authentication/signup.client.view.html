@@ -15,19 +15,19 @@
 			<form name="userForm" data-ng-submit="userForm.$valid && signup()" class="signin form-horizontal" novalidate autocomplete="off">
 				<fieldset class="col-lg-offset-2 col-lg-8" >
 					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.firstName.$invalid}" >
-						<label for="firstName">ชื่อ</label>
+						<label for="firstName">ชื่อ<span class="text-danger">*</span></label>
 						<input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name" maxlength="25" required >
 						
 						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.firstName.$invalid" class="text-danger">กรุณากรอก <strong>ชื่อ</strong> ด้วยค่ะ</p>
 					</div>
 					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.lastName.$invalid}">
-						<label for="lastName">นามสกุล</label>
+						<label for="lastName">นามสกุล<span class="text-danger">*</span></label>
 						<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name" maxlength="25" required>
 						
 						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.lastName.$invalid" class="text-danger">กรุณากรอก <strong>นามสกุล</strong> ด้วยค่ะ</p>
 					</div>
 					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.email.$error.required}">
-						<label for="email">อีเมล์</label>
+						<label for="email">อีเมล์<span class="text-danger">*</span></label>
 						<input type="email" id="email" name="email" class="form-control" data-ng-model="credentials.email" ng-pattern="/.+\@.+\..+/" placeholder="Email" maxlength="60" required>
 						
 						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.email.$error.required" class="text-danger">กรุณากรอก <strong>email</strong> ด้วยค่ะ</p>
@@ -36,7 +36,7 @@
 
 					</div>
 					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.password.$invalid}">
-						<label for="password">รหัสผ่าน</label>
+						<label for="password">รหัสผ่าน<span class="text-danger">*</span></label>
 						<input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password 6 ตัวอักษรขึ้นไป" ng-minlength="6" maxlength="50" required>
 						
 						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.password.$error.required" class="text-danger">กรุณากรอก <strong>password</strong> ด้วยค่ะ</p>
@@ -45,7 +45,7 @@
 					</div>
 
 					<div class="form-group" ng-class="{'has-error':(userForm.$submitted||userForm.$touched) && userForm.passwordConfirm.$invalid}" >
-						<label for="password">ยืนยันรหัสผ่าน</label>
+						<label for="password">ยืนยันรหัสผ่าน<span class="text-danger">*</span></label>
 						<input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" data-ng-model="credentials.passwordConfirm" placeholder="ยืนยัน Password"  password-match="credentials.password" required>
 
 						<p ng-show="(userForm.$submitted||userForm.$touched) && userForm.passwordConfirm.$error.required" class="text-danger">กรุณายืนยัน <strong> password</strong> ด้วยค่ะ</p>

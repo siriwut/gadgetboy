@@ -148,12 +148,12 @@ exports.reset = function(req, res, next) {
 						});
 					} else {
 						return res.status(400).send({
-							message: 'Passwords do not match'
+							message: 'รหัสผ่านไม่ตรงกัน'
 						});
 					}
 				} else {
 					return res.status(400).send({
-						message: 'Password reset token is invalid or has expired.'
+						message: 'token สำหรับรีเซ็ตรหัสผ่านหมดอายุ'
 					});
 				}
 			});
@@ -172,7 +172,7 @@ exports.reset = function(req, res, next) {
 			var mailOptions = {
 				to: user.email,
 				from: config.mailer.from,
-				subject: 'Your password has been changed',
+				subject: 'รหัสผ่านของคุณเปลี่ยนเรียบร้อยแล้วค่ะ',
 				html: emailHTML
 			};
 
@@ -211,7 +211,7 @@ exports.changePassword = function(req, res) {
 											res.status(400).send(err);
 										} else {
 											res.send({
-												message: 'Password changed successfully'
+												message: 'เปลี่ยนรหัสผ่านเรียบร้อย'
 											});
 										}
 									});
@@ -219,28 +219,28 @@ exports.changePassword = function(req, res) {
 							});
 						} else {
 							res.status(400).send({
-								message: 'Passwords do not match'
+								message: 'รหัสผ่านไม่ตรงกัน'
 							});
 						}
 					} else {
 						res.status(400).send({
-							message: 'Current password is incorrect'
+							message: 'รหัสผ่านปัจจุบันไม่ถูกต้อง'
 						});
 					}
 				} else {
 					res.status(400).send({
-						message: 'User is not found'
+						message: 'ไม่พบชื่อผู้ใช้'
 					});
 				}
 			});
 		} else {
 			res.status(400).send({
-				message: 'Please provide a new password'
+				message: 'กรุณากำหนดรหัสผ่านใหม่'
 			});
 		}
 	} else {
 		res.status(400).send({
-			message: 'User is not signed in'
+			message: 'ผู้ใช้ไม่ได้เข้าสู่ระบบ'
 		});
 	}
 };

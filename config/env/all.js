@@ -19,7 +19,8 @@ module.exports = {
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-glyphicons.css',
 			'public/lib/jquery-simplecolorpicker/jquery.simplecolorpicker-fontawesome.css',
 			'public/lib/textAngular/dist/textAngular.css',
-			'public/lib/font-awesome/css/font-awesome.css'
+			'public/lib/font-awesome/css/font-awesome.css',
+			'public/lib/angular-loading-bar/build/loading-bar.min.css'
 			],
 			js: [
 			'public/lib/jquery/dist/jquery.min.js',
@@ -40,7 +41,8 @@ module.exports = {
 			'public/lib/textAngular/dist/textAngular-sanitize.min.js',
 			'public/lib/textAngular/dist/textAngular.min.js',
 			'public/lib/lodash/lodash.min.js',
-			'public/lib/angular-confirm-modal/angular-confirm.min.js'
+			'public/lib/angular-confirm-modal/angular-confirm.min.js',
+			'public/lib/angular-loading-bar/build/loading-bar.min.js'
 			]
 		},
 		css: [

@@ -128,4 +128,31 @@
 		</table>
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h3>หลักฐานยืนยันการชำระเงิน</h3>
+		<hr>
+
+		<div data-ng-if="om.order.paidEvidence" >
+			<div class="col-lg-6">
+				<a href product-image-preview image="om.order.paidEvidence.photo" >
+					<img src="{{om.order.paidEvidence.photo.url}}" width="300" height="300" class="img-thumbnail" >
+				</a>
+			</div>
+			<div class="col-lg-6">
+				<p>
+					<b>จำนวนเงิน:</b> {{om.order.paidEvidence.cost | currency: ''}} บาท <br>
+					<b>วันที่จ่ายเงิน:</b> {{om.order.paidEvidence.paidTime | date: 'dd-MMMM-yyyy'}}  <br>
+					<b>เวลาที่จ่ายเงิน:</b> {{om.order.paidEvidence.paidTime | date: 'HH:mm:ss'}}  <br>
+					<b>ข้อมูลเพิ่มเติม:</b> <br>
+					{{om.order.paidEvidence.message}}  
+				</p>
+			</div>
+		</div>
+		<div class="col-lg-offset-4" data-ng-if="!om.order.paidEvidence" >
+			<h3 class="text-muted" >ไม่พบหลักฐานการชำระเงิน</h3>
+		</div>
+	</div>
+</div>
 </section>

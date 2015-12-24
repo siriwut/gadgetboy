@@ -156,7 +156,8 @@ exports.read = function(req, res) {
 		totalProductQty: { $sum: '$orders.products.quantity'},
 		address: { $first: '$orders.address'},
 		payment: { $first: '$orders.payment'},
-		shipping: { $first: '$orders.shipping'},
+		shipping: { $first: '$orders.shipping' },
+		paidEvidence: { $first: '$orders.paidEvidence' },
 		user: { $first: '$user' },
 		cust_id: { $first: '$_id' },
 		created: { $first: '$orders.created' }
@@ -174,6 +175,7 @@ exports.read = function(req, res) {
 
 		var opts = [
 		{ path: 'products.product', model: 'Product' },
+		{ path: 'paidEvidence.photo', model: 'Photo' },
 		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
 		];
 
@@ -223,6 +225,7 @@ exports.list = function(req, res) {
 		address: { $first: '$orders.address'},
 		payment: { $first: '$orders.payment'},
 		shipping: { $first: '$orders.shipping'},
+		paidEvidence: { $first: '$orders.paidEvidence' },
 		user: { $first: '$user' },
 		cust_id: { $first: '$_id' },
 		created: { $first: '$orders.created' }
@@ -237,6 +240,7 @@ exports.list = function(req, res) {
 		
 		var opts = [
 		{ path: 'products.product', model: 'Product' },
+		{ path: 'paidEvidence.photo', model: 'Photo' },
 		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
 		];
 
@@ -279,6 +283,7 @@ exports.listByUser = function(req, res) {
 		address: { $first: '$orders.address'},
 		payment: { $first: '$orders.payment'},
 		shipping: { $first: '$orders.shipping'},
+		paidEvidence: { $first: '$orders.paidEvidence' },
 		user: { $first: '$user' },
 		cust_id: { $first: '$_id' },
 		created: { $first: '$orders.created' }
@@ -293,6 +298,7 @@ exports.listByUser = function(req, res) {
 		
 		var opts = [
 		{ path: 'products.product', model: 'Product' },
+		{ path: 'paidEvidence.photo', model: 'Photo' },
 		{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
 		];
 
@@ -321,20 +327,20 @@ exports.update = function(req, res) {
 	}
 
 	var order = req.body;
-	
+
 	Customer.update({ 
-		user: order.cust_id, 
-		'orders._id': req.params.orderId 
+		user: order.user._id, 
+		'orders._id': req.params.orderId
 	}, { 
 		$set: {
 			'orders.$.address': order.address,
 			'orders.$.status': order.status
 		} 
-	}).exec(function(err) {
+	}).exec(function(err, result) {
 		if(err) {
 			return res.status(400).send({ message: errorHandler.getErrorMessage(err) });
 		}
-
+		
 		res.jsonp(order);
 	});
 
@@ -453,7 +459,10 @@ exports.confirmPaid = function(req, res) {
 					user: req.user._id,
 					'orders._id': orderId
 				},{
-					$set: { 'orders.$.paidEvidence': paidEvidence }
+					$set: { 
+						'orders.$.paidEvidence': paidEvidence ,
+						'orders.$.status': 'confirmed'
+					}
 				})
 				.exec(function(err, result) {
 					if(err){
@@ -468,12 +477,35 @@ exports.confirmPaid = function(req, res) {
 								message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
 							});
 						}
-						console.log(order);
-						res.jsonp(order);
+
+						var opts = [
+						{ path: 'products.product', model: 'Product' },
+						{ path: 'user', select: 'username email firstName lastName provider', model: 'User' }
+						];
+
+						Customer.populate(order, opts, function(err, order) {
+							if(err) {
+								return res.status(400).send({ 
+									message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+								});
+							}
+
+							var opt = { path: 'products.product.photos', model: 'Photo' };
+
+							Customer.populate(order, opt, function(err, order) {
+								if(err) {
+									return res.status(400).send({ 
+										message: 'แจ้งการชำระเงินผิดพลาดกรุณาลองใหม่ค่ะ' 
+									});
+								}
+
+								return  res.jsonp(order);
+							});
+
+						});
 					});
 				});		
-
-			});
-		});
+});
+});
 });
 };

@@ -47,12 +47,37 @@ async = require('async');
  * Show the current Product
  */
  exports.read = function(req, res) {
+ 	Product
+ 	.findById(req.params.productId)
+ 	.populate('user','displayName')
+ 	.populate('category')
+ 	.populate('photos')
+ 	.populate('relatedProducts')
+ 	.exec(function(err, product){
+ 		if(err) {
+ 			return res.status(400).send({
+ 				message:'รหัสสินค้าไม่ถูกต้อง'
+ 			});
+ 		}
 
- 	Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
- 		if(err)return res.status(400).send({message:'รหัสสินค้าไม่ถูกต้อง'});
- 		if(!product)return res.status(400).send({message:'ไม่พบสินค้าชิ้นนี้'});
+ 		if(!product){
+ 			return res.status(400).send({
+ 				message:'ไม่พบสินค้าชิ้นนี้'
+ 			});
+ 		}
 
- 		res.jsonp(product);
+ 		var opt = { path: 'relatedProducts.photos', model: 'Photo' };
+
+ 		Product.populate(product, opt, function(err, product) {
+ 			if(err) {
+ 				return res.status(400).send({
+ 					message: errorHandler.getErrorMessage(err)
+ 				});
+ 			}
+
+
+ 			res.jsonp(product);
+ 		});
  	});
  };
 
@@ -85,7 +110,6 @@ async = require('async');
  * Update a Product
  */
  exports.update = function(req, res) {
-
  	async.waterfall([function(done){
  		Product.findById(req.params.productId).populate('user','displayName').populate('category').populate('photos').exec(function(err,product){
  			done(err,product);
@@ -113,7 +137,7 @@ async = require('async');
  		product.category = category;
  		res.json(product);
  	}],function(err){
- 		if(err) { 
+ 		if(err) {
  			return res.status(400).send({
  				message: errorHandler.getErrorMessage(err)
  			});
@@ -172,11 +196,6 @@ async = require('async');
 
  		});
  	});
-
-
-
-
-
 };
 
 /**
@@ -184,23 +203,39 @@ async = require('async');
  */
  exports.list = function(req, res) {
  	var message = null;
- 	var page = 0;
- 	var nPerPage = 20;
+ 	var page = req.query.page || 1;
+ 	var nPerPage = req.query.perPage || 20;
+ 	var currentPage = (page - 1) * nPerPage;
+ 	var productBy = req.query.productBy || 'all';
+ 	var where = {};
 
- 	if(req.query.page) page = req.query.page;
-
+ 	switch(productBy) {
+ 		case 'sale':
+ 			where = { 'sale.onSale': true };
+ 		break;
+ 		case 'soleOut':
+ 			where = { quantity: { $or: { $eq: 0, $lt: 0 } } };
+ 		break;
+ 	}
+ 	
  	//query for admin can see
- 	Product.find().skip(page>0?(page-1)*nPerPage:0).limit(nPerPage).sort('-created').populate('user','displayName').populate('category','name').populate('photos').exec(function(err, products) {
+ 	Product
+ 	.find(where)
+ 	.skip(currentPage)
+ 	.limit(nPerPage)
+ 	.sort('-created')
+ 	.populate('user','displayName')
+ 	.populate('category','name')
+ 	.populate('photos')
+ 	.exec(function(err, products) {
  		if (err) {
  			return res.status(400).send({
  				message: errorHandler.getErrorMessage(err)
  			});
  		} else {
- 			res.json(products);
+ 			res.jsonp(products);
  		}
  	});
-
-
  };
 
 

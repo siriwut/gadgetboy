@@ -118,10 +118,6 @@
  			},
  			paidTime: {
  				type: Date
- 			},
- 			created: {
- 				type: Date,
- 				default: Date.now
  			}
  		},
  		created: {

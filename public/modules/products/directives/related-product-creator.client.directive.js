@@ -17,7 +17,7 @@ angular.module('products')
 		$scope.relatedProductError = null;
 
 		Products.get({productId:$scope.productId},function(res){
-			$scope.ngModel.push($scope.productId);
+			$scope.ngModel.push(res);
 			$scope.productId = null;
 		},function(err){
 			$scope.relatedProductError = err.data.message;
@@ -37,8 +37,8 @@ angular.module('products')
 			return ;
 		}
 		
-		Products.get({productId:value},function(res){
-			$scope.ngModel[index] = value;
+		Products.get({productId: value},function(res){
+			$scope.ngModel[index] = res;
 		},function(err){
 
 			$scope.$broadcast('editError',err.data.message);

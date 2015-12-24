@@ -6,29 +6,32 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<h3> รายการคำสั่งซื้อ <a>{{co.order.code}}</a> </h3>
+			<h3> รายการคำสั่งซื้อ <a>{{co.order.code}}</a> &nbsp; | &nbsp; ยอดรวม: {{co.order.netTotalPrice | currency: ''}} บาท</h3>
 		</div>
 	</div>
 	<div class="row" style="margin-top:20px;" >
-		<form data-ng-submit="co.confirmPayment()" >
+		<form data-ng-submit="confirmPaymentForm.$valid && co.confirmPayment()" name="confirmPaymentForm" novalidate >
 			<div class="col-sm-6 col-md-6 col-lg-6">
 				<div class="form-group">
 					<label>รูป slip ชำระเงิน <span class="text-danger" >*</span> <span class="text-muted" >(ขนาดไม่เกิน 2MB)</span></label>
 
 					<div class="photos-uploader" >
 						<div class="edge">
-							<div class="btn btn-primary btn-file" ngf-select data-ng-model="co.paidEvidence.photo" ngf-accept="'.jpg,.png,.gif'" ngf-capture="'camera'" ngf-max-size="'2MB'" >
+							<div class="btn btn-primary btn-file" ngf-select data-ng-model="co.paidEvidence.photo" ngf-accept="'.jpg,.png,.gif'" ngf-capture="'camera'" ngf-max-size="'2MB'" name="photo" required>
 								<span class="glyphicon glyphicon-picture" ></span> เลือกรูปภาพ 
 							</div>
-
-							<img ngf-src="co.paidEvidence.photo" class="thumb" ng-show="co.paidEvidence.photo"  >
+							<img ngf-src="co.paidEvidence.photo" class="thumb" data-ng-show="co.paidEvidence.photo"  >
 						</div>
+						<span class="text-danger" data-ng-show="(confirmPaymentForm.$submitted || confirmPaymentForm.$touched) && confirmPaymentForm.photo.$invalid" > กรุณากรอกรูป slip ชำระเงินด้วยค่ะ </span>
+						<span class="text-danger" data-ng-show="confirmPaymentForm.photo.$error.maxSize" >กรุณาเลือกรูปขนาดไม่เกิน 2MB ค่ะ</span>
 					</div>
 
 				</div>
 				<div class="form-group">
 					<label>จำนวนเงิน <span class="text-danger" >*</span></label>
-					<input type="number" data-ng-model="co.paidEvidence.cost" class="form-control" placeholder="0.00" >
+					<input type="number" data-ng-model="co.paidEvidence.cost" class="form-control" placeholder="0.00" name="cost" required >
+
+					<span class="text-danger" data-ng-show="(confirmPaymentForm.$submitted || confirmPaymentForm.$touched) && confirmPaymentForm.cost.$invalid" > กรุณากรอกจำนวนเงินด้วยค่ะ </span>
 				</div>
 				<div class="form-group">
 					<label>ข้อมูลเพิ่มเติม</label>
@@ -41,18 +44,20 @@
 				<div class="form-group">
 					<label>วันที่ชำระ <span class="text-danger" >*</span></label>
 					<p class="input-group">
-						<input type="text" data-ng-model="co.paidEvidence.paidTime" class="form-control" datepicker-popup="{{co.dateTimePicker.format}}" is-open="co.dateTimePicker.status.opened" show-button-bar="false" >
+						<input type="text" data-ng-model="co.paidEvidence.paidTime" class="form-control" datepicker-popup="{{co.dateTimePicker.format}}" is-open="co.dateTimePicker.status.opened" show-button-bar="false" name="date" required >
 						<span class="input-group-btn">
 							<button type="button" class="btn" data-ng-click="co.dateTimePicker.open($event)" ><i class="glyphicon glyphicon-calendar"></i></button>
 						</span>
 					</p>
+					<span class="text-danger" data-ng-show="(confirmPaymentForm.$submitted || confirmPaymentForm.$touched) && confirmPaymentForm.date.$invalid" > กรุณากรอกวันที่ชำระเงินด้วยค่ะ </span>
 				</div>
 				<div class="form-group">
 					<label>เวลาที่ชำระ <span class="text-danger" >*</span></label>
-					<timepicker class="custom-timepicker" data-ng-model="co.paidEvidence.paidTime" show-meridian="false" ></timepicker>
+					<timepicker class="custom-timepicker" data-ng-model="co.paidEvidence.paidTime" show-meridian="false" name="time" required></timepicker>
+					<span class="text-danger" data-ng-show="(confirmPaymentForm.$submitted || confirmPaymentForm.$touched) && confirmPaymentForm.time.$invalid" > กรุณากรอกเวลาที่ชำระเงินด้วยค่ะ </span>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-success form-control hidden-sm hidden-md hidden-lg" >ยืนยัน</button>
+			<button type="submit" class="btn btn-success form-control hidden-sm hidden-md hidden-lg"     >ยืนยัน</button>
 		</form>
 	</div>
 </section>

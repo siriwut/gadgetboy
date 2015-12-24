@@ -20,7 +20,12 @@
  			return res.status(400).send({ message:'Cannot load Category' + req.params.categorySlug });
  		}
 
- 		Product.find({category:category._id, price:{$gt:0}}).populate('user').populate('category').populate('photos').exec(function(err,products){
+ 		Product
+ 		.find({category:category._id, price:{$gt:0}})
+ 		.populate('user')
+ 		.populate('category')
+ 		.populate('photos')
+ 		.exec(function(err,products){
  			if(err)return res.status(400).send(err);
  			if(!products)return res.status(400).send({message:'Cannot load Product in Category'+req.params.categorySlug});
 
@@ -28,12 +33,15 @@
  		});
 
  	});
-
- 	
  };
 
  exports.productByCategoryID = function(req,res,next,id){
- 	Product.find({category:id, price:{$gt:0}}).populate('user').populate('category','name').populate('photos').exec(function(err,products){
+ 	Product
+ 	.find({category:id, price:{$gt:0}})
+ 	.populate('user')
+ 	.populate('category','name')
+ 	.populate('photos')
+ 	.exec(function(err,products){
  		if(err)return next(err);
  		if(!products)return next(new Error('Failed to load product ' + id));
  		

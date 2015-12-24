@@ -14,11 +14,12 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 				// If successful we assign the response to the global user model
 				$scope.authentication.user = response;
 
-				// And redirect to the index page
+				
 				if($location.search().page === 'checkout'){
 					return $window.location.assign('/checkout/step/shippingandpayment');	
 				}
 
+				// And redirect to the index page
 				$window.location.assign('/');
 
 			}).error(function(response) {

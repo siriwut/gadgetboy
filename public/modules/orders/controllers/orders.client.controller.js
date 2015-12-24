@@ -45,9 +45,11 @@ angular
 				var order = res.data;
 				
 				orderService.create(order);
+				console.log('Fuckkkkk');
 				orderService.minusProductsQtyByOrder();
 				
 				$window.location.assign('/checkout/step/complete/' + res.data._id);
+				
 			}, function(err){
 				Flash.create('danger', err.data.message);
 			});

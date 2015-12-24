@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
+angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication','Flash',
+	function($scope, $http, $location, Users, Authentication, Flash) {
 		$scope.user = Authentication.user;
 
 		// If user is not signed in then redirect back home
@@ -42,13 +42,16 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		$scope.updateUserProfile = function(isValid) {
 			if (isValid) {
 				$scope.success = $scope.error = null;
+				$scope.user.username = $scope.user.email;
 				var user = new Users($scope.user);
 
 				user.$update(function(response) {
-					$scope.success = true;
+					//$scope.success = true;
+					Flash.create('success', 'บันทึกเรียบร้อยแล้ว');
 					Authentication.user = response;
 				}, function(response) {
-					$scope.error = response.data.message;
+					//$scope.error = response.data.message;
+					Flash.create('danger', response.data.message);
 				});
 			} else {
 				$scope.submitted = true;
@@ -57,14 +60,16 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 
 		// Change user password
 		$scope.changeUserPassword = function() {
-			$scope.success = $scope.error = null;
+			//$scope.success = $scope.error = null;
 
 			$http.post('/api/users/password', $scope.passwordDetails).success(function(response) {
 				// If successful show success message and clear form
-				$scope.success = true;
+				//$scope.success = true;
+				Flash.create('success', 'แก้ไขรหัสผ่านเรียบร้อยแล้ว');
 				$scope.passwordDetails = null;
 			}).error(function(response) {
-				$scope.error = response.message;
+				//$scope.error = response.message;
+				Flash.create('danger', response.message);
 			});
 		};
 	}

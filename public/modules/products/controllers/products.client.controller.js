@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('products').controller('ProductsController', ['$scope','$http','$location','$state','$rootScope','$stateParams','$anchorScroll','Authentication','Products','Categories','filterFilter','Flash','EventColors','Colors',
-	function($scope,$http,$location,$state,$rootScope,$stateParams,$anchorScroll,Authentication,Products,Categories,filterFiler,Flash,EventColors,Colors) {
+angular.module('products').controller('ProductsController', 
+	['$scope', '$http', '$location', '$state', '$rootScope', '$stateParams', '$anchorScroll', 'Authentication', 'Products', 'Categories', 'filterFilter', 'Flash', 'EventColors', 'Colors', 'paginationConfig',
+	function($scope, $http, $location, $state, $rootScope, $stateParams, $anchorScroll, Authentication, Products, Categories, filterFiler, Flash, EventColors, Colors, paginationConfig) {
 
 		var photoIdList = [];
 		var productCheckedList = [];
@@ -82,11 +83,23 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 				slug:'slug'
 			};
 
-			$scope.products=Products.query(function(){
+			paginationConfig.itemsPerPage = 20;
+			
+			Products
+			.query({
+				page: $scope.currentPage,
+				perPage: paginationConfig.itemsPerPage,
+				productBy: $stateParams.productBy
+			})
+			.$promise
+			.then(function(res){
+				$scope.products = res;
 				$scope.getQuantity();
-				for(var i=0; i<$scope.products.length;i++){
+				for(var i=0; i < $scope.products.length;i++){
 					$scope.products[i].selected = false;
 				}
+			},function(err) {
+
 			});
 		};
 
@@ -155,13 +168,23 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 
 
 		$scope.pageChange = function(){
-			$scope.products=Products.query({page:$scope.currentPage},function(){
+			Products
+			.query({
+				page: $scope.currentPage,
+				perPage: paginationConfig.itemsPerPage,
+				productBy: $stateParams.productBy
+			})
+			.$promise
+			.then(function(res){
 				$scope.getQuantity();
-				for(var i=0; i<$scope.products.length;i++){
+				$scope.products = res;
+				$scope.getQuantity();
+				for(var i=0; i < $scope.products.length;i++){
 					$scope.products[i].selected = false;
 				}
-			});
+			},function(err) {
 
+			});
 		};
 
 		$scope.initCategories = function(){
@@ -174,7 +197,7 @@ angular.module('products').controller('ProductsController', ['$scope','$http','$
 			angular.forEach(EventColors,function(val,key){
 				colors.push(val);
 			});
-		
+
 			$scope.colors = colors;
 		};
 

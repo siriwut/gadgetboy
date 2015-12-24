@@ -1,6 +1,7 @@
-<div class="form-inline related-product edit-related-product"  data-ng-repeat="id in ngModel track by $index" >
-	<div>
-		<input type="text" name="{{'textRelatedProduct'+$index}}" readonly class="form-control text-related-product" style="width:450px;" placeholder="รหัสสินค้า" value="{{id}}"  >
+<div class="form-inline related-product edit-related-product"  data-ng-repeat="product in ngModel track by $index" >
+	<div  >
+		<img src="{{product.photos[0].url}}" width="50" height="50" >
+		<input type="text" name="{{'textRelatedProduct'+$index}}" readonly class="form-control text-related-product" style="width:450px;" placeholder="รหัสสินค้า" value="{{product._id}}"  >
 		<a href="#"  btn-edit-related-product index="{{$index}}"  >แก้ไข</a> |
 		<a href="#" data-ng-click="removeRelatedProduct($index)" >ลบ</a>
 	</div>

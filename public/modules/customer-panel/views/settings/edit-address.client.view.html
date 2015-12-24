@@ -1,0 +1,63 @@
+<section class="content-box item-box" data-ng-init="addr.findOneAddress()" >
+	<div class="row" >
+		<div class="col-lg-12">
+			<h3 class="admin-panel-header" >
+				<span class="glyphicon glyphicon-envelope" ></span>
+				แก้ไขที่อยู่ในการจัดส่ง
+			</h3>
+		</div>
+	</div>
+	<div class="row" >
+		<div class="col-lg-12">
+			<form data-ng-submit="editAddressForm.$valid && addr.editAddress()" name="editAddressForm" novalidate>
+				<div class="row" >		
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label>ชื่อ และนามสกุลผู้รับ*</label>
+							<input type="text" class="form-control" data-ng-model="addr.address.name" name="name" required>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.name.$invalid" >กรุณากรอกชื่อ และนามสกุลด้วยค่ะ</p>
+						</div>
+						<div class="form-group">
+							<label>ที่อยู่*</label>
+							<textarea class="form-control" rows="3" data-ng-model="addr.address.address" name="address" required>
+							</textarea>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.address.$invalid" >กรุณากรอกที่อยู่ด้วยค่ะ</p>
+						</div>
+						<div class="form-group">
+							<label>อำเภอ/เขต*</label>
+							<input type="text" class="form-control" data-ng-model="addr.address.district" name="district" required>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.district.$invalid" >กรุณากรอกอำเภอ/เขต่ด้วยค่ะ</p>
+						</div>
+						<div class="form-group">
+							<label>จังหวัด</label>
+							<select  class="form-control" data-ng-model="addr.address.province" class="form-control" data-ng-options="value for value in addr.provinces" name="province" required>
+							</select>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.province.$invalid" >กรุณากรอกจังหวัดด้วยค่ะ</p>
+						</div>
+						<div class="form-group">
+							<label>รหัสไปรษณีย์*</label>
+							<input type="text" class="form-control" data-ng-model="addr.address.zipcode" name="zipcode" required>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.zipcode.$invalid" >กรุณากรอกรหัสไปรษณีย์่ด้วยค่ะ</p>
+						</div>
+						<div class="form-group">
+							<label>เบอร์โทรศัพย์*</label>
+							<input type="text" class="form-control" data-ng-model="addr.address.tel" name="tel" required>
+							<p class="text-danger" data-ng-show="(editAddressForm.$submitted || editAddressForm.$touched) && editAddressForm.tel.$invalid" >กรุณากรอกเบอร์โทรศัพย์ด้วยค่ะ</p>
+						</div>
+					</div>
+				</div>
+				<div class="row" >		
+					<div class="col-lg-6">
+						<a  class="btn btn-warning" ui-sref="customerPanel.viewAddress"  >&lt;&lt; ย้อนกลับ</a>
+						<button type="submit" class="btn btn-primary pull-right" >บันทึก</button>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 10px;" >	
+					<div class="col-lg-6">
+						<span flash-message="5000"></span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

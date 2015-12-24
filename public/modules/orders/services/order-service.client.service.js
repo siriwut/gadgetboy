@@ -4,7 +4,7 @@ angular.module('orders').factory('orderService', ['$q', 'Products',
 	function($q, Products) {
 		var _self = this;
 		
-		_self.Order = {};
+		_self.order = {};
 		
 		return {
 			create: create,
@@ -12,17 +12,17 @@ angular.module('orders').factory('orderService', ['$q', 'Products',
 			minusProductsQtyByOrder: minusProductsQtyByOrder
 		};
 
-		function create(Order) {
-			_self.Order = Order;
+		function create(order) {
+			_self.order = order;
 		}
 
 		function addProductsQtyByOrder() {
-			if(!_self.Order) {
+			if(!_self.order) {
 				throw new Error('Order not undefined.');
 			}
 
 			var products = [];
-			var orderProducts = _self.Order.products;
+			var orderProducts = _self.order.products;
 
 			orderProducts.forEach(function(val, key) {
 				var defer = $q.defer();
@@ -42,12 +42,12 @@ angular.module('orders').factory('orderService', ['$q', 'Products',
 		}
 
 		function minusProductsQtyByOrder() {
-			if(!_self.Order) {
-				throw new Error('Order not undefined.');
+			if(!_self.order) {
+				throw new Error('order not undefined.');
 			}
 
 			var products = [];
-			var orderProducts = _self.Order.products;
+			var orderProducts = _self.order.products;
 
 			orderProducts.forEach(function(val, key) {
 				var defer = $q.defer();

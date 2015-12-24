@@ -8,6 +8,10 @@ angular.module('customers-manager').factory('Customers', ['$resource',
 		}, {
 			update: {
 				method: 'PUT'
+			},
+			getByUser: {
+				url: '/api/customers/users',
+				method: 'GET'
 			}
 		});
 	}

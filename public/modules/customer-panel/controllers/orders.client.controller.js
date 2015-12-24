@@ -2,8 +2,8 @@
 
 angular
 .module('customer-panel')
-.controller('CustomerOrdersCtrl', ['$scope', '$state', '$stateParams','Orders','Upload',
-	function($scope, $state, $stateParams, Orders, Upload) {
+.controller('CustomerOrdersCtrl', 
+	function($scope, $state, $stateParams, $confirm, Orders, Upload, Flash) {
 		var co = this;
 
 		co.orders = [];
@@ -48,12 +48,28 @@ angular
 		} 
 
 		function confirmPayment() {
-			co.upload(co.paidEvidence.photo, {
-				orderId: $stateParams.orderId,
-				cost:co.paidEvidence.cost,
-				message: co.paidEvidence.message,
-				paidTime: co.paidEvidence.paidTime
-			});
+			var confirmData = {
+				title: 'ยืนยันแจ้งการชำระเงิน',
+				text:'คุณต้องการยืนยันแจ้งการชำระเงิน หรือไม่',
+				ok: 'ยืนยัน', 
+				cancel: 'ยกเลิก'
+			};
+
+			var confirmTemplate = '<div class="modal-header"><h3 class="modal-title">{{data.title}}</h3></div>' +
+			'<div class="modal-body">{{data.text}}</div>' +
+			'<div class="modal-footer">' +
+			'<button class="btn btn-success" ng-click="ok()">{{data.ok}}</button>' +
+			'<button class="btn btn-danger" ng-click="cancel()">{{data.cancel}}</button>' +
+			'</div>';
+
+			$confirm(confirmData, { template: confirmTemplate }).then(function() {
+				co.upload(co.paidEvidence.photo, {
+					orderId: $stateParams.orderId,
+					cost:co.paidEvidence.cost,
+					message: co.paidEvidence.message || '',
+					paidTime: co.paidEvidence.paidTime
+				});
+			});			
 		}
 
 		function upload(file, data) {
@@ -63,12 +79,11 @@ angular
 				file: file,
 				data: data 
 			}).then(function(res) {
-				console.log(res);
+				$state.go('customerPanel.listOrders');
 			}, function(err) {
 				console.log(err);
 			});
 		}
-
 
 		function dateToday() {
 			co.paidEvidence.paidTime = new Date();
@@ -77,5 +92,4 @@ angular
 		function openDatePopup($event) {
 			co.dateTimePicker.status.opened = true;
 		}
-	}
-	]);
+	});

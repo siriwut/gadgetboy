@@ -18,11 +18,10 @@ module.exports = function(app) {
 
 	app.route('/api/products/search').get(products.search);
 
-
-
-	app.route('/api/products/:productId').
-	get(products.read)
-	.put(users.requiresLogin,users.hasAuthorization(['admin']), products.update)
+	
+	app.route('/api/products/:productId')
+	.get(products.read)
+	.put(users.requiresLogin,users.hasAuthorization(['user', 'admin']), products.update)
 	.delete(users.requiresLogin,users.hasAuthorization(['admin']), products.delete);
 
 };

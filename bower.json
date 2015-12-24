@@ -9,6 +9,7 @@
     "angular-confirm-modal": "~1.1.2",
     "angular-cookies": "~1.4",
     "angular-flash-alert": "~1.1.1",
+    "angular-loading-bar": "~0.8.0",
     "angular-mocks": "~1.4",
     "angular-resource": "~1.4",
     "angular-sanitize": "~1.4",

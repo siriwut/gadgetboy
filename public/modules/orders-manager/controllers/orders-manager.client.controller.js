@@ -40,7 +40,9 @@ angular
 				status: om.status, 
 				itemsPerPage: paginationConfig.itemsPerPage, 
 				currentPage: om.pagination.currentPage
-			}).$promise.then(function(res){
+			})
+			.$promise
+			.then(function(res){
 				om.orders = res;
 			}, function(err) {
 

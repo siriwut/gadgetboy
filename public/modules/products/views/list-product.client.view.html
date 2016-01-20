@@ -3,20 +3,20 @@
 	<section class="row admin-content item-box" >	
 		<div class="row admin-panel-header" >	
 			<div class="col-lg-8 col-xs-12">
-				<h3  >สินค้าทั้งหมด<a ui-sref="adminPanel.createProduct" class="btn btn-primary btn-sm btn-add-product" ><span class="glyphicon glyphicon-plus"></span>เพิ่มสินค้า</a></h3>
+				<h3  >สินค้า{{productBy | productsManagerTitle}} ({{pagination.totalQty}} ชิ้น)<a ui-sref="adminPanel.createProduct" class="btn btn-primary btn-sm btn-add-product" ><span class="glyphicon glyphicon-plus"></span>เพิ่มสินค้า</a></h3>
 			</div>
 			<div class="col-lg-4 col-xs-12">
 				<h3 class="pull-right">
 					<form class="form-inline" >
 						<div class="form-group " >
-							<input type="text" class="form-control input-sm " placeholder="ค้นหาสินค้า..."  >
+							<input type="text" class="form-control input-sm " placeholder="ค้นหาสินค้า..." data-ng-model="searchQuery"  >
 						</div>
-						<button class="btn btn-default btn-sm" >ค้นหา</button>
+						<button class="btn btn-default btn-sm" data-ng-click="search()" >ค้นหา</button>
 					</form>	
 				</h3>
 			</div>
 		</div>
-		<div class="row" data-ng-if="products && products.length" >
+		<div class="row"  >
 			<div class="col-lg-8 col-xs-12">
 				<form class="form-inline" >
 					<div class="form-group" >
@@ -27,18 +27,18 @@
 					</div>
 					<button class="btn btn-default btn-sm btn-edit-product" data-ng-click="remove()" >ยืนยัน</button>
 					<div class="form-group" data-ng-init="initCategories()" >
-						<select class="form-control input-sm"    data-ng-options="category.name for category in categories track by category._id" data-ng-model="product.category" >
+						<select class="form-control input-sm"    data-ng-options="category.name for category in categories track by category._id" data-ng-model="productFilter.category" >
 							<option value="" >หมวดหมู่ทั้งหมด</option>
 						</select>
 
 					</div>
-					<button class="btn btn-default btn-sm" >กรอง</button>		
+					<button class="btn btn-default btn-sm" data-ng-click="productFilter.filterByCategory(productFilter.category)" >กรอง</button>		
 				</form>	
 
 			</div>
 
 			<div class="col-lg-4 col-xs-12">
-				<pagination  boundary-links="true" total-items="totalQuantity"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"  ></pagination>
+				<pagination  boundary-links="true" total-items="pagination.totalQty"  ng-model="pagination.current" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"  ></pagination>
 			</div>
 		</div>
 		<div class="row"   >
@@ -97,7 +97,7 @@
 								<span data-ng-if="!product.color" >ไม่มีสี</span>
 							</td>
 							<td >{{(product.price|currency:'':0)||0}} บาท </td>
-							<td >{{(product.quantity||0)+' ชิ้น'}} </td>
+							<td ><span data-ng-if="product.quantity" >{{(product.quantity||0)+' ชิ้น'}}</span> <span data-ng-if="!product.quantity" class="text-danger" >สินค้าหมด</span></td>
 							<td  >
 								<span  >{{product.category.name || 'ไม่มีหมวดหมู่'}}</span>	
 								
@@ -116,7 +116,7 @@
 			</div>
 		</div>
 
-		<div class="row" data-ng-if="products && products.length" >
+		<div class="row">
 			<div class="col-lg-8 col-xs-12">
 				<form class="form-inline" >
 					<div class="form-group" >
@@ -126,17 +126,17 @@
 
 					</div>
 					<button class="btn btn-default btn-sm btn-edit-product" data-ng-click="remove()" >ยืนยัน</button>
-					<div class="form-group" >
-						<select class="form-control input-sm" >
-							<option>หมวดหมู่ทั้งหมด</option>
+					<div class="form-group" data-ng-init="initCategories()" >
+						<select class="form-control input-sm"    data-ng-options="category.name for category in categories track by category._id" data-ng-model="productFilter.category" >
+							<option value="" >หมวดหมู่ทั้งหมด</option>
 						</select>
 
 					</div>
-					<button class="btn btn-default btn-sm" >กรอง</button>		
+					<button class="btn btn-default btn-sm" data-ng-click="productFilter.filterByCategory(productFilter.category)" >กรอง</button>		
 				</form>	
 			</div>
 			<div class="col-lg-4 col-xs-12">
-				<pagination  boundary-links="true" total-items="totalQuantity"  ng-model="currentPage" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ></pagination>
+				<pagination  boundary-links="true" total-items="pagination.totalQty"  ng-model="pagination.current" ng-change="pageChange()" class="pagination-sm pagination-custom pull-right" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ></pagination>
 			</div>
 		</div>
 

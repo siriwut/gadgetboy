@@ -13,6 +13,7 @@ angular
 		co.listByUser = listByUser;
 		co.findOne = findOne;
 		co.confirmPayment = confirmPayment;
+		co.initConfirmPayment = initConfirmPayment;
 		co.upload = upload;
 
 		co.dateTimePicker = {
@@ -37,15 +38,27 @@ angular
 		}
 
 		function findOne() {
-			Orders
-			.get({ orderId: $stateParams.orderId })
+			return Orders
+			.get({ 
+				orderId: $stateParams.orderId
+			})
 			.$promise
 			.then(function(res) {
 				co.order = res;
+				return co.order;
 			}, function(err){
-				$state.go('customerPanel.listOrders');
+				return $state.go('customerPanel.listOrders');
 			});
 		} 
+
+		function initConfirmPayment() {		
+			findOne()
+			.then(function(order) {
+				if(order.paidEvidence || order.payment.type !== 'bkt') {
+					return $state.go('customerPanel.listOrders');
+				}
+			});
+		}
 
 		function confirmPayment() {
 			var confirmData = {

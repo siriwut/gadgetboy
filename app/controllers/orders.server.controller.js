@@ -333,7 +333,7 @@ exports.update = function(req, res) {
 		'orders._id': req.params.orderId
 	}, { 
 		$set: {
-			'orders.$.address': order.address,
+			'orders.$.address': order.address || {},
 			'orders.$.status': order.status
 		} 
 	}).exec(function(err, result) {

@@ -5,8 +5,10 @@ angular.module('product-walls').controller('ProductWallController', ['$scope','$
 		$scope.categories = [];
 		
 		$scope.displayWalls = function(){
-			$http.get('/api/shop/wall').then(function(res){
-				$scope.categories=res.data;
+			$http.get('/api/shop/wall').then(function(res){	
+				$scope.categories = _.filter(res.data, function(obj) {
+					return obj.products.length >= 4 ;
+				});
 			},function(err){
 				console.log(err.data);
 			});

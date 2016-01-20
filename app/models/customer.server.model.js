@@ -72,6 +72,14 @@
  			cost: {
  				type: Number,
  				default: 0
+ 			},
+ 			track: {
+ 				type: String,
+ 				default: ''
+ 			},
+ 			shipperWebsite: {
+ 				type: String,
+ 				default: ''
  			}
  		},
  		status: {

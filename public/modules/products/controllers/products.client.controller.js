@@ -6,6 +6,22 @@ angular.module('products').controller('ProductsController',
 
 		var photoIdList = [];
 		var productCheckedList = [];
+		
+		paginationConfig.itemsPerPage = 20;
+
+		$scope.pagination = {
+			current: 1,
+			perPage: paginationConfig.itemsPerPage,
+			totalQty:  0
+		};
+
+		$scope.productFilter = {
+			category: {}
+		};
+
+		$scope.productBy = $stateParams.productBy;
+		$scope.searchQuery = '';
+
 
 		$scope.create = function(){
 
@@ -59,8 +75,6 @@ angular.module('products').controller('ProductsController',
 				Flash.dismiss();
 				Flash.create('success',message);
 
-
-
 				$state.go('adminPanel.editProduct',{productId:data._id},{reload:true});
 
 			}, function(error) {
@@ -69,27 +83,16 @@ angular.module('products').controller('ProductsController',
 		};
 
 		$scope.list = function(){
-			$scope.totalQuantity = 1;
 
-			$scope.tableHeader = {
-				name:'ชื่อ',
-				model:'รุ่น',
-				brand:'แบรนด์',
-				price:'ราคา',
-				color:'สี',
-				quantity:'จำนวน',
-				photo:'รูป',
-				category:'หมวดหมู่',
-				slug:'slug'
-			};
+			setTableHeader();
 
-			paginationConfig.itemsPerPage = 20;
-			
 			Products
 			.query({
-				page: $scope.currentPage,
-				perPage: paginationConfig.itemsPerPage,
-				productBy: $stateParams.productBy
+				page: $scope.pagination.current,
+				perPage: $scope.pagination.perPage,
+				productBy: $scope.productBy,
+				byCategory: $scope.productFilter.category._id || '',
+				search: $scope.searchQuery || ''
 			})
 			.$promise
 			.then(function(res){
@@ -147,9 +150,25 @@ angular.module('products').controller('ProductsController',
 
 		};
 
+		$scope.search = function() {
+			$scope.list();
+		};
+
+
+		$scope.productFilter.filterByCategory = function(category) {
+			$scope.productFilter.category = category || {};
+			$scope.list();
+		};
+
 		$scope.getQuantity = function(){
-			$http.get('/api/products/quantity').then(function(quantity){
-				$scope.totalQuantity = quantity.data;
+			$http
+			.get('/api/products/quantity', {
+				params: {
+					productBy: $scope.productBy 
+				}
+			})
+			.then(function(quantity){
+				$scope.pagination.totalQty = quantity.data;
 			}, function(errorResponse) {
 				
 			});
@@ -168,24 +187,22 @@ angular.module('products').controller('ProductsController',
 
 
 		$scope.pageChange = function(){
-			Products
-			.query({
-				page: $scope.currentPage,
-				perPage: paginationConfig.itemsPerPage,
-				productBy: $stateParams.productBy
-			})
-			.$promise
-			.then(function(res){
-				$scope.getQuantity();
-				$scope.products = res;
-				$scope.getQuantity();
-				for(var i=0; i < $scope.products.length;i++){
-					$scope.products[i].selected = false;
-				}
-			},function(err) {
-
-			});
+			$scope.list();
 		};
+
+		function setTableHeader() {
+			$scope.tableHeader = {
+				name:'ชื่อ',
+				model:'รุ่น',
+				brand:'แบรนด์',
+				price:'ราคา',
+				color:'สี',
+				quantity:'จำนวน',
+				photo:'รูป',
+				category:'หมวดหมู่',
+				slug:'slug'
+			};
+		}
 
 		$scope.initCategories = function(){
 			$scope.categories = Categories.query();
@@ -235,6 +252,11 @@ angular.module('products').controller('ProductsController',
 			}
 		};
 
+		$scope.$watch('searchQuery', function(){
+			if($scope.searchQuery === '') {
+				$scope.list();
+			}
+		});
 
 		$scope.$on('photoUploadCompleted',function(event,photoId){
 			photoIdList.push(photoId);				

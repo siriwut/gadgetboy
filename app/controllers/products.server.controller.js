@@ -207,15 +207,25 @@ async = require('async');
  	var nPerPage = req.query.perPage || 20;
  	var currentPage = (page - 1) * nPerPage;
  	var productBy = req.query.productBy || 'all';
+ 	var byCategory = req.query.byCategory || '';
+ 	var search = req.query.search || '';
  	var where = {};
 
  	switch(productBy) {
  		case 'sale':
- 			where = { 'sale.onSale': true };
+ 		where = { 'sale.onSale': true };
  		break;
  		case 'soleOut':
- 			where = { quantity: { $or: { $eq: 0, $lt: 0 } } };
+ 		where = { $or: [{ quantity: { $eq: 0 } }, { quantity: { $lt: 0 } }] };
  		break;
+ 	}
+
+ 	if(byCategory) {
+ 		where.category = byCategory;
+ 	}
+
+ 	if(search) {
+ 		where.$text = { $search: search };
  	}
  	
  	//query for admin can see
@@ -239,23 +249,58 @@ async = require('async');
  };
 
 
- exports.getQuantity = function(req, res){
+ exports.getQuantity = function(req, res) {
+ 	var byCategory = req.query.byCategory || '';
+ 	var productBy = req.query.productBy || 'all';
+ 	var priceNotZero = !! parseInt(req.query.priceNotZero);
+ 	var where = {};
  	
- 	Product.count(function(err,quantity){
+ 	switch(productBy) {
+ 		case 'sale':
+ 		where = { 'sale.onSale': true };
+ 		break;
+ 		case 'soleOut':
+ 		where = { quantity: { $eq: 0 } };
+ 		break;
+ 	}
+
+ 	if(byCategory) {
+ 		where.category = mongoose.Types.ObjectId(byCategory);
+ 	}
+ 	
+ 	if(priceNotZero) {
+ 		where.$or = [{ price: { $ne: 0 } }, { price: { $lt: 0 } }];
+ 	}
+ 	
+ 	Product.count(where, function(err,quantity){
  		if (err) {
  			return res.status(400).send({
  				message: errorHandler.getErrorMessage(err)
  			});
- 		} else {
- 			res.json(quantity);
  		}
+ 		
+ 		res.json(quantity);	
  	});
 
  };
 
 
  exports.search = function(req,res){
- 	Product.find({$text:{$search:req.query.q},price:{$gt:0},category:{$ne:null}}).populate('user','displayName').populate('category').populate('photos').exec(function(err,result){
+ 	Product
+ 	.find({
+ 		$text: { 
+ 			$search: req.query.q 
+ 		},
+ 		price:{ 
+ 			$gt: 0 
+ 		},
+ 		category:{ 
+ 			$ne: null 
+ 		}})
+ 	.populate('user','displayName')
+ 	.populate('category')
+ 	.populate('photos')
+ 	.exec(function(err,result){
  		if(err) return res.status(400).send({message:errorHandler.getErrorMessage(err)});
  		res.jsonp(result);
  	});

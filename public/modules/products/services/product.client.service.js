@@ -18,6 +18,10 @@ angular.module('products').factory('Products', ['$resource',
 				url: '/api/products/search',
 				method:'GET',
 				isArray: true
+			},
+			getQty: {
+				url: '/api/products/quantity',
+				method: 'GET',
 			}
 		});
 	}

@@ -25,49 +25,68 @@
 				<accordion-group data-ng-repeat="order in co.orders" is-open="co.orders[$index].isOpen" style="margin-top:20px;" data-ng-init="co.orders[$index].isOpen = $first? true: false" >
 				<accordion-heading>
 				<header class="row" >
-					<div class="col-lg-1"  >
+					<div class="col-sm-1 col-md-1 col-lg-1"  >
 						<i class="pull-right glyphicon" ng-class="{'glyphicon-triangle-bottom': co.orders[$index].isOpen, 'glyphicon-triangle-right': !co.orders[$index].isOpen}"></i>
 					</div>
-					<div class="col-lg-2" >			
+					<div class="col-sm-2 col-md-2 col-lg-2" >			
 						<h6>รายการสั่งซื้อ <a href="#" >{{order.code}}</a></h6>
 						<h5>Placed on {{order.created  | date: 'dd/MM/yyyy'}}</h5>
 					</div>
-					<div class="col-lg-3" >
+					<div class="col-sm-3 col-md-3 col-lg-3" >
 						<h6>ยอดสุทธิ(บาท)</h6>
 						<h5>{{order.netTotalPrice | currency:'' }}</h5>
 					</div>
-					<div class="col-lg-3" >
+					<div class="col-sm-3 col-md-3 col-lg-3" >
 						<h6>การชำระเงิน</h6>
 						<h5>{{order.payment.type | parseToCustomerPaymentMethod}}</h5>
 					</div>
-					<div class="col-lg-3" >
-						<b>{{order.status | parseToCustomerStatus }}</b>
+					<div class="col-sm-3 col-md-3 col-lg-3" >
+						<b data-ng-if="order.payment.type !== 'bkt' && order.status === 'new'" >กำลังดำเนินการตรวจสอบ</b>
+						<b data-ng-hide="order.status === 'new' && order.payment.type === 'cod'" >{{order.status | parseToCustomerStatus }}</b>
 					</div>
 				</header>		
 			</accordion-heading>			
 			<div class="row" data-ng-repeat="product in order.products" >
-				<div class="col-lg-3"  >
-					<img src="{{ product.product.photos[0].url }}" widht="100" height="100" >
-				</div>
-				<div class="col-lg-6" >
-					{{product.product.name}}<br>
-					{{product.quantity}} ชิ้น
-				</div>
-				<div div class="col-lg-3" data-ng-if="$first" > 
-					<a class="btn btn-primary" ui-sref="customerPanel.confirmPayment({ orderId: order._id })" data-ng-if="order.status === 'new'" >
+				<div div class="col-xs-12 hidden-sm hidden-md hidden-lg" data-ng-if="$first" > 
+					<a class="btn btn-primary" ui-sref="customerPanel.confirmPayment({ orderId: order._id })" data-ng-if="order.status === 'new' && order.payment.type === 'bkt'" >
 						แจ้งการชำระเงิน
 					</a>
-					<b data-ng-if="order.status !== 'new'" ng-class="{'text-primary': order.status === 'new',
-					'text-lightyellow': order.status === 'confirmed',
-					'text-warning': order.status === 'paid',
-					'text-skyblue': order.status === 'delivered',
-					'text-success': order.status === 'completed',
-					'text-danger': order.status === 'overtime',
-					'text-muted': order.status === 'canceled'}" >{{order.status | parseToCustomerStatus }}</b>
-				</div>
+					<span data-ng-if="order.payment.type !== 'bkt' && order.status === 'new'" class="badge bg-lightyellow" >กำลังดำเนินการตรวจสอบ</span>
+					<span data-ng-hide="order.status === 'new' && (order.payment.type === 'cod' || order.payment.type ==='bkt')" class="badge" ng-class="{
+					'bg-lightyellow': order.status === 'confirmed',
+					'bg-orange': order.status === 'paid',
+					'bg-skyblue': order.status === 'delivered',
+					'bg-green': order.status === 'completed',
+					'bg-danger': order.status === 'overtime',
+					'bg-muted': order.status === 'canceled'}" >
+					{{order.status | parseToCustomerStatus }}
+				</span>
 			</div>
-		</accordion-group>
-	</accordion>
+			<div class="col-sm-2 col-md-3 col-lg-3"  >
+				<img src="{{ product.product.photos[0].url }}" widht="100" height="100" >
+			</div>
+			<div class="col-sm-6 col-md-6 col-lg-6" >
+				{{product.product.name}}<br>
+				{{product.quantity}} ชิ้น
+			</div>
+			<div div class="hidden-xs col-sm-3 col-md-3 col-lg-3" data-ng-if="$first" > 
+				<a class="btn btn-primary" ui-sref="customerPanel.confirmPayment({ orderId: order._id })" data-ng-if="order.status === 'new' && order.payment.type === 'bkt'" >
+					แจ้งการชำระเงิน
+				</a>
+				<span data-ng-if="order.payment.type !== 'bkt' && order.status === 'new'" class="badge bg-lightyellow" >กำลังดำเนินการตรวจสอบ</span>
+				<span data-ng-hide="order.status === 'new' && (order.payment.type === 'cod' || order.payment.type ==='bkt')" class="badge" ng-class="{
+				'bg-lightyellow': order.status === 'confirmed',
+				'bg-orange': order.status === 'paid',
+				'bg-skyblue': order.status === 'delivered',
+				'bg-green': order.status === 'completed',
+				'bg-danger': order.status === 'overtime',
+				'bg-muted': order.status === 'canceled'}" >
+				{{order.status | parseToCustomerStatus }}
+			</span>
+		</div>
+	</div>
+</accordion-group>
+</accordion>
 </div>
 
 <div class="col-lg-12" data-ng-if="!co.orders.length" >

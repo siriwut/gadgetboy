@@ -5,9 +5,10 @@ GadgetBoy E-Commerce Shop
 This project purpose is to develop e-commerce system for develop Node.js, AngularJS and MongoDB skill and my personal business. Project was kickstarted by Mean.JS Full-Stack to built back-end and front-end system.
 
 Features
--Admin panel for manage products, customers, front shop and other relevant info.
--Customers can select products and drop to basket.
--Customers can order products with payment methods as desired. 
+
+ - Admin panel for manage products, customers, front shop and other relevant info.
+ - Customers can select products and drop to basket.
+ - Customers can order products with payment methods as desired.
 
 Home
 ---

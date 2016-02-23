@@ -1,6 +1,6 @@
 GadgetBoy E-Commerce Shop 
 ===
-###Beginner Project in Nodejs AngularJS and MongoDB
+###First Project in Nodejs AngularJS and MongoDB (Beginner)
 
 This project purpose is to develop e-commerce system for develop Node.js, AngularJS and MongoDB skill and my personal business. Project was kickstarted by Mean.JS Full-Stack to built back-end and front-end system.
 
